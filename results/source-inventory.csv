@@ -1,0 +1,1491 @@
+"variable","construct","storage","raw_observed"
+"RECORD","record: Record number","numeric",17545
+"UUID","uuid: Participant identifier","factor",17545
+"DATE","date: Completion time and date","factor",17545
+"S1","S1: What language would you like to continue in?","factor",17545
+"S2_RACER1","S2_Racer1: White - In order to make sure we have a representative sample of ever","factor",17545
+"S2_RACER2","S2_Racer2: Hispanic or Latino - In order to make sure we have a representative s","factor",17545
+"S2_RACER3","S2_Racer3: Black or African American - In order to make sure we have a represent","factor",17545
+"S2_RACER4","S2_Racer4: Asian American - In order to make sure we have a representative sampl","factor",17545
+"S2_RACER5","S2_Racer5: American Indian/Native American - In order to make sure we have a rep","factor",17545
+"S2_RACER6","S2_Racer6: Arab, Middle Eastern or North African - In order to make sure we have","factor",17545
+"S2_RACER7","S2_Racer7: Native Hawaiian - In order to make sure we have a representative samp","factor",17545
+"S2_RACER8","S2_Racer8: Not Hawaiian, but other Pacific Islander - In order to make sure we h","factor",17545
+"S2_RACE_PRIME","S2_Race_Prime: Even if they are all important, which of these would you consider","factor",17545
+"MAIN_ETH_QUOTA","Main_Eth_quota: Hold Ethnicity for single quota;","factor",17545
+"S2_HISPANICR1","S2_Hispanicr1: No, not Hispanic or Latino - Do you consider yourself, or your fa","factor",12968
+"S2_HISPANICR2","S2_Hispanicr2: Yes, myself - Do you consider yourself, or your family ancestry t","factor",12968
+"S2_HISPANICR3","S2_Hispanicr3: Yes, one of my parents - Do you consider yourself, or your family","factor",12968
+"S2_HISPANICR4","S2_Hispanicr4: Yes, one of my grandparents - Do you consider yourself, or your f","factor",12968
+"S2_HISPANICR5","S2_Hispanicr5: Yes, another more distant relative - Do you consider yourself, or","factor",12968
+"S2_NATIVER1","S2_Nativer1: No, not Native American - Do you consider yourself, or your family","factor",17545
+"S2_NATIVER2","S2_Nativer2: Yes, myself - Do you consider yourself, or your family ancestry to","factor",17545
+"S2_NATIVER3","S2_Nativer3: Yes, one of my parents - Do you consider yourself, or your family a","factor",17545
+"S2_NATIVER4","S2_Nativer4: Yes, one of my grandparents - Do you consider yourself, or your fam","factor",17545
+"S2_NATIVER5","S2_Nativer5: Yes, another more distant relative - Do you consider yourself, or y","factor",17545
+"S2_AFROLAT_TEXT","S2_AfroLat_text: Text for S2_AfroLat","factor",9394
+"S2_AFROLATR1","S2_AfroLatr1: No, not Afro-Latino - Do you identify as Afro-Latino, or being Bla","factor",9394
+"S2_AFROLATR2","S2_AfroLatr2: Yes, myself - Do you identify as Afro-Latino, or being Black with","factor",9394
+"S2_AFROLATR3","S2_AfroLatr3: Yes, one of my parents - Do you identify as Afro-Latino, or being","factor",9394
+"S2_AFROLATR4","S2_AfroLatr4: Yes, one of my grandparents - Do you identify as Afro-Latino, or b","factor",9394
+"S2_AFROLATR5","S2_AfroLatr5: Yes, another more distant relative - Do you identify as Afro-Latin","factor",9394
+"S3","S3: Which of the following best represents how you think of yourself?","factor",17545
+"S3R4OE","S3r4oe: Which of the following best represents how you think of yourself? - Some","factor",17545
+"S3B","S3b: What is your gender?","factor",17545
+"S3BR4OE","S3br4oe: What is your gender? - Something else (Specify)","factor",17545
+"S3C","S3c: Some people describe themselves as transgender when they experience a diffe","factor",17545
+"S4","S4: Please select your current state of residence.","factor",17545
+"S5","S5: In what year were you born?","numeric",17545
+"S5_AGE","S5_Age: Age categories","factor",17545
+"S6","S6: Are you currently registered to vote here in [pipe: S4], or like many people","factor",17545
+"S6_NON","S6_non: In 2020 there were 40 million Americans who were NOT registered to vote.","factor",6317
+"S7","S7: Were you born in the...?","factor",17545
+"S8","S8: Asian Americans come from a diversity of backgrounds. What do you consider t","factor",3955
+"S8R16OE","S8r16oe: Asian Americans come from a diversity of backgrounds. What do you consi","factor",17545
+"ASIAN_ETH","Asian_Eth: Asian Ethnicity","factor",3938
+"S8_PACIFIC","S8_Pacific: Native Hawaiians and Pacific Islanders come from a diversity of back","factor",432
+"S8_PACIFICR8OE","S8_Pacificr8oe: Native Hawaiians and Pacific Islanders come from a diversity of","factor",17545
+"S9","S9: Some African Americans are part of immigrant communities that are newer to A","factor",4843
+"S9R19OE","S9r19oe: Some African Americans are part of immigrant communities that are newer","factor",17545
+"S10","S10: Hispanics and Latinos have their roots in many different countries in Latin","factor",4975
+"S10R22OE","S10r22oe: Hispanics and Latinos have their roots in many different countries in","factor",17545
+"S10_MEX","S10_Mex: Do you consider any part of your or your family ancestry to be Mexican","factor",631
+"S11","S11: There are 574 federally recognized tribes living within the US, what tribe","factor",2829
+"S11R13OE","S11r13oe: There are 574 federally recognized tribes living within the US, what t","factor",17545
+"S12","S12: Arab, Middle Eastern or North African communities come from diverse backgro","factor",292
+"S12R27OE","S12r27oe: Arab, Middle Eastern or North African communities come from diverse ba","factor",17545
+"S2_M","S2_M: Do you consider yourself to be mixed race or multiracial?","factor",17545
+"S13","S13: What is the highest level of education you completed?","factor",17545
+"S14","S14: When you think about the community that you live in, which comes closest to","factor",17545
+"S15","S15: Just to make sure we have a representative sample of people from all across","factor",17545
+"Q58R1","Q58r1: Catholic - When it comes to religion, do you consider yourself to be?","factor",17532
+"Q58R2","Q58r2: Protestant (such as Methodist, Presbyterian, Assembly of God, Baptist, Lu","factor",17532
+"Q58R3","Q58r3: Other Christian - When it comes to religion, do you consider yourself to","factor",17532
+"Q58R4","Q58r4: Jewish - When it comes to religion, do you consider yourself to be?","factor",17532
+"Q58R5","Q58r5: Muslim - When it comes to religion, do you consider yourself to be?","factor",17532
+"Q58R6","Q58r6: Hindu - When it comes to religion, do you consider yourself to be?","factor",17532
+"Q58R7","Q58r7: Buddhist - When it comes to religion, do you consider yourself to be?","factor",17532
+"Q58R8","Q58r8: Mormon/LDS - When it comes to religion, do you consider yourself to be?","factor",17532
+"Q58R9","Q58r9: Folk religion - When it comes to religion, do you consider yourself to be","factor",17532
+"Q58R10","Q58r10: Daoist - When it comes to religion, do you consider yourself to be?","factor",17532
+"Q58R11","Q58r11: Shamanism - When it comes to religion, do you consider yourself to be?","factor",17532
+"Q58R12","Q58r12: Ancestral religion - When it comes to religion, do you consider yourself","factor",17532
+"Q58R13","Q58r13: Spiritual but not religious - When it comes to religion, do you consider","factor",17532
+"Q58R14","Q58r14: Atheist - When it comes to religion, do you consider yourself to be?","factor",17532
+"Q58R15","Q58r15: Agnostic - When it comes to religion, do you consider yourself to be?","factor",17532
+"Q58R16","Q58r16: None - When it comes to religion, do you consider yourself to be?","factor",17532
+"Q58R17","Q58r17: Other (SPECIFY) - When it comes to religion, do you consider yourself to","factor",17532
+"Q58R17OE","Q58r17oe: When it comes to religion, do you consider yourself to be? - Other (SP","factor",17545
+"Q3B_PLURAL","Q3b_plural: What is your gender?","factor",17545
+"Q3B_PLURALR4OE","Q3b_pluralr4oe: What is your gender? - $ {S3b.r4.open}","factor",17545
+"Q1R1","Q1r1: Responding to Coronavirus / COVID-19 - On the whole, what are the most imp","factor",17545
+"Q1R2","Q1r2: Lowering the costs of health care - On the whole, what are the most import","factor",17545
+"Q1R3","Q1r3: Improving wages and incomes - On the whole, what are the most important is","factor",17545
+"Q1R4","Q1r4: Unemployment / Creating more jobs - On the whole, what are the most import","factor",17545
+"Q1R5","Q1r5: Stopping discrimination against racial/ethnic minorities - On the whole, w","factor",17545
+"Q1R6","Q1r6: Criminal justice and police reform - On the whole, what are the most impor","factor",17545
+"Q1R7","Q1r7: Protecting immigrant rights - On the whole, what are the most important is","factor",17545
+"Q1R8","Q1r8: Improving K-12 education and schools - On the whole, what are the most imp","factor",17545
+"Q1R9","Q1r9: Lowering taxes - On the whole, what are the most important issues that you","factor",17545
+"Q1R10","Q1r10: Decrease government spending - On the whole, what are the most important","factor",17545
+"Q1R11","Q1r11: Combating climate change and pollution - On the whole, what are the most","factor",17545
+"Q1R12","Q1r12: Creating more affordable housing - On the whole, what are the most import","factor",17545
+"Q1R13","Q1r13: Addressing mass shootings and gun safety policy - On the whole, what are","factor",17545
+"Q1R14","Q1r14: Lowering the cost of college - On the whole, what are the most important","factor",17545
+"Q1R15","Q1r15: Protecting women","factor",17545
+"Q1R16","Q1r16: Limiting abortion - On the whole, what are the most important issues that","factor",17545
+"Q1R17","Q1r17: Stopping the left-wing Democratic agenda - On the whole, what are the mos","factor",17545
+"Q1R18","Q1r18: Stopping the right-wing Republican agenda - On the whole, what are the mo","factor",17545
+"Q1R19","Q1r19: Border security to control immigration - On the whole, what are the most","factor",17545
+"Q1R20","Q1r20: Combating terrorism - On the whole, what are the most important issues th","factor",17545
+"Q1R21","Q1r21: Reducing crime - On the whole, what are the most important issues that yo","factor",17545
+"Q1R22","Q1r22: Eliminating voter suppression - On the whole, what are the most important","factor",17545
+"Q1R23","Q1r23: Other - On the whole, what are the most important issues that you want th","factor",17545
+"Q2R1","Q2r1: Former President Donald Trump - For each of the following people, please i","factor",17545
+"Q2R2","Q2r2: Former Vice President Mike Pence - For each of the following people, pleas","factor",17545
+"Q2R3","Q2r3: President Joe Biden - For each of the following people, please indicate wh","factor",17545
+"Q2R4","Q2r4: Vice President Kamala Harris - For each of the following people, please in","factor",17545
+"Q2R5","Q2r5: Former President Barack Obama - For each of the following people, please i","factor",17545
+"Q2R6","Q2r6: Former President George W. Bush - For each of the following people, please","factor",17545
+"Q2R7","Q2r7: Former Secretary of State Hillary Clinton - For each of the following peop","factor",17545
+"Q2R8","Q2r8: Former first-lady Melania Trump - For each of the following people, please","factor",17545
+"Q2R9","Q2r9: Former first-lady Michelle Obama - For each of the following people, pleas","factor",17545
+"Q2R10","Q2r10: First-lady Dr. Jill Biden - For each of the following people, please indi","factor",17545
+"Q12","Q12: This year a lot of people said they did NOT vote in the election, because t","factor",11073
+"Q13","Q13: Did you vote by mail or absentee ballot, vote early in person, or vote in p","factor",10351
+"Q14","Q14: In the election for president, [pipe: Q14verb] [pipe: Q14verb2], or the Lib","factor",17545
+"Q14R5OE","Q14r5oe: In the election for president, [pipe: Q14verb] [pipe: Q14verb2], or the","factor",17545
+"Q15","Q15: How about in the election for U.S. Congress, here in your district in [pipe","factor",17545
+"Q15R3OE","Q15r3oe: How about in the election for U.S. Congress, here in your district in [","factor",17545
+"Q16","Q16: Before coming to the United States, did you ever vote in the elections in y","factor",4248
+"Q17","Q17: Before you came to the US, did you identify with a political party in your","factor",4248
+"Q18","Q18: Would you describe this party as liberal or on the left, conservative or on","factor",1130
+"Q19","Q19: How similar or different would you say the party you supported in your coun","factor",1130
+"Q20","Q20: Before you came to the US, were you involved in any political party or orga","factor",4248
+"Q21","Q21: Do you consider your party identification to be","factor",17545
+"Q22","Q22: Do you consider yourself to be a strong [pipe: Q21], or not?","factor",11556
+"Q23","Q23: If you had to choose, do you consider yourself closer to the Republican par","factor",5989
+"Q24","Q24: Have you always called yourself a Republican, or did you used to call yours","factor",3238
+"Q25","Q25: Have you always called yourself a Democrat, or did you used to call yoursel","factor",8318
+"Q26","Q26: Have you always called yourself an Independent, or did you used to think of","factor",5174
+"Q27R1","Q27r1: Older Americans - Thinking about Democrats, which of the following groups","factor",17545
+"Q27R2","Q27r2: Younger Americans - Thinking about Democrats, which of the following grou","factor",17545
+"Q27R3","Q27r3: Men - Thinking about Democrats, which of the following groups do you asso","factor",17545
+"Q27R4","Q27r4: Women - Thinking about Democrats, which of the following groups do you as","factor",17545
+"Q27R5","Q27r5: LGBTQ Americans - Thinking about Democrats, which of the following groups","factor",17545
+"Q27R6","Q27r6: Catholics - Thinking about Democrats, which of the following groups do yo","factor",17545
+"Q27R7","Q27r7: Protestants - Thinking about Democrats, which of the following groups do","factor",17545
+"Q27R8","Q27r8: Jews - Thinking about Democrats, which of the following groups do you ass","factor",17545
+"Q27R9","Q27r9: Muslims - Thinking about Democrats, which of the following groups do you","factor",17545
+"Q27R10","Q27r10: Hindus - Thinking about Democrats, which of the following groups do you","factor",17545
+"Q27R11","Q27r11: Buddhists - Thinking about Democrats, which of the following groups do y","factor",17545
+"Q27R12","Q27r12: Atheists - Thinking about Democrats, which of the following groups do yo","factor",17545
+"Q27R13","Q27r13: Agnostics - Thinking about Democrats, which of the following groups do y","factor",17545
+"Q27R14","Q27r14: Non-religious people - Thinking about Democrats, which of the following","factor",17545
+"Q27R15","Q27r15: Rich people - Thinking about Democrats, which of the following groups do","factor",17545
+"Q27R16","Q27r16: Poor people - Thinking about Democrats, which of the following groups do","factor",17545
+"Q27R17","Q27r17: Middle class people - Thinking about Democrats, which of the following g","factor",17545
+"Q27R18","Q27r18: People who are racist - Thinking about Democrats, which of the following","factor",17545
+"Q27R19","Q27r19: People who fight against racism - Thinking about Democrats, which of the","factor",17545
+"Q28R1","Q28r1: Older Americans - Thinking about Republicans, which of the following grou","factor",17545
+"Q28R2","Q28r2: Younger Americans - Thinking about Republicans, which of the following gr","factor",17545
+"Q28R3","Q28r3: Men - Thinking about Republicans, which of the following groups do you as","factor",17545
+"Q28R4","Q28r4: Women - Thinking about Republicans, which of the following groups do you","factor",17545
+"Q28R5","Q28r5: LGBTQ Americans - Thinking about Republicans, which of the following grou","factor",17545
+"Q28R6","Q28r6: Catholics - Thinking about Republicans, which of the following groups do","factor",17545
+"Q28R7","Q28r7: Protestants - Thinking about Republicans, which of the following groups d","factor",17545
+"Q28R8","Q28r8: Jews - Thinking about Republicans, which of the following groups do you a","factor",17545
+"Q28R9","Q28r9: Muslims - Thinking about Republicans, which of the following groups do yo","factor",17545
+"Q28R10","Q28r10: Hindus - Thinking about Republicans, which of the following groups do yo","factor",17545
+"Q28R11","Q28r11: Buddhists - Thinking about Republicans, which of the following groups do","factor",17545
+"Q28R12","Q28r12: Atheists - Thinking about Republicans, which of the following groups do","factor",17545
+"Q28R13","Q28r13: Agnostics - Thinking about Republicans, which of the following groups do","factor",17545
+"Q28R14","Q28r14: Non-religious people - Thinking about Republicans, which of the followin","factor",17545
+"Q28R15","Q28r15: Rich people - Thinking about Republicans, which of the following groups","factor",17545
+"Q28R16","Q28r16: Poor people - Thinking about Republicans, which of the following groups","factor",17545
+"Q28R17","Q28r17: Middle class people - Thinking about Republicans, which of the following","factor",17545
+"Q28R18","Q28r18: People who are racist - Thinking about Republicans, which of the followi","factor",17545
+"Q28R19","Q28r19: People who fight against racism - Thinking about Republicans, which of t","factor",17545
+"Q29","Q29: Some people are very interested in politics while other people can","factor",17545
+"Q30","Q30: Do you remember how you became interested in politics? Choose the best answ","factor",11918
+"Q30R5OE","Q30r5oe: Do you remember how you became interested in politics? Choose the best","factor",17545
+"Q31","Q31: Why do you think you are not interested in politics? Choose the best answer","factor",5627
+"Q31R5OE","Q31r5oe: Why do you think you are not interested in politics? Choose the best an","factor",17545
+"Q32R1","Q32r1: Local TV News (NBC, CBS, Fox, ABC) - Please rank the following as sources","factor",17031
+"Q32R2","Q32r2: Cable TV News (Fox News, MSNBC, CNN) - Please rank the following as sourc","factor",16887
+"Q32R3","Q32r3: News on my Facebook feed - Please rank the following as sources of news a","factor",16474
+"Q32R4","Q32r4: Social media like Twitter or Instagram - Please rank the following as sou","factor",16472
+"Q32R5","Q32r5: Talking with friends or family - Please rank the following as sources of","factor",17046
+"Q32R6","Q32r6: Newspapers or news outlets online - Please rank the following as sources","factor",16854
+"Q32R7","Q32r7: YouTube - Please rank the following as sources of news and information. T","factor",16531
+"Q32R8","Q32r8: Specialized online news sources - Please rank the following as sources of","factor",16545
+"Q32R9","Q32r9: Listening to news radio - Please rank the following as sources of news an","factor",16375
+"Q33R1","Q33r1: Fox News - How often do you watch or get news from the following news sou","factor",17545
+"Q33R2","Q33r2: MSNBC - How often do you watch or get news from the following news source","factor",17545
+"Q33R3","Q33r3: CNN - How often do you watch or get news from the following news sources?","factor",17545
+"Q33R4","Q33r4: New York Times - How often do you watch or get news from the following ne","factor",17545
+"Q33R5","Q33r5: National Public Radio (NPR) - How often do you watch or get news from the","factor",17545
+"Q38R1","Q38r1: Yes, people from the Democratic side - During the 2020 election and campa","factor",17545
+"Q38R2","Q38r2: Yes, people from the Republican side - During the 2020 election and campa","factor",17545
+"Q38R3","Q38r3: Yes, people from community groups - During the 2020 election and campaign","factor",17545
+"Q38R4","Q38r4: No, nobody contacted me - During the 2020 election and campaign, did anyo","factor",17545
+"Q39R1","Q39r1: Someone came to my home - In which of the following ways were you contact","factor",8803
+"Q39R2","Q39r2: Phone call - In which of the following ways were you contacted?","factor",8803
+"Q39R3","Q39r3: Text message - In which of the following ways were you contacted?","factor",8803
+"Q39R4","Q39r4: Email - In which of the following ways were you contacted?","factor",8803
+"Q39R5","Q39r5: Direct message on social media - In which of the following ways were you","factor",8803
+"Q39R6","Q39r6: Mail sent to my house - In which of the following ways were you contacted","factor",8803
+"Q39R7","Q39r7: Someone talked to me on the street, outside a store or something similar","factor",8803
+"Q40","Q40: Over the past 12 months, were you asked to register or to vote by a cultura","factor",17545
+"Q41R1","Q41r1: Encouraging me to vote - What type of information did cultural groups or","factor",2136
+"Q41R2","Q41r2: Encouraging me to vote for a specific candidate - What type of informatio","factor",2136
+"Q41R3","Q41r3: Informing me about the issues - What type of information did cultural gro","factor",2136
+"Q41R4","Q41r4: Something else - What type of information did cultural groups or racial m","factor",2136
+"Q42","Q42: People rely on different sources for information on politics in the U.S. Ho","factor",17545
+"Q43","Q43: When it comes to politics, do you think of yourself as liberal, moderate, o","factor",17545
+"Q44","Q44: How much of the time do you think you can trust the government in Washingto","factor",17545
+"Q45","Q45: Please indicate if you agree or disagree: The political system helps people","factor",17545
+"Q46","Q46: Please indicate if you agree or disagree: Politicians do not listen to peop","factor",17545
+"Q47","Q47: How much have you heard in the news about allegations of voter fraud in the","factor",17545
+"Q48_50SPLIT","q48_50split: holds split selection for q48-50","factor",17545
+"Q48","Q48: Do you believe there was voter fraud in the presidential election which imp","factor",5816
+"Q49","Q49: Do you believe there was voter fraud in the presidential election at the le","factor",5903
+"Q50","Q50: Do you believe there was voter fraud in the presidential election at the le","factor",5826
+"Q51_52SPLIT","q51_52split: holds split selection for q51-52","factor",17545
+"Q51","Q51: On November 20, 2020","factor",8673
+"Q52","Q52: After all 50 states and D.C. certified the final vote results Joe Biden def","factor",8872
+"Q53","Q53: On January 6, 2021 the U.S. Congress was scheduled to meet and vote on the","factor",17545
+"Q54","Q54: Some people have said that former President Donald Trump encouraged or inci","factor",17545
+"Q55","Q55: Do you think the Republican members of Congress who tried to stop the forma","factor",17545
+"Q56","Q56: Thinking about the people who attacked the U.S. Capitol, do you think","factor",17545
+"Q57","Q57: How much of the time do you think you can trust your [pipe: Q57verb] govern","factor",17545
+"Q58_COUNT","Q58_count: HOLDS NUMBER OF ROWS THAT WERE SELCTED AT Q58.","numeric",17545
+"Q58SELECT","Q58select: HOLDS Q58 selection","numeric",0
+"Q59","Q59: Thinking back to before the coronavirus pandemic, generally speaking, about","factor",17545
+"Q60R1","Q60r1: Fundamentalist - Theologically, do you consider yourself a fundamentalist","factor",15656
+"Q60R2","Q60r2: Evangelical - Theologically, do you consider yourself a fundamentalist, e","factor",15656
+"Q60R3","Q60r3: Mainline - Theologically, do you consider yourself a fundamentalist, evan","factor",15656
+"Q60R4","Q60r4: Liberal - Theologically, do you consider yourself a fundamentalist, evang","factor",15656
+"Q60R5","Q60r5: Pentecostal - Theologically, do you consider yourself a fundamentalist, e","factor",15656
+"Q60R6","Q60r6: None of these - Theologically, do you consider yourself a fundamentalist,","factor",15656
+"Q61","Q61: What primary religion, if any, did your family practice or follow when you","factor",17545
+"Q61R17OE","Q61r17oe: What primary religion, if any, did your family practice or follow when","factor",17545
+"Q62R1","Q62r1: God will reward the faithful with health and wealth. - To what extent do","factor",17545
+"Q62R2","Q62r2: If you earn a lot of money, you should give most of it away and live mode","factor",17545
+"Q62R3","Q62r3: People should be allowed to compete to ensure the best person wins. - To","factor",17545
+"Q62R4","Q62r4: I","factor",17545
+"Q62R5","Q62r5: A problem with government social programs is that they get in the way of","factor",17545
+"NEWQ67","newq67: Which best describes your view of the Afterlife?","factor",17545
+"Q67","Q67: Thinking about before the coronavirus pandemic, how often do you talk with","factor",17545
+"Q68","Q68: Think about the people in your neighborhood.","factor",17545
+"Q69","Q69: Thinking about the people in your neighborhood, how similar would you say y","factor",17545
+"Q70R1","Q70r1: Public schools - Overall, how would you rate the following local goods an","factor",17545
+"Q70R2","Q70r2: Police - Overall, how would you rate the following local goods and servic","factor",17545
+"Q70R3","Q70r3: Public parks/recreation - Overall, how would you rate the following local","factor",17545
+"Q70R4","Q70r4: Public transportation - Overall, how would you rate the following local g","factor",17545
+"Q70R5","Q70r5: Access to hospitals/health care facilities - Overall, how would you rate","factor",17545
+"Q75","Q75: Overall, how would you rate your community as a place to live?","factor",17545
+"Q76R1","Q76r1: White, non-Hispanic - If you could live anywhere, in any type of communit","factor",17545
+"Q76R2","Q76r2: Hispanic or Latino - If you could live anywhere, in any type of community","factor",17545
+"Q76R3","Q76r3: Black of African American - If you could live anywhere, in any type of co","factor",17545
+"Q76R4","Q76r4: Asian American or Pacific Islander - If you could live anywhere, in any t","factor",17545
+"Q76R5","Q76r5: Native American or Native Hawaiian - If you could live anywhere, in any t","factor",17545
+"Q76R6","Q76r6: Middle Eastern or North African - If you could live anywhere, in any type","factor",17545
+"Q77R1","Q77r1: Discussed politics with family and friends? - Since January 2020, have yo","factor",17545
+"Q77R2","Q77r2: Contributed money to a candidate, political party, ballot issue, or some","factor",17545
+"Q77R3","Q77r3: Worn a campaign button, or posted a campaign sign or sticker? - Since Jan","factor",17545
+"Q77R4","Q77r4: Contacted an elected representative or a government official in the U.S.","factor",17545
+"Q77R5","Q77r5: Contacted in any way, such as by letter, telephone, internet, or in perso","factor",17545
+"Q77R6","Q77r6: Worked or cooperated with others to try to solve a problem affecting your","factor",17545
+"Q77R7","Q77r7: Discussed a candidate or political issue by posting on an internet site o","factor",17545
+"Q77R8","Q77r8: Signed a petition regarding an issue or problem that concerns you? - Sinc","factor",17545
+"Q77R9","Q77r9: Boycotted a company or product for political reasons? - Since January 202","factor",17545
+"Q78","Q78: Since January 2020, have you","factor",17545
+"Q79","Q79: Did you work in person or mainly remotely, using phone, internet, mail?","factor",1156
+"Q84","Q84: Since January 2020, have you","factor",17545
+"Q85","Q85: In how many groups did you regularly participate?","factor",2175
+"Q85B","Q85b: Do any of these organizations sometimes take stands on any public issues,","factor",2149
+"Q86","Q86: Since January 2020, have you","factor",17545
+"Q87","Q87: Was this in person or remotely, like using the internet?","factor",2038
+"Q88","Q88: Did you speak or post a comment at the meeting?","factor",2038
+"Q93","Q93: Since January 2020, have you","factor",17545
+"Q94","Q94: Was this in person or remotely, like using the internet?","factor",1282
+"Q95","Q95: Since January 2020, have you","factor",17545
+"Q96R1","Q96r1: In support of Black Lives Matter","factor",1427
+"Q96R2","Q96r2: To protest racial bias in policing or the criminal justice system - For w","factor",1427
+"Q96R3","Q96r3: In support of humane immigration reform - For which of the following issu","factor",1427
+"Q96R4","Q96r4: Urging stronger government actions to address COVID-19 - For which of the","factor",1427
+"Q96R5","Q96r5: Opposing government overreach to address COVID-19 - For which of the foll","factor",1427
+"Q96R6","Q96r6: In support of wages and economic equality - For which of the following is","factor",1427
+"Q96R7","Q96r7: To address climate change - For which of the following issues did you att","factor",1427
+"Q96R8","Q96r8: Opposing gun violence and stronger gun laws - For which of the following","factor",1427
+"Q96R9","Q96r9: In support of","factor",1427
+"Q96R10","Q96r10: In support of President-Elect Joe Biden - For which of the following iss","factor",1427
+"Q96R11","Q96r11: In support of President Trump - For which of the following issues did yo","factor",1427
+"Q96R12","Q96r12: To protest voter fraud in the 2020 election - For which of the following","factor",1427
+"Q96R13","Q96r13: In support of equal voting rights for all - For which of the following i","factor",1427
+"Q96R14","Q96r14: Other (SPECIFY) - For which of the following issues did you attend a mar","factor",1427
+"Q96R14OE","Q96r14oe: For which of the following issues did you attend a march, demonstratio","factor",17545
+"Q97","Q97: Previously we asked about your political engagement during the past 12 mont","factor",17545
+"Q98R1","Q98r1: In support of Black Lives Matter","factor",2141
+"Q98R2","Q98r2: To protest racial bias in policing or the criminal justice system - For w","factor",2141
+"Q98R3","Q98r3: In support of humane immigration reform - For which of the following issu","factor",2141
+"Q98R4","Q98r4: In support of wages and economic equality - For which of the following is","factor",2141
+"Q98R5","Q98r5: To address climate change - For which of the following issues did you att","factor",2141
+"Q98R6","Q98r6: Opposing gun violence and stronger gun laws - For which of the following","factor",2141
+"Q98R7","Q98r7: In support of","factor",2141
+"Q98R8","Q98r8: In opposition to President Trump - For which of the following issues did","factor",2141
+"Q98R9","Q98r9: In support of President Trump - For which of the following issues did you","factor",2141
+"Q98R10","Q98r10: In support of equal voting rights for all - For which of the following i","factor",2141
+"Q98R11","Q98r11: Other (SPECIFY) - For which of the following issues did you attend a mar","factor",2141
+"Q98R11OE","Q98r11oe: For which of the following issues did you attend a march, demonstratio","factor",17545
+"Q99R1","Q99r1: Racial bias in policing or the criminal justice system - Regardless of yo","factor",17545
+"Q99R2","Q99r2: Support for Black lives - Regardless of your own participation in such ev","factor",17545
+"Q99R3","Q99r3: Humane immigration reform - Regardless of your own participation in such","factor",17545
+"Q99R4","Q99r4: Stronger government actions to address COVID-19 - Regardless of your own","factor",17545
+"Q99R5","Q99r5: Stopping government overreach to address COVID-19 - Regardless of your ow","factor",17545
+"Q99R6","Q99r6: Wage and economic equality - Regardless of your own participation in such","factor",17545
+"Q99R7","Q99r7: Addressing climate change - Regardless of your own participation in such","factor",17545
+"Q99R8","Q99r8: Stronger gun laws - Regardless of your own participation in such events,","factor",17545
+"Q99R9","Q99r9: Support for women","factor",17545
+"Q99R10","Q99r10: Support for equal voting rights for all - Regardless of your own partici","factor",17545
+"Q99R11","Q99r11: Stopping voter fraud in elections - Regardless of your own participation","factor",17545
+"Q110R1","Q110r1: No, none of these - In the past year, have you made a monetary donation","factor",17545
+"Q110R2","Q110r2: Religious Organization - In the past year, have you made a monetary dona","factor",17545
+"Q110R3","Q110r3: Political Party or candidate - In the past year, have you made a monetar","factor",17545
+"Q110R4","Q110r4: Social/Human Services Organization - In the past year, have you made a m","factor",17545
+"Q110R5","Q110r5: COVID Relief Efforts - In the past year, have you made a monetary donati","factor",17545
+"Q110R6","Q110r6: Black Lives Matter - In the past year, have you made a monetary donation","factor",17545
+"Q110R7","Q110r7: Police association - In the past year, have you made a monetary donation","factor",17545
+"Q110R8","Q110r8: Political civic group (not a political party) - In the past year, have y","factor",17545
+"Q111R1","Q111r1: Black Lives Matter - Thinking about your overall giving or donations to","factor",17545
+"Q111R2","Q111r2: Local Police association - Thinking about your overall giving or donatio","factor",17545
+"Q111R3","Q111r3: Immigrant rights organization - Thinking about your overall giving or do","factor",17545
+"Q111R4","Q111r4: Your church or place of worship - Thinking about your overall giving or","factor",17545
+"Q111R5","Q111r5: Local school - Thinking about your overall giving or donations to differ","factor",17545
+"Q116R1","Q116r1: Children/Youth - Who do you expect to benefit from your largest donation","factor",5967
+"Q116R2","Q116r2: Low-income individuals/families - Who do you expect to benefit from your","factor",6171
+"Q116R3","Q116r3: Women - Who do you expect to benefit from your largest donations, please","factor",2732
+"Q116R4","Q116r4: Members of my racial/ethnic group - Who do you expect to benefit from yo","factor",2682
+"Q116R5","Q116r5: Immigrants, Asylum Seekers, Refugees - Who do you expect to benefit from","factor",1566
+"Q116R6","Q116r6: Formerly Incarcerated Individuals - Who do you expect to benefit from yo","factor",763
+"Q116R7","Q116r7: Military Families/Veterans - Who do you expect to benefit from your larg","factor",1594
+"Q116R8","Q116r8: Environment/Animals - Who do you expect to benefit from your largest don","factor",1586
+"Q116R9","Q116r9: Police Officers/Fraternal Orders of Police - Who do you expect to benefi","factor",892
+"Q116R10","Q116r10: Individuals affected by COVID Pandemic - Who do you expect to benefit f","factor",2077
+"Q116R11","Q116r11: Small Businesses - Who do you expect to benefit from your largest donat","factor",1071
+"Q116R12","Q116r12: Scientists/Research - Who do you expect to benefit from your largest do","factor",807
+"Q116R13","Q116r13: Gun Owners - Who do you expect to benefit from your largest donations,","factor",279
+"Q116R14","Q116r14: Politician/Local Campaign/Super PAC - Who do you expect to benefit from","factor",547
+"Q117R1","Q117r1: Addressing police brutality - Please indicate if the following should be","factor",17545
+"Q117R2","Q117r2: Reducing mass incarceration - Please indicate if the following should be","factor",17545
+"Q117R3","Q117r3: Opposing same-sex marriage - Please indicate if the following should be","factor",17545
+"Q117R4","Q117r4: Raising the minimum wage - Please indicate if the following should be a","factor",17545
+"Q117R5","Q117r5: Restricting access to abortions - Please indicate if the following shoul","factor",17545
+"Q117R6","Q117r6: Addressing Domestic violence/sexual violence - Please indicate if the fo","factor",17545
+"Q117R7","Q117r7: Reducing the number of liquor stores in the [pipe: S2_Race_Prime] commun","factor",17545
+"Q117R8","Q117r8: Stopping voter suppression - Please indicate if the following should be","factor",17545
+"Q117R9","Q117r9: Reducing crime - Please indicate if the following should be a high prior","factor",17545
+"Q117R10","Q117r10: Increasing funding for public schools - Please indicate if the followin","factor",17545
+"Q117R11","Q117r11: Supporting immigrant rights - Please indicate if the following should b","factor",17545
+"Q117R12","Q117r12: Ending coronavirus quarantine - Please indicate if the following should","factor",17545
+"Q117R13","Q117r13: A national mandate to wear a mask in public when coronavirus cases are","factor",17545
+"Q130","Q130: Looking back over the past ten months that our nation has been dealing wit","factor",17545
+"Q131SPLIT","q131split: holds split for q131 battery","factor",17545
+"Q131R1","Q131r1: Congress should pass a comprehensive stimulus bill with over 2 trillion","factor",17545
+"Q131R2","Q131r2: As long as the coronavirus is a threat, we need a national mandate to we","factor",8904
+"Q131R3","Q131r3: We should end the policy of separating immigrant children from their par","factor",8641
+"Q131R4","Q131r4: We should establish a path to citizenship for undocumented immigrants wh","factor",8904
+"Q131R5","Q131r5: We should reward undocumented immigrants who have risked their lives as","factor",8641
+"Q131R6","Q131r6: We need police reform to stop the killing and abuse of African Americans","factor",8904
+"Q131R7","Q131r7: We should get rid of the electoral college and have a basic popular vote","factor",8641
+"Q131R8","Q131r8: Congress and the President should support a bold national climate policy","factor",8904
+"Q131R9","Q131r9: Abortion should remain a legal option in the United States. - Please ind","factor",8641
+"Q131R10","Q131r10: Washington D.C. should be a full state and have 2 U.S. Senators and Rep","factor",8904
+"Q131R11","Q131r11: Puerto Rico should be a full state and have 2 U.S. Senators and Represe","factor",8641
+"Q131R12","Q131r12: Colleges and universities should consider grades and test scores only a","factor",8904
+"Q131R13","Q131r13: Colleges and universities should consider factors that impact a student","factor",8641
+"Q144","Q144: When it comes to the new vaccine to protect against the coronavirus, which","factor",17545
+"Q145","Q145: More hopeful or less hopeful","factor",17545
+"Q146","Q146: More angry or less angry","factor",17545
+"Q147","Q147: More afraid or less afraid","factor",17545
+"Q148","Q148: More hopeful or less hopeful","factor",17545
+"Q149","Q149: More angry or less angry","factor",17545
+"Q150","Q150: More afraid or less afraid","factor",17545
+"Q151","Q151: More hopeful or less hopeful","factor",17545
+"Q152","Q152: More angry or less angry","factor",17545
+"Q153","Q153: More afraid or less afraid","factor",17545
+"Q154R1","Q154r1: You see an American flag or hear the national anthem? - How much pride w","factor",17545
+"Q154R2","Q154r2: You participate in a civic or political action, such as voting, contacti","factor",17545
+"Q154R3","Q154r3: You view news or think about protests on issues that are important for [","factor",17545
+"Q154R4","Q154r4: You see a [pipe: S2_Race_Prime] individual accomplishing a major milesto","factor",17545
+"Q154R5","Q154r5: You see a [pipe: S2_Race_Prime] individual holding elected office? - How","factor",17545
+"Q159R1","Q159r1: Public officials work hard to help [pipe: S2_Race_Prime] people? - How o","factor",17545
+"Q159R2","Q159r2: [pipe: S2_Race_Prime] people have a say in how government handles import","factor",17545
+"Q159R3","Q159r3: [pipe: S2_Race_Prime] elected to office can make changes for Black peopl","factor",17545
+"Q162R1","Q162r1: Voting in elections - For each of the following activities, indicate if","factor",17545
+"Q162R2","Q162r2: Donating money to campaigns or causes - For each of the following activi","factor",17545
+"Q162R3","Q162r3: Working with others to solve community problems - For each of the follow","factor",17545
+"Q162R4","Q162r4: Attending protests for issues you care about - For each of the following","factor",17545
+"Q162R5","Q162r5: Posting on the internet about issues you care about - For each of the fo","factor",17545
+"Q162R6","Q162r6: Contacting officials about issues you care about - For each of the follo","factor",17545
+"Q162R7","Q162r7: Working for a candidate or party or ballot issue in an election campaign","factor",17545
+"Q162R8","Q162r8: Wearing something to cover the nose and mouth, like a mask, when inside","factor",17545
+"Q170","Q170: Is there any political leader or any group or organization that you think","factor",17545
+"Q171R1","Q171r1: Elected officials - Who looks out for your concerns?","factor",6478
+"Q171R2","Q171r2: Religious leaders - Who looks out for your concerns?","factor",6478
+"Q171R3","Q171r3: Community leaders - Who looks out for your concerns?","factor",6478
+"Q171R4","Q171r4: Union or work association leaders - Who looks out for your concerns?","factor",6478
+"Q171R5","Q171r5: A media figure - Who looks out for your concerns?","factor",6478
+"Q171R6","Q171r6: Celebrity or artist - Who looks out for your concerns?","factor",6478
+"Q171R7","Q171r7: Someone you know - Who looks out for your concerns?","factor",6478
+"Q171R8","Q171r8: Other - Who looks out for your concerns?","factor",6478
+"Q171R9","Q171r9: Can","factor",6478
+"Q171R8OE","Q171r8oe: Who looks out for your concerns? - Other","factor",17545
+"Q172R1","Q172r1: Personally vote for or against certain candidates in an election for pub","factor",6478
+"Q172R2","Q172r2: Personally attend a protest march or demonstration? - Did this leader or","factor",6478
+"Q172R3","Q172r3: Personally take some other action on a political issue or in an election","factor",6478
+"Q175R1","Q175r1: Personally vote for or against certain candidates in an election for pub","factor",11067
+"Q175R2","Q175r2: Personally attend a protest march or demonstration? - Did anyone ever su","factor",11067
+"Q175R3","Q175r3: Personally take some other action on a political issue or in an election","factor",11067
+"Q178R1","Q178r1: Scientific research these days doesn't pay enough attention to the moral","factor",17545
+"Q178R2","Q178r2: Scientific research has created as many problems for society as it has s","factor",17545
+"Q178R3","Q178r3: Scientific research is essential for improving the quality of human live","factor",17545
+"Q178R4","Q178r4: New technology used in medicine allows people to live longer and better.","factor",17545
+"Q182","Q182: Immigration and Customs Enforcement (I.C.E.) regularly conducts deportatio","factor",17545
+"Q183","Q183: Is your overall opinion of Immigration and Customs Enforcement, known as I","factor",17545
+"Q184R1","Q184r1: Increasing security at the U.S.-Mexico border should be a national prior","factor",17545
+"Q184R2","Q184r2: This country should make it easier for immigrants to obtain visas and ci","factor",17545
+"Q184R3","Q184r3: Law enforcement and the criminal justice system need to be completely re","factor",17545
+"Q187R1","Q187r1: Children born in the United States to non-citizen parents should not hav","factor",17545
+"Q187R2","Q187r2: We need to empower law enforcement to patrol and secure Muslim neighborh","factor",17545
+"Q187R3","Q187r3: Enact sanctions and heighten diplomatic tensions with China in response","factor",17545
+"Q187R4","Q187r4: End family reunification visa policies in the U.S. - Please indicate how","factor",17545
+"Q187R5","Q187r5: Ban people from predominantly Muslim countries from entering the U.S. -","factor",17545
+"Q192","Q192: Which statement comes closer to your own views","factor",17545
+"Q193SPLIT","q193split: holds split for q193/194","factor",17545
+"Q193","Q193: How strongly do you agree with the following statement? The LGBTQ communit","factor",8776
+"Q194","Q194: How strongly do you agree with the following statement? The LGBTQ communit","factor",8769
+"LONGSHORTSPLIT","longshortsplit: holds split for long/short","factor",17545
+"Q195A1R1","Q195A1r1: Donald Trump, Jr., Republican - One way of voting uses a ranked vote,","factor",3137
+"Q195A1R2","Q195A1r2: Nikki Haley, former Republican governor of South Carolina and ambassad","factor",8311
+"Q195A1R3","Q195A1r3: Andrew Cuomo, Democratic governor of New York - One way of voting uses","factor",7831
+"Q195A1R4","Q195A1r4: Kamala Harris, former Democratic California Senator and Vice-President","factor",7238
+"Q195A2R1","Q195A2r1: Donald Trump, Jr., Republican - One way of voting uses a ranked vote,","factor",2524
+"Q195A2R2","Q195A2r2: Nikki Haley, former Republican governor of South Carolina and ambassad","factor",3885
+"Q195A2R3","Q195A2r3: Marco Rubio, Republican Senator from Florida - One way of voting uses","factor",2937
+"Q195A2R4","Q195A2r4: Mike Pence, Republican Vice President - One way of voting uses a ranke","factor",3068
+"Q195A2R5","Q195A2r5: Ron DeSantis, Republican governor of Florida - One way of voting uses","factor",2633
+"Q195A2R6","Q195A2r6: Kamala Harris, former Democratic California Senator and Vice-President","factor",6105
+"Q195A2R7","Q195A2r7: Pete Buttigieg, former Democratic mayor of South Bend, Indiana - One w","factor",4936
+"Q195A2R8","Q195A2r8: Alexandria Ocasio-Cortez, Democratic representative from New York - On","factor",4867
+"Q195A2R9","Q195A2r9: Andrew Cuomo, Democratic governor of New York - One way of voting uses","factor",5033
+"Q195A2R10","Q195A2r10: Stacey Abrams, former Democratic leader in the Georgia House of Repre","factor",5348
+"Q195B1R1","Q195B1r1: Donald Trump, Jr., Republican - One way of voting uses a ranked vote,","factor",3095
+"Q195B1R2","Q195B1r2: Nikki Haley, former Republican governor of South Carolina and ambassad","factor",8140
+"Q195B1R3","Q195B1r3: Andrew Cuomo, Democratic governor of New York - One way of voting uses","factor",7659
+"Q195B1R4","Q195B1r4: Kamala Harris, former Democratic California Senator and Vice-President","factor",7224
+"Q195B2R1","Q195B2r1: Donald Trump, Jr., Republican - One way of voting uses a ranked vote,","factor",2578
+"Q195B2R2","Q195B2r2: Nikki Haley, former Republican governor of South Carolina and ambassad","factor",4112
+"Q195B2R3","Q195B2r3: Marco Rubio, Republican Senator from Florida - One way of voting uses","factor",3009
+"Q195B2R4","Q195B2r4: Mike Pence, Republican Vice President - One way of voting uses a ranke","factor",3260
+"Q195B2R5","Q195B2r5: Ron DeSantis, Republican governor of Florida - One way of voting uses","factor",2806
+"Q195B2R6","Q195B2r6: Kamala Harris, former Democratic California Senator and Vice-President","factor",6198
+"Q195B2R7","Q195B2r7: Pete Buttigieg, former Democratic mayor of South Bend, Indiana - One w","factor",5327
+"Q195B2R8","Q195B2r8: Alexandria Ocasio-Cortez, Democratic representative from New York - On","factor",5193
+"Q195B2R9","Q195B2r9: Andrew Cuomo, Democratic governor of New York - One way of voting uses","factor",5444
+"Q195B2R10","Q195B2r10: Stacey Abrams, former Democratic leader in the Georgia House of Repre","factor",5603
+"Q196","Q196: On a scale of 0 to 10, how satisfied are you with this way of voting?","factor",17545
+"Q197A1","Q197A1: One way of voting involves a single vote, in which you vote for one cand","factor",8839
+"Q197A2","Q197A2: One way of voting involves a single vote, in which you vote for one cand","factor",8839
+"Q197B1","Q197B1: One way of voting involves a single vote, in which you vote for one cand","factor",8706
+"Q197B2","Q197B2: One way of voting involves a single vote, in which you vote for one cand","factor",8706
+"Q198","Q198: On a scale of 0 to 10, how satisfied are you with this way of voting?","factor",17545
+"Q199SPLIT","q199split: holds split q199-q201","factor",17545
+"Q199","Q199: Now that you have used both of them, which way of voting do you prefer?","factor",5909
+"Q200","Q200: Studies show that the ranked vote helps elect more women and people of col","factor",5813
+"Q201","Q201: Studies show that the ranked vote is confusing for some people. Now that y","factor",5823
+"Q202R1","Q202r1: Run for political office - Given your answer to the previous question, w","factor",17545
+"Q202R2","Q202r2: Encourage someone you know to run for office - Given your answer to the","factor",17545
+"Q202R3","Q202r3: Volunteer for a candidate or political party - Given your answer to the","factor",17545
+"Q203","Q203: Would you approve or disapprove of a member of Congress who proposes a new","factor",17545
+"Q204","Q204: Would you approve or disapprove of a member of Congress who violates congr","factor",17545
+"Q205","Q205: Would you approve or disapprove of a member of Congress who gets arrested","factor",17545
+"Q206","Q206: To what extent do you feel that your member of Congress understands the po","numeric",17545
+"Q207","Q207: To what extent do you feel that your member of Congress serves the politic","numeric",17545
+"Q208R1","Q208r1: Racial and ethnic minorities can get ahead in the United States if they","factor",17545
+"Q208R2","Q208r2: Most people who want to get ahead can make it if they are willing to wor","factor",17545
+"Q208R3","Q208r3: It is possible to start out poor in this country, work hard, and become","factor",17545
+"Q208R4","Q208r4: Government should provide income support to those who try to provide for","factor",17545
+"Q208R5","Q208r5: It is the responsibility of the government to reduce the differences in","factor",17545
+"Q213R1","Q213r1: Irish, Italians, Jewish and many other minorities overcame prejudice and","factor",17545
+"Q213R2","Q213r2: Generations of slavery and discrimination have created conditions that m","factor",17545
+"Q213R3","Q213r3: Over the past few years, Blacks have gotten less than they deserve. - Do","factor",17545
+"Q213R4","Q213r4: It's really a matter of some people not trying hard enough; if Blacks wo","factor",17545
+"Q217R1","Q217r1: White people in the U.S. have certain advantages because of their race.","factor",17545
+"Q217R2","Q217r2: Racial problems in the U.S. are rare, isolated situations. - Please indi","factor",17545
+"Q217R3","Q217r3: I am angry that racism exists. - Please indicate if you agree or disagre","factor",17545
+"Q217R4","Q217r4: I am sometimes fearful of people of other races. - Please indicate if yo","factor",17545
+"Q221R1","Q221r1: Generally speaking, [pipe: S2_Race_Prime]s are resilient to the hard tim","factor",17545
+"Q221R2","Q221r2: Unlike other minorities, [pipe: S2_Race_Prime]s give up too easily when","factor",17545
+"Q221R3","Q221r3: [pipe: S2_Race_Prime] people can always create something for themselves","factor",17545
+"Q221R4","Q221r4: Even when [pipe: S2_Race_Prime]s get knocked down, they get up and try a","factor",17545
+"Q225R1","Q225r1: Atheists - Here is a list of groups in society.","factor",17545
+"Q225R2","Q225r2: Muslims - Here is a list of groups in society.","factor",17545
+"Q225R3","Q225r3: Jews - Here is a list of groups in society.","factor",17545
+"Q225R4","Q225r4: Conservative Christians - Here is a list of groups in society.","factor",17545
+"Q225R5","Q225r5: Black people - Here is a list of groups in society.","factor",17545
+"Q225R6","Q225r6: White people - Here is a list of groups in society.","factor",17545
+"Q225R7","Q225r7: Hispanic people - Here is a list of groups in society.","factor",17545
+"Q225R8","Q225r8: Asian people - Here is a list of groups in society.","factor",17545
+"Q225R9","Q225r9: Native Americans - Here is a list of groups in society.","factor",17545
+"Q225R10","Q225r10: Democrats - Here is a list of groups in society.","factor",17545
+"Q225R11","Q225r11: Republicans - Here is a list of groups in society.","factor",17545
+"Q225R12","Q225r12: LGBTQ people - Here is a list of groups in society.","factor",17545
+"Q225R13","Q225r13: Immigrants - Here is a list of groups in society.","factor",17545
+"Q225R14","Q225r14: White nationalists - Here is a list of groups in society.","factor",17545
+"Q239R1","Q239r1: Most Muslims integrate successfully into American culture. - With respec","factor",17545
+"Q239R2","Q239r2: Most Muslim Americans reject jihad and violence. - With respect to Musli","factor",17545
+"Q239R3","Q239r3: Most Muslim Americans are not terrorists. - With respect to Muslim Ameri","factor",17545
+"Q239R4","Q239r4: Muslim Americans do a good job of speaking out against Islamic terrorism","factor",17545
+"Q243R1","Q243r1: It is harder for America","factor",17545
+"Q243R2","Q243r2: America","factor",17545
+"Q243R3","Q243r3: America","factor",17545
+"Q243R4","Q243r4: If America's youth stopped complaining about their problems, they would","factor",17545
+"Q247","Q247: What share of your friends, co-workers, and family members are [pipe: S2_R","factor",17545
+"Q248","Q248: How much effort should the government put into alleviating poverty among [","factor",17545
+"Q249","Q249: How much effort should the government put into eliminating discrimination","factor",17545
+"Q250R1","Q250r1: Confederate History Month - The [pipe: S4] state government should offic","factor",5447
+"Q250R2","Q250r2: Hispanic Heritage Month - The [pipe: S4] state government should officia","factor",4975
+"Q250R3","Q250r3: Black History Month - The [pipe: S4] state government should officially","factor",5479
+"Q250R4","Q250r4: Asian American and Pacific Islander Heritage Month - The [pipe: S4] stat","factor",3955
+"Q250R5","Q250r5: Native American Heritage Month - The [pipe: S4] state government should","factor",2829
+"Q250R6","Q250r6: Native Hawaiian Heritage Month - The [pipe: S4] state government should","factor",117
+"Q250R7","Q250r7: Islamic Heritage Month - The [pipe: S4] state government should official","factor",741
+"Q250R8","Q250r8: Caribbean-American Heritage Month - The [pipe: S4] state government shou","factor",1323
+"Q251","Q251: Black people in America are a diverse group. They include Black Americans","factor",5479
+"Q252","Q252: Still thinking about the experiences of different Black populations in the","factor",5479
+"Q253","Q253: On average, Black American descendants of enslaved people have lower incom","factor",5479
+"Q254","Q254: Some immigrants who arrive to the US prefer to give their children common","factor",4248
+"Q255","Q255: If an average White American saw a picture of you in which you were not we","factor",5479
+"Q256","Q256: How would you define racism in this country?","factor",17545
+"Q257SPLIT","q257split: holds split for q257","factor",17545
+"Q257AR1","Q257Ar1: They are more likely to carry illnesses than Americans. - For the follo","factor",5767
+"Q257AR2","Q257Ar2: They are more likely to live in conditions that help spread disease tha","factor",5767
+"Q257AR3","Q257Ar3: To protect your health, it is important to avoid Mexican immigrants. -","factor",5767
+"Q257AR4","Q257Ar4: If I were on public transportation, I would not sit next to someone who","factor",5767
+"Q257BR1","Q257Br1: They are more likely to carry illnesses than Americans. - For the follo","factor",5900
+"Q257BR2","Q257Br2: They are more likely to live in conditions that help spread disease tha","factor",5900
+"Q257BR3","Q257Br3: To protect your health, it is important to avoid Chinese immigrants. -","factor",5900
+"Q257BR4","Q257Br4: If I were on public transportation, I would not sit next to someone who","factor",5900
+"Q257CR1","Q257Cr1: They are more likely to carry illnesses than Americans. - For the follo","factor",5878
+"Q257CR2","Q257Cr2: They are more likely to live in conditions that help spread disease tha","factor",5878
+"Q257CR3","Q257Cr3: To protect your health, it is important to avoid immigrants. - For the","factor",5878
+"Q257CR4","Q257Cr4: If I were on public transportation, I would not sit next to someone who","factor",5878
+"Q258SPLIT","q258split: holds split for q258","factor",5479
+"Q258","Q258: As you may know, the number of [pipe: q258split] representatives in Congre","factor",5479
+"Q259","Q259: What do you consider to be the most important moral issues facing the nati","factor",17545
+"Q260","Q260: When you speak or think of Christ, do you imagine Christ as being...","factor",5479
+"Q261","Q261: As you know, human beings display a wide variety of physical characteristi","factor",17545
+"Q262","Q262: Does your tribe have a blood quantum requirement for tribal citizenship?","factor",2829
+"Q262R7OE","Q262r7oe: Does your tribe have a blood quantum requirement for tribal citizenshi","factor",17545
+"Q263","Q263: What would you prefer your Tribe use to determine tribal citizenship?","factor",2829
+"Q263R6OE","Q263r6oe: What would you prefer your Tribe use to determine tribal citizenship?","factor",17545
+"Q264","Q264: How often do you see Native Americans outside of your own family?","factor",2829
+"Q265","Q265: How often do you attend cultural events, such as powwows, community meals,","factor",2829
+"Q266","Q266: How often do you vote in tribal elections?","factor",2829
+"Q267","Q267: Compared to most other Black people, how would you describe your skin tone","factor",5479
+"Q268","Q268: Compared to most other [pipe: S2_Race_Prime] people, how would you describ","factor",17522
+"Q269","Q269: How important is your skin tone to your identity?","factor",5479
+"Q270","Q270: If someone said something bad about [pipe: q270verb] skinned people, how l","factor",5479
+"Q271","Q271: How important is being [pipe: S2_Race_Prime] to your identity?","factor",17545
+"TABLE1_HID","table1_hid: New Single Select Question","factor",17545
+"TABLE2_HID","table2_hid: New Single Select Question","factor",17545
+"AGE1_HID","age1_hid: New Single Select Question","factor",17545
+"AGE2_HID","age2_hid: New Single Select Question","factor",17545
+"PROF1_HID","prof1_hid: New Single Select Question","factor",17545
+"PROF2_HID","prof2_hid: New Single Select Question","factor",17545
+"POLEXP1_HID","polexp1_hid: New Single Select Question","factor",17545
+"POLEXP2_HID","polexp2_hid: New Single Select Question","factor",17545
+"RAND_POS1","rand_pos1: New Single Select Question","factor",17545
+"RAND_POS2","rand_pos2: New Single Select Question","factor",17545
+"RAND_SCORE1","rand_score1: New Single Select Question","factor",17545
+"RAND_SCORE2","rand_score2: New Single Select Question","factor",17545
+"Q272","Q272: Organizations often release report cards on politicians","factor",17545
+"Q273R1","Q273r1: I am satisfied with the quality of the public schools in my district. -","factor",9394
+"Q273R2","Q273r2: I am willing to attend a school board meeting, if I have a concern about","factor",9394
+"Q273R3","Q273r3: Attending school board meetings is a useful way to receive information o","factor",9394
+"Q273R4","Q273r4: When someone like me speaks up at a school board meeting, it can influen","factor",9394
+"Q273R5","Q273r5: I trust my school board to have open conversations with people of differ","factor",9394
+"S10HOLD","S10hold: Hispanics and Latinos have their roots in many different countries in L","factor",4975
+"Q278","Q278: Do you think that what happens to people in [pipe: S10hold] will have some","factor",4975
+"Q279","Q279: Would you consider relocating to [pipe: S10hold] to live permanently?","factor",4975
+"Q280","Q280: Do you think the social and political challenges faced by people in [pipe:","factor",4975
+"Q281R1","Q281r1: When seeking medical care for you or your family - In the past four year","factor",17545
+"Q281R2","Q281r2: In dealings with police - In the past four years, have you experienced d","factor",17545
+"Q281R3","Q281r3: In dealings with immigration officers - In the past four years, have you","factor",17545
+"Q281R4","Q281r4: At your place of work - In the past four years, have you experienced dis","factor",17545
+"Q281R5","Q281r5: In a restaurant, theater, or other place of entertainment - In the past","factor",17545
+"Q281R6","Q281r6: In a store - In the past four years, have you experienced discrimination","factor",17545
+"Q281R7","Q281r7: From other people - In the past four years, have you experienced discrim","factor",17545
+"Q281R8","Q281r8: Other - In the past four years, have you experienced discrimination or e","factor",17545
+"Q281R9","Q281r9: No, none of these - In the past four years, have you experienced discrim","factor",17545
+"Q282SPLIT","q282split: holds split for 282/283","factor",17545
+"Q282","Q282: Different people feel differently about voting. For some Americans voting","factor",4728
+"Q283","Q283: Different people feel differently about voting. For some [pipe: S2_Race_Pr","factor",4666
+"Q284","Q284: How strongly do you feel that voting in an election is a duty?","factor",2737
+"Q285SPLIT","q285split: holds split for q285/286","factor",17545
+"Q285","Q285: Here is a list of four things that some people have done and some people h","factor",4621
+"Q286","Q286: Here is a list of five things that some people have done and some people h","factor",4773
+"Q287SPLIT","q287split: holds split for q287/295/301 batteries","factor",17545
+"Q287R1","Q287r1: [pipe: S2_Race_Prime] - Here are some group categories you checked earli","factor",6047
+"Q287R2","Q287r2: [pipe: ancestryverb] - Here are some group categories you checked earlie","factor",4577
+"Q287R3","Q287r3: [pipe: genderverb] - Here are some group categories you checked earlier","factor",6047
+"Q287R4","Q287r4: [pipe: religionverb] - Here are some group categories you checked earlie","factor",6043
+"Q287R5","Q287r5: Your socioeconomic class - Here are some group categories you checked ea","factor",6047
+"Q287R6","Q287r6: [pipe: partyverb] - Here are some group categories you checked earlier i","factor",6047
+"Q287R7","Q287r7: Other (SPECIFY) - Here are some group categories you checked earlier in","factor",6047
+"Q287R7OE","Q287r7oe: Here are some group categories you checked earlier in this survey. If","factor",17545
+"Q294","Q294: Which of these groups is most important to your sense of personal identity","factor",6047
+"Q294R7OE","Q294r7oe: Which of these groups is most important to your sense of personal iden","factor",17545
+"Q295R1","Q295r1: [pipe: S2_Race_Prime] - We often describe people using one or only a few","numeric",5893
+"Q295R2","Q295r2: [pipe: ancestryverb] - We often describe people using one or only a few","numeric",4507
+"Q295R3","Q295r3: [pipe: genderverb] - We often describe people using one or only a few pa","numeric",5893
+"Q295R4","Q295r4: [pipe: religionverb] - We often describe people using one or only a few","numeric",5890
+"Q295R5","Q295r5: Your socioeconomic class - We often describe people using one or only a","numeric",5893
+"Q295R6","Q295r6: Other (SPECIFY) - We often describe people using one or only a few parts","numeric",2839
+"Q295R6OE","Q295r6oe: We often describe people using one or only a few parts of their identi","factor",17545
+"C2PID","C2PID: Category with highest point value from B 295-300","factor",5893
+"C2PP","C2PP: Highest point value from B 295-300","numeric",5893
+"Q301R1","Q301r1: [pipe: S2_Race_Prime] - We often describe people using one or only a few","numeric",5605
+"Q301R2","Q301r2: [pipe: ancestryverb] - We often describe people using one or only a few","numeric",4195
+"Q301R3","Q301r3: [pipe: genderverb] - We often describe people using one or only a few pa","numeric",5605
+"Q301R4","Q301r4: [pipe: religionverb] - We often describe people using one or only a few","numeric",5599
+"Q301R5","Q301r5: Your socioeconomic class - We often describe people using one or only a","numeric",5605
+"Q301R6","Q301r6: [pipe: partyverb] - We often describe people using one or only a few par","numeric",5605
+"Q301R7","Q301r7: Other - We often describe people using one or only a few parts of their","numeric",5605
+"Q301R7OE","Q301r7oe: We often describe people using one or only a few parts of their identi","factor",17545
+"C3PID","C3PID: Category with highest point value from C 301-307","factor",5605
+"C3PP","C3PP: Highest point value from C 301-307","numeric",5605
+"Q308R1","Q308r1: Undocumented immigrants - How would you rate your feelings toward each o","numeric",17545
+"Q308R2","Q308r2: Gun owners - How would you rate your feelings toward each of the followi","numeric",17545
+"Q308R3","Q308r3: Veterans - How would you rate your feelings toward each of the following","numeric",17545
+"Q308R4","Q308r4: Welfare recipients - How would you rate your feelings toward each of the","numeric",17545
+"Q308R5","Q308r5: Climate change activists - How would you rate your feelings toward each","numeric",17545
+"Q308R6","Q308r6: #MeToo Movement - How would you rate your feelings toward each of the fo","numeric",17545
+"Q308R7","Q308r7: #BlackLivesMatter - How would you rate your feelings toward each of the","numeric",17545
+"Q315_TEXT","Q315_text: New Single Select Question","factor",17545
+"Q315","Q315: How much do you think being","factor",17545
+"Q316R1","Q316r1: Their racial background is the same as yours - When you vote in an elect","factor",17545
+"Q316R2","Q316r2: Their gender is the same as yours - When you vote in an election, how im","factor",17545
+"Q316R3","Q316r3: They talk about what they will do if they are elected - When you vote in","factor",17545
+"Q316R4","Q316r4: They share the same values as you do - When you vote in an election, how","factor",17545
+"Q316R5","Q316r5: They believe the same issues are as important as you - When you vote in","factor",17545
+"Q316R6","Q316r6: They take the same stances on most of the same political issues - When y","factor",17545
+"Q316R7","Q316r7: They are in the same party as you - When you vote in an election, how im","factor",17545
+"Q323BLWSPLIT","q323BLWsplit: holds split selection for BLW","factor",12409
+"BLWNAMESPLIT","BLWnamesplit: holds name for BLW","factor",12409
+"BLWETHSPLIT","BLWethsplit: holds eth for BLW","factor",12409
+"BLWGENDERSPLIT","BLWgendersplit: holds gender for BLW","factor",12409
+"BLWSTATEMENTSPLIT","BLWstatementsplit: holds statement for BLW","factor",12409
+"Q323APISPLIT","q323APIsplit: holds split selection for API","factor",4091
+"APINAMESPLIT","APInamesplit: holds name for API","factor",4091
+"APIETHSPLIT","APIethsplit: holds eth for API","factor",4091
+"APIGENDERSPLIT","APIgendersplit: holds gender for API","factor",4091
+"APISTATEMENTSPLIT","APIstatementsplit: holds statement for API","factor",4091
+"Q323NINHSPLIT","q323NINHsplit: holds split selection for NINH","factor",819
+"NINHNAMESPLIT","NINHnamesplit: holds name for NINH","factor",819
+"NINHETHSPLIT","NINHethsplit: holds eth for NINH","factor",819
+"NINHGENDERSPLIT","NINHgendersplit: holds gender for NINH","factor",819
+"NINHSTATEMENTSPLIT","NINHstatementsplit: holds statement for NINH","factor",819
+"Q323_BLW","Q323_BLW: [pipe: BLWnamesplit] is a [pipe: BLWethsplit] [pipe: BLWgendersplit] c","factor",12409
+"Q323_API","Q323_API: [pipe: APInamesplit] is a [pipe: APIethsplit] [pipe: APIgendersplit] c","factor",4091
+"Q323_NINH","Q323_NINH: [pipe: NINHnamesplit] is a [pipe: NINHethsplit] [pipe: NINHgenderspli","factor",819
+"Q324","Q324: How well do you think the candidate could represent your interests?","factor",17545
+"Q325_BLW","Q325_BLW: How much do you think you could trust [pipe: BLWnamesplit]?","factor",12409
+"Q325_API","Q325_API: How much do you think you could trust [pipe: APInamesplit]?","factor",4091
+"Q325_NINH","Q325_NINH: How much do you think you could trust [pipe: NINHnamesplit]?","factor",819
+"Q326R1","Q326r1: Achieve [pipe: BLWstatementsplit] - Which of the following to you think","factor",12409
+"Q326R2","Q326r2: Achieve [pipe: APIstatementsplit] - Which of the following to you think","factor",4091
+"Q326R3","Q326r3: Achieve [pipe: NIHNstatementsplit] - Which of the following to you think","factor",819
+"Q326R4","Q326r4: Represent [pipe: S2_Race_Prime] people like me - Which of the following","factor",17545
+"Q326R5","Q326r5: Represent all [pipe: BLWethsplit] people - Which of the following to you","factor",12409
+"Q326R6","Q326r6: Represent all [pipe: APIethsplit] people - Which of the following to you","factor",4091
+"Q326R7","Q326r7: Represent all [pipe: NIHNethsplit] people - Which of the following to yo","factor",819
+"Q329R1","Q329r1: Whites - Choosing only three groups from the list below, please indicate","factor",1873
+"Q329R2","Q329r2: Blacks - Choosing only three groups from the list below, please indicate","factor",6318
+"Q329R3","Q329r3: Hispanics - Choosing only three groups from the list below, please indic","factor",3803
+"Q329R4","Q329r4: Men - Choosing only three groups from the list below, please indicate ho","factor",2554
+"Q329R5","Q329r5: Blue Collar Workers - Choosing only three groups from the list below, pl","factor",8360
+"Q329R6","Q329r6: Asians - Choosing only three groups from the list below, please indicate","factor",2720
+"Q329R7","Q329r7: Homeowners - Choosing only three groups from the list below, please indi","factor",5814
+"Q329R8","Q329r8: Women - Choosing only three groups from the list below, please indicate","factor",7278
+"Q329R9","Q329r9: Young People - Choosing only three groups from the list below, please in","factor",6737
+"Q329R10","Q329r10: Business Owners - Choosing only three groups from the list below, pleas","factor",7178
+"Q330","Q330: What percent of the members of the U.S. House of Representatives do you th","numeric",17545
+"Q331","Q331: What percent of the members of the U.S. House of Representatives do you th","numeric",17545
+"Q332","Q332: What percent of the members of the U.S. House of Representatives do you th","numeric",17545
+"Q333","Q333: Congressional districts are redrawn every ten years by each state. But how","factor",9394
+"Q334","Q334: Would your position change if having some districts where Blacks and Hispa","factor",2318
+"Q335","Q335: Would your position change if having Blacks and Hispanics spread evenly ac","factor",4721
+"Q336R1C1","Q336r1c1: Radical social change that dismantles institutions such as marriage an","numeric",525
+"Q336R2C1","Q336r2c1: Civil rights protections, such as employment and housing policies that","numeric",525
+"Q336R3C1","Q336r3c1: Civil liberties protections, such as the right to privacy from governm","numeric",525
+"Q339","Q339: If you had to choose one approach to improving the status and well-being o","factor",17545
+"Q340_RACE_1","Q340_Race_1: Holds Race for Candidate 1","factor",17545
+"Q340_RACE_2","Q340_Race_2: Holds Race for Candidate 2","factor",17545
+"Q340_GENDER_1","Q340_Gender_1: Holds Gender for Candidate 1","factor",17545
+"Q340_GENDER_2","Q340_Gender_2: Holds Gender for Candidate 2","factor",17545
+"Q340_EXP_1","Q340_Exp_1: Holds Prior Experience for Candidate 1","factor",17545
+"Q340_EXP_2","Q340_Exp_2: Holds Prior Experience for Candidate 2","factor",17545
+"Q340_VOUCHER_1","Q340_Voucher_1: Holds House Voucher for Candidate 1","factor",17545
+"Q340_VOUCHER_2","Q340_Voucher_2: Holds House Voucher for Candidate 2","factor",17545
+"Q340_EVICT_1","Q340_Evict_1: Holds Evictions for Candidate 1","factor",17545
+"Q340_EVICT_2","Q340_Evict_2: Holds Evictions for Candidate 2","factor",17545
+"Q340_BUILD_1","Q340_Build_1: Holds Building Affordable Housing for Candidate 1","factor",17545
+"Q340_BUILD_2","Q340_Build_2: Holds Building Affordable Housing for Candidate 2","factor",17545
+"Q340_GUN_1","Q340_Gun_1: Holds Gun Control for Candidate 1","factor",17545
+"Q340_GUN_2","Q340_Gun_2: Holds Gun Control for Candidate 2","factor",17545
+"Q340AR1","q340ar1: * [pipe: Q340_Race_1] -","factor",17545
+"Q340AR2","q340ar2: * [pipe: Q340_Gender_1] -","factor",17545
+"Q340AR3","q340ar3: * [pipe: Q340_Exp_1] -","factor",17545
+"Q340AR4","q340ar4: * [pipe: Q340_Voucher_1] -","factor",17545
+"Q340AR5","q340ar5: * [pipe: Q340_Evict_1] -","factor",17545
+"Q340AR6","q340ar6: * [pipe: Q340_Build_1] -","factor",17545
+"Q340AR7","q340ar7: * [pipe: Q340_Gun_1] -","factor",17545
+"Q340BR1","q340br1: * [pipe: Q340_Race_2] - Candidate B hidden place holder for piping","factor",17545
+"Q340BR2","q340br2: * [pipe: Q340_Gender_2] - Candidate B hidden place holder for piping","factor",17545
+"Q340BR3","q340br3: * [pipe: Q340_Exp_2] - Candidate B hidden place holder for piping","factor",17545
+"Q340BR4","q340br4: * [pipe: Q340_Voucher_2] - Candidate B hidden place holder for piping","factor",17545
+"Q340BR5","q340br5: * [pipe: Q340_Evict_2] - Candidate B hidden place holder for piping","factor",17545
+"Q340BR6","q340br6: * [pipe: Q340_Build_2] - Candidate B hidden place holder for piping","factor",17545
+"Q340BR7","q340br7: * [pipe: Q340_Gun_2] - Candidate B hidden place holder for piping","factor",17545
+"Q340AAR1","q340aar1: Holds order for Candidate A","factor",17545
+"Q340BBR1","q340bbr1: Holds order for Candidate B","factor",17545
+"Q340","Q340: Which candidate would you vote for?","factor",17545
+"Q341R1","Q341r1: Candidate 1:","factor",17545
+"Q341R2","Q341r2: Candidate 2: - If you have up to 1 hour, how much time are you willing t","factor",17545
+"Q343R1","Q343r1: Building more duplexes, townhomes, and low-rise apartments - Do you supp","factor",17545
+"Q343R2","Q343r2: Banning discrimination against section 8 voucher use - Do you support th","factor",17545
+"Q343R3","Q343r3: Limiting evictions - Do you support the following policies?","factor",17545
+"Q343R4","Q343r4: Rent control - Do you support the following policies?","factor",17545
+"Q347SPLIT","q347split: holds split for q347","factor",17545
+"Q347","Q347: Thinking about the representation and diversity of your local [pipe: q347s","factor",17545
+"Q348","Q348: How much influence do you think [pipe: S2_Race_Prime] people have over you","factor",17545
+"Q349","Q349: How much do you think your local [pipe: q347split] care about the prioriti","factor",17545
+"Q350","Q350: How much real improvement do you think there has been in the economic posi","factor",17545
+"Q351","Q351: Now what about in your neighborhood. How much real improvement do you thin","factor",17545
+"Q352","Q352: When it comes to undocumented Mexican immigrants who are already living an","factor",17545
+"Q353","Q353: Thinking about your overall giving, what would you say was the total dolla","factor",765
+"Q354","Q354: Thinking about your overall giving, what would you say was the total dolla","factor",765
+"Q355R1","Q355r1: Relief organizations for overseas relief efforts - Which of the followin","factor",765
+"Q355R2","Q355r2: Relief organizations for domestic poverty alleviation - Which of the fol","factor",765
+"Q355R3","Q355r3: Civil rights organizations dedicated to protecting the rights of people","factor",765
+"Q355R4","Q355r4: Educational purpose - Which of the following have you contributed to?","factor",765
+"Q355R5","Q355r5: Youth and family services - Which of the following have you contributed","factor",765
+"Q355R6","Q355r6: Arts and culture - Which of the following have you contributed to?","factor",765
+"Q355R7","Q355r7: Health care or medical research - Which of the following have you contri","factor",765
+"Q355R8","Q355r8: Preserving the environment - Which of the following have you contributed","factor",765
+"Q355R9","Q355r9: None of these - Which of the following have you contributed to?","factor",765
+"Q356","Q356: Over the past year, did you participate in a Black Lives Matter protest or","factor",17545
+"Q357","Q357: About how many days did you go to a Black Lives Matter protest?","factor",2500
+"Q358","Q358: Based on everything you have heard or seen, how much do you support or opp","factor",17545
+"Q359R1","Q359r1: [pipe: S2_Race_Prime]s have a responsibility to support the Black Lives","factor",17545
+"Q359R2","Q359r2: [pipe: S2_Race_Prime]s will benefit from the success of the Black Lives","factor",17545
+"Q359R3","Q359r3: When Americans speak up and protest injustice in the U.S., it always mak","factor",17545
+"Q359R4","Q359r4: When Black Americans speak up and protest injustice in the U.S., it alwa","factor",17545
+"Q363","Q363: Thinking about government services, political power and representation, wo","factor",8810
+"Q364SPLIT","q364split: holds split for q364","factor",8810
+"Q364","Q364: If there were protests in your area, how comfortable or uncomfortable woul","factor",4417
+"Q365","Q365: If there were Black Lives Matter protests in your area, how comfortable or","factor",4393
+"Q366R1","Q366r1: No, I did not engage online on this issue at all - Thinking about the is","factor",17545
+"Q366R2","Q366r2: Yes, I engaged in support of BLM - Thinking about the issue of police vi","factor",17545
+"Q366R3","Q366r3: Yes, I engaged in support of police - Thinking about the issue of police","factor",17545
+"Q366R4","Q366r4: Yes, I engaged in general on the issue - Thinking about the issue of pol","factor",17545
+"Q367","Q367: In response to the killing of George Floyd in Minnesota, millions of peopl","factor",17545
+"Q368","Q368: During the summer of 2020, Black Lives Matter and protesters around the wo","factor",17545
+"Q369","Q369: Which statement do you agree the most:","factor",6165
+"Q370","Q370: Which statement do you agree the most:","factor",6165
+"Q371","Q371: During the COVID-19 pandemic, the Center for Disease Control (CDC) suggest","factor",17545
+"Q372","Q372: As far as you know, when you are inside a public place, like a store, offi","factor",17545
+"Q373","Q373: How would you describe the role of Mosque in spreading awareness about COV","factor",765
+"Q374","Q374: What percentage of your total charitable contributions did you make this R","factor",765
+"Q375","Q375: Do you think your charitable contributions in this Ramadan when compared t","factor",765
+"Q376","Q376: When you are out in public, how often do you wear religious garb or a head","factor",765
+"Q377","Q377: We are interested in your reactions to some things that happen in everyday","factor",5447
+"Q378","Q378: Tim is a White man who owns a hair salon. His business is growing rapidly","factor",5447
+"Q379","Q379: Milford is a mid-sized city in the Northeast. The main bus depot for the c","factor",5447
+"Q380","Q380: Michael is a young Black man who lives in a midwestern city. One day Micha","factor",5447
+"Q381_Q383R1","Q381_Q383r1: Where would you rate Whites in general on this scale? - Now we have","factor",17545
+"Q381_Q383R2","Q381_Q383r2: Where would you rate Blacks in general on this scale? - Now we have","factor",17545
+"Q381_Q383R3","Q381_Q383r3: Where would you rate Latinos in general on this scale? - Now we hav","factor",17545
+"Q384R1","Q384r1: Some people say the Black Lives Matter protests in the Summer of 2020 we","factor",17545
+"Q385","Q385: As you may have heard, in the wake of the murder of George Floyd and prote","factor",17545
+"Q386_Q390R1","Q386_Q390r1: Asian Americans are often overly competitive for their success. - D","factor",5447
+"Q386_Q390R2","Q386_Q390r2: Asian Americans make the job market too competitive - Do you agree","factor",5447
+"Q386_Q390R3","Q386_Q390r3: When it comes to education, Asian Americans strive to achieve too m","factor",5447
+"Q386_Q390R4","Q386_Q390r4: Asian Americans need to embrace American values more - Do you agree","factor",5447
+"Q386_Q390R5","Q386_Q390r5: It is annoying when Asian Americans speak in their own languages in","factor",5447
+"Q391_Q393R1","Q391_Q393r1: Job - Would you say that your political views are in line with most","factor",5479
+"Q391_Q393R2","Q391_Q393r2: Church or place of worship - Would you say that your political view","factor",5479
+"Q391_Q393R3","Q391_Q393r3: Volunteer Organization - Would you say that your political views ar","factor",5479
+"Q394","Q394: Do you have a plan for disasters or emergencies for your household?","factor",5479
+"Q395","Q395: How much can [pipe: S2_Race_Prime]s like you influence the outcome of elec","factor",17545
+"Q396_Q398R1","Q396_Q398r1: Medical science, like in-vitro fertilization (where the egg and spe","factor",13039
+"Q396_Q398R2","Q396_Q398r2: People should always follow the advice given to them by medical pra","factor",13039
+"Q396_Q398R3","Q396_Q398r3: Patients have sometimes been deceived or misled by medical practiti","factor",13039
+"Q399","Q399: Do you think that in-vitro fertilization (IVF) is morally acceptable?","factor",13039
+"Q400","Q400: Today, in the US, one in ten women has trouble getting or staying pregnant","factor",13039
+"Q401_Q404R1","Q401_Q404r1: Black and White women experience sexism in different ways - Do you","factor",11089
+"Q401_Q404R2","Q401_Q404r2: In order to achieve the changes we seek, we must fight racism as we","factor",11089
+"Q401_Q404R3","Q401_Q404r3: It concerns me that racism within the lesbian and gay community mak","factor",11089
+"Q401_Q404R4","Q401_Q404r4: It concerns me that sexism among Black men makes it difficult for B","factor",11089
+"Q405","Q405: Some people feel that the government in Washington should make every effor","factor",5479
+"Q406","Q406: Since early 2020, the U.S. has been dealing with disruptions and health an","factor",17545
+"Q407R1","Q407r1: Personal or family health","factor",7806
+"Q407R2","Q407r2: Personal or family finances","factor",7806
+"Q407R3","Q407r3: Social changes like distancing and closures","factor",7806
+"Q407R4","Q407r4: New policies and issues","factor",7806
+"Q407R5","Q407r5: Other (Specify) - And what was it that made you","factor",7806
+"Q407R5OE","Q407r5oe: And what was it that made you","factor",17545
+"Q408","Q408: How often when you are inside a public place, like a store, office, or bus","factor",17545
+"Q409","Q409: In general would you rate your physical health as excellent, very good, go","factor",17545
+"Q410","Q410: In general would you rate your mental health as excellent, very good, good","factor",17545
+"Q411_Q416R1","Q411_Q416r1: Little interest or pleasure in doing things - Over the last 2 weeks","factor",17545
+"Q411_Q416R2","Q411_Q416r2: Feeling down, depressed, or hopeless - Over the last 2 weeks, how o","factor",17545
+"Q411_Q416R3","Q411_Q416r3: Feeling nervous, anxious, or on edge - Over the last 2 weeks, how o","factor",17545
+"Q411_Q416R4","Q411_Q416r4: Feeling afraid as if something awful might happen - Over the last 2","factor",17545
+"Q411_Q416R5","Q411_Q416r5: My mind can","factor",17545
+"Q411_Q416R6","Q411_Q416r6: Uncertainty makes me uneasy, anxious or stressed - Over the last 2","factor",17545
+"SPLITQ417_Q424","splitQ417_Q424: Holds split var","factor",17545
+"Q417_Q424R1","Q417_Q424r1: Reparations to Black Americans to address inequities created by gen","factor",2688
+"Q417_Q424R2","Q417_Q424r2: Reparations to Black Americans to address America","factor",2759
+"Q417_Q424R3","Q417_Q424r3: Shifting some funds from local police departments to local social s","factor",2688
+"Q417_Q424R4","Q417_Q424r4: Defunding local police departments. - To what degree would you supp","factor",2759
+"Q417_Q424R5","Q417_Q424r5: Developing a federal standard in education, ensuring that kindergar","factor",2688
+"Q417_Q424R6","Q417_Q424r6: Developing a federal standard in education, ensuring that kindergar","factor",2759
+"Q417_Q424R7","Q417_Q424r7: Ensuring affirmative action in jobs and universities so that Blacks","factor",2688
+"Q417_Q424R8","Q417_Q424r8: Ensuring affirmative action in jobs and universities so that everyo","factor",2759
+"Q425","Q425: How important is religion in your life","factor",17545
+"Q426R1","Q426r1: NAME: - Earlier you mentioned that you participate in worship services o","factor",17545
+"Q426R2","Q426r2: CITY: - Earlier you mentioned that you participate in worship services o","factor",17545
+"NOANSWERQ426_R3","noanswerQ426_r3: Earlier you mentioned that you participate in worship services","factor",11420
+"Q427R1","Q427r1: NAME: - Earlier you mentioned that you do not participate in worship ser","factor",17545
+"Q427R2","Q427r2: CITY: - Earlier you mentioned that you do not participate in worship ser","factor",17545
+"NOANSWERQ427_R3","noanswerQ427_r3: Earlier you mentioned that you do not participate in worship se","factor",6125
+"Q428R1","Q428r1: Percent White - Please indicate the approximate racial/ethnic compositio","numeric",11420
+"Q428R2","Q428r2: Percent Black - Please indicate the approximate racial/ethnic compositio","numeric",11420
+"Q428R3","Q428r3: Percent Hispanic - Please indicate the approximate racial/ethnic composi","numeric",11420
+"Q428R4","Q428r4: Percent Asian - Please indicate the approximate racial/ethnic compositio","numeric",11420
+"Q428R6","Q428r6: Percent American Indian/Native Indian - Please indicate the approximate","numeric",11420
+"Q428R5","Q428r5: Percent Other - Please indicate the approximate racial/ethnic compositio","numeric",11420
+"Q429_Q440R1","Q429_Q440r1: Antisemitism no longer matters in the US - Please indicate your lev","factor",17545
+"Q429_Q440R2","Q429_Q440r2: Discrimination against Muslims will soon be a thing of the past - P","factor",17545
+"Q429_Q440R3","Q429_Q440r3: Our social structure system privileges Christians - Please indicate","factor",17545
+"Q429_Q440R4","Q429_Q440r4: Jews have more power and influence than other groups in this countr","factor",17545
+"Q429_Q440R5","Q429_Q440r5: America must protect and preserve its White European heritage - Ple","factor",17545
+"Q429_Q440R6","Q429_Q440r6: America must protect and preserve its multiracial heritage - Please","factor",17545
+"Q429_Q440R7","Q429_Q440r7: The federal government should advocate the values of racial minorit","factor",17545
+"Q429_Q440R8","Q429_Q440r8: The federal government should advocate the values of Whites - Pleas","factor",17545
+"Q429_Q440R9","Q429_Q440r9: The federal government should advocate Christian values - Please in","factor",17545
+"Q429_Q440R10","Q429_Q440r10: The federal government should advocate the values of religious min","factor",17545
+"Q429_Q440R11","Q429_Q440r11: America must protect and preserve its Christian heritage - Please","factor",17545
+"Q429_Q440R12","Q429_Q440r12: America must protect and preserve its multi-religious heritage - P","factor",17545
+"Q441_Q452R1","Q441_Q452r1: Been stopped and questioned by the police while in a car. - People","factor",17545
+"Q441_Q452R2","Q441_Q452r2: Been stopped and questioned by the police while you were on foot. -","factor",17545
+"Q441_Q452R3","Q441_Q452r3: Been charged a fine or fee for a non-criminal infraction, such as d","factor",17545
+"Q441_Q452R4","Q441_Q452r4: Been arrested, booked, or charged with a crime. - People come into","factor",17545
+"Q441_Q452R5","Q441_Q452r5: Been convicted of a crime, even if you weren't guilty. - People com","factor",17545
+"Q441_Q452R6","Q441_Q452r6: Been charged a fine for a criminal conviction. - People come into c","factor",17545
+"Q441_Q452R7","Q441_Q452r7: Been on probation or parole. - People come into contact with the cr","factor",17545
+"Q441_Q452R8","Q441_Q452r8: Spent time in jail or prison, including juvenile detention. - Peopl","factor",17545
+"Q441_Q452R9","Q441_Q452r9: Been the victim of a crime. - People come into contact with the cri","factor",17545
+"Q441_Q452R10","Q441_Q452r10: Had a close friend or family member arrested, booked, or charged w","factor",17545
+"Q441_Q452R11","Q441_Q452r11: Had a close friend or family member convicted of a crime, even if","factor",17545
+"Q441_Q452R12","Q441_Q452r12: Had a close friend or family member who spent time in jail, prison","factor",17545
+"Q453","Q453: How old were you when you first had involuntary contact with police, law e","factor",17545
+"Q454","Q454: How many times have you had an involuntary encounter with law enforcement","factor",11564
+"Q455","Q455: Would you say the experiences dealing with law enforcement were mostly pos","factor",11564
+"Q456_Q461R1","Q456_Q461r1: Avoid walking or driving in wealthier neighborhoods - How often do","factor",17545
+"Q456_Q461R2","Q456_Q461r2: Avoid walking or driving in lower-income neighborhoods - How often","factor",17545
+"Q456_Q461R3","Q456_Q461r3: Avoid walking or driving in my own, or very similar neighborhoods -","factor",17545
+"Q456_Q461R4","Q456_Q461r4: Avoid gathering in groups to avoid appearance of wrongdoing - How o","factor",17545
+"Q456_Q461R5","Q456_Q461r5: Carry myself in a way that makes me look non-threatening - How ofte","factor",17545
+"Q456_Q461R6","Q456_Q461r6: Turn to my neighbors and local groups to help solve problems rather","factor",17545
+"Q462","Q462: If you had trouble with the police - like a traffic violation or being acc","factor",17545
+"Q463","Q463: Have you ever used the camera on your mobile device to record police misco","factor",17545
+"Q464","Q464: Have you done that within the past 12 months?","factor",2148
+"Q465R1","Q465r1: Myself - Were you recording an incident involving yourself or someone el","factor",2148
+"Q465R2","Q465r2: Someone else - Were you recording an incident involving yourself or some","factor",2148
+"Q466","Q466: Do you personally know anyone who has been shot by police or law enforceme","factor",17545
+"Q467_Q469R1","Q467_Q469r1: Helped someone seek immigration-related information or services - N","factor",17545
+"Q467_Q469R2","Q467_Q469r2: Refrained from reporting a minor crime to protect someone from poss","factor",17545
+"Q467_Q469R3","Q467_Q469r3: Intervened or reported a crime/incident of harassment committed aga","factor",17545
+"Q470","Q470: Have you or someone in your family, or a close personal friend ever used a","factor",17545
+"Q471R1","Q471r1: Me - Who was it that used that program?","numeric",0
+"Q471R2","Q471r2: My child - Who was it that used that program?","numeric",0
+"Q471R3","Q471r3: My parent - Who was it that used that program?","numeric",0
+"Q471R4","Q471r4: My spouse/partner - Who was it that used that program?","numeric",0
+"Q471R5","Q471r5: My brother or sister - Who was it that used that program?","numeric",0
+"Q471R6","Q471r6: My aunt or uncle - Who was it that used that program?","factor",1838
+"Q471R7","Q471r7: My cousin or other relative - Who was it that used that program?","factor",1838
+"Q471R8","Q471r8: My grandparent - Who was it that used that program?","factor",1838
+"Q471R9","Q471r9: A close personal friend - Who was it that used that program?","factor",1838
+"Q472_Q474R1","Q472_Q474r1: I have power to define myself in interactions with police - People","factor",17545
+"Q472_Q474R2","Q472_Q474r2: Many officers see people like me as animals, thugs, and less than h","factor",17545
+"Q472_Q474R3","Q472_Q474r3: The police are very present in my neighborhood but do not get to kn","factor",17545
+"Q475R1","Q475r1: Establish community control over the police force - Please rank the foll","factor",16958
+"Q475R2","Q475r2: Reduce policing budget and role in the community - Please rank the follo","factor",16914
+"Q475R3","Q475r3: Invest more resources in education, jobs and health - Please rank the fo","factor",17303
+"Q475R4","Q475r4: Require police to focus their attention on serious crimes and violence,","factor",17265
+"Q475R5","Q475r5: Abolish the police and create a community-led safety initiative. - Pleas","factor",16777
+"Q475R6","Q475r6: Increase the size of the police force - Please rank the following police","factor",17013
+"Q475R7","Q475r7: Train police more to limit racial bias - Please rank the following polic","factor",17126
+"Q476","Q476: Which of the following statements most aligns with your experience with po","factor",17545
+"Q477","Q477: Which of the following characterizations most describe your experience wit","factor",17545
+"Q478_Q483R1","Q478_Q483r1: The official rules say the police can","factor",17545
+"Q478_Q483R2","Q478_Q483r2: There","factor",17545
+"Q478_Q483R3","Q478_Q483r3: Democracy protects me from police mistreatment - How much do you ag","factor",17545
+"Q478_Q483R4","Q478_Q483r4: I feel like a full and equal citizen in this country with all the r","factor",17545
+"Q478_Q483R5","Q478_Q483r5: If there is a safety issue in my community I feel comfortable calli","factor",17545
+"Q478_Q483R6","Q478_Q483r6: I do not trust the police to protect my community - How much do you","factor",17545
+"Q484","Q484: In general, do the police treat Black women better than Black men, worse,","factor",17545
+"Q485","Q485: When it comes to the treatment of Black people by the police and the treat","factor",17545
+"Q486","Q486: Previously you indicated that you may have been arrested, detained or conv","factor",9392
+"Q487_Q489R1","Q487_Q489r1: The judge - Take a minute to think about times you visited the cour","factor",5605
+"Q487_Q489R2","Q487_Q489r2: Your attorney/lawyer representing you - Take a minute to think abou","factor",5605
+"Q487_Q489R3","Q487_Q489r3: The prosecutor/opposing lawyer - Take a minute to think about times","factor",5605
+"Q490R1","Q490r1: Yes, I have been stopped or questioned - Do you know anyone who has been","factor",17545
+"Q490R2","Q490r2: Yes, a close family member has been stopped or questioned","factor",17545
+"Q490R3","Q490r3: Yes, a close family member has been detained or deported","factor",17545
+"Q490R4","Q490r4: Yes, some other relative has been stopped or questioned","factor",17545
+"Q490R5","Q490r5: Yes, some other relative has been detained or deported","factor",17545
+"Q490R6","Q490r6: Yes, a friend or co-worker has been stopped or questioned","factor",17545
+"Q490R7","Q490r7: Yes, a friend or co-worker has been detained or deported - Do you know a","factor",17545
+"Q490R8","Q490r8: No, do not know anyone - Do you know anyone who has been stopped or ques","factor",17545
+"Q491A","Q491A: Would you say their experience dealing with law enforcement for immigrati","factor",3588
+"Q491R1","Q491r1: No, I do not know anyone undocumented - Do you know anyone who is curren","factor",17545
+"Q491R2","Q491r2: Yes, one of my parents - Do you know anyone who is currently an undocume","factor",17545
+"Q491R3","Q491r3: Yes, one of my siblings - Do you know anyone who is currently an undocum","factor",17545
+"Q491R4","Q491r4: Yes, one of my children - Do you know anyone who is currently an undocum","factor",17545
+"Q491R5","Q491r5: Yes, another family member (aunt, grandparent, cousin) - Do you know any","factor",17545
+"Q491R6","Q491r6: Yes, a close personal friend - Do you know anyone who is currently an un","factor",17545
+"Q491R7","Q491r7: Yes, someone I work with - Do you know anyone who is currently an undocu","factor",17545
+"Q492","Q492: How worried, if at all, are you that someone you know could be detained or","factor",17545
+"Q493","Q493: How worried, if at all, are you that YOU could be detained or deported for","factor",10288
+"Q494_Q503R1","Q494_Q503r1: Shares my race - Which of the following traits do you prefer in a c","factor",17545
+"Q494_Q503R2","Q494_Q503r2: Shares my gender - Which of the following traits do you prefer in a","factor",17545
+"Q494_Q503R3","Q494_Q503r3: Devoted to their religion - Which of the following traits do you pr","factor",17545
+"Q494_Q503R4","Q494_Q503r4: Young - Which of the following traits do you prefer in a candidate","factor",17545
+"Q494_Q503R5","Q494_Q503r5: Working-class background - Which of the following traits do you pre","factor",17545
+"Q494_Q503R6","Q494_Q503r6: Wealthy/rich - Which of the following traits do you prefer in a can","factor",17545
+"Q494_Q503R7","Q494_Q503r7: Has experience, been elected to office before - Which of the follow","factor",17545
+"Q494_Q503R8","Q494_Q503r8: Is a newcomer to politics - Which of the following traits do you pr","factor",17545
+"Q494_Q503R9","Q494_Q503r9: Endorsements from interest groups I support - Which of the followin","factor",17545
+"Q494_Q503R10","Q494_Q503r10: Candidate training experience - Which of the following traits do y","factor",17545
+"Q504R1","Q504r1: My employment - In the past year, which of the following has caused you","numeric",17545
+"Q504R2","Q504r2: COVID-19 - In the past year, which of the following has caused you the m","numeric",17545
+"Q504R3","Q504r3: Climate change - In the past year, which of the following has caused you","numeric",17545
+"Q504R4","Q504r4: Police Brutality - In the past year, which of the following has caused y","numeric",17545
+"Q504R5","Q504r5: Terrorism - In the past year, which of the following has caused you the","numeric",17545
+"Q504R6","Q504r6: White supremacy - In the past year, which of the following has caused yo","numeric",17545
+"Q504R7","Q504r7: Threats to my religious freedom - In the past year, which of the followi","numeric",17545
+"Q504R8","Q504r8: US immigration policy - In the past year, which of the following has cau","numeric",17545
+"Q504R11","Q504r11: Donald Trump - In the past year, which of the following has caused you","numeric",17545
+"Q504R12","Q504r12: Joe Biden - In the past year, which of the following has caused you the","numeric",17545
+"Q505_Q508R1","Q505_Q508r1: People acted as if they are suspicious of you. - Here are a few thi","factor",17545
+"Q505_Q508R2","Q505_Q508r2: People called you offensive names or treated you with less respect.","factor",17545
+"Q505_Q508R3","Q505_Q508r3: People expressed support for you. - Here are a few things that some","factor",17545
+"Q505_Q508R4","Q505_Q508r4: You saw graffiti targeting","factor",17545
+"Q509_Q511R1","Q509_Q511r1: You were singled out or treated unfairly by other government offici","factor",17545
+"Q509_Q511R2","Q509_Q511r2: You heard or saw government officials or politicians make negative","factor",17545
+"Q509_Q511R3","Q509_Q511r3: You were negatively affected by one of President Donald Trump's exe","factor",17545
+"Q512R1","Q512r1: Working in Congress on bills concerning national issues. - Here is a lis","factor",17545
+"Q512R2","Q512r2: Helping people in the district who have personal problems with governmen","factor",17545
+"Q512R3","Q512r3: Making sure the state/district gets its fair share of government money a","factor",17545
+"Q513_Q516R1","Q513_Q516r1: In the best kind of government, about half of all elected officials","factor",17545
+"Q513_Q516R2","Q513_Q516r2: Men make better political leaders than women do. - Please tell us w","factor",17545
+"Q513_Q516R3","Q513_Q516r3: Discrimination against women is no longer a problem in the U.S. - P","factor",17545
+"SPLITQ517_Q520","splitQ517_Q520: New Single Select Question","factor",17545
+"SPLITA","splitA: New Single Select Question","factor",17545
+"Q517","Q517: Consider how women are viewed by Americans in general. As viewed by most A","factor",8661
+"Q518","Q518: Consider how women are viewed by","factor",8884
+"Q519","Q519: Consider how women are viewed by Americans in general. As viewed by most A","factor",8661
+"Q520","Q520: Consider how women are viewed by","factor",8884
+"Q521_Q528R1","Q521_Q528r1: Many women interpret innocent remarks or acts as being sexist. - Do","factor",17545
+"Q521_Q528R2","Q521_Q528r2: Most women fail to appreciate fully all that men do for them. - Do","factor",17545
+"Q521_Q528R3","Q521_Q528r3: Women seek to gain power by getting control over men. - Do you agre","factor",17545
+"Q521_Q528R4","Q521_Q528r4: Once a woman gets a man to commit to her, she tries to put him on a","factor",17545
+"Q521_Q528R5","Q521_Q528r5: Women should be cherished and protected by men. - Do you agree stro","factor",17545
+"Q521_Q528R6","Q521_Q528r6: Men are incomplete without women. - Do you agree strongly, agree so","factor",17545
+"Q521_Q528R7","Q521_Q528r7: Women, compared to men, tend to have a superior moral sensibility.","factor",17545
+"Q521_Q528R8","Q521_Q528r8: Men should be willing to sacrifice their own well being in order to","factor",17545
+"Q529","Q529: Sometimes people find themselves the object of unwanted sexual advances or","factor",17545
+"Q530","Q530: Have you ever reported unwanted sexual conversations or physical contact t","factor",7682
+"Q531","Q531: Was action taken when you reported the incident?","factor",2155
+"Q532","Q532: On the scale below, how would you rate your experience reporting unwanted","factor",1644
+"Q533","Q533: On the scale below, how would you rate your experience reporting unwanted","factor",1500
+"Q534R1","Q534r1: No, none of these - Over the past few years many people have posted thei","factor",17545
+"Q534R2","Q534r2: I have shared my support for #MeToo online - Over the past few years man","factor",17545
+"Q534R3","Q534r3: I have shared my opposition to #MeToo online - Over the past few years m","factor",17545
+"Q534R4","Q534r4: I have discussed my support for MeToo in person - Over the past few year","factor",17545
+"Q534R5","Q534r5: I have discussed my opposition to MeToo in person - Over the past few ye","factor",17545
+"Q535_Q538R1","Q535_Q538r1: Authority where unwanted contact occurred (e.g. employer, school, r","factor",17545
+"Q535_Q538R2","Q535_Q538r2: Police - In the future, if you were ever to find yourself the objec","factor",17545
+"Q535_Q538R3","Q535_Q538r3: Family - In the future, if you were ever to find yourself the objec","factor",17545
+"Q535_Q538R4","Q535_Q538r4: Friends - In the future, if you were ever to find yourself the obje","factor",17545
+"Q539R1","Q539r1: Percent White - Please indicate the approximate racial/ethnic compositio","numeric",17545
+"Q539R2","Q539r2: Percent Black - Please indicate the approximate racial/ethnic compositio","numeric",17545
+"Q539R3","Q539r3: Percent Hispanic - Please indicate the approximate racial/ethnic composi","numeric",17545
+"Q539R4","Q539r4: Percent Asian - Please indicate the approximate racial/ethnic compositio","numeric",17545
+"Q539R6","Q539r6: Percent American Indian/Native American - Please indicate the approximat","numeric",17545
+"Q539R5","Q539r5: Percent Other - Please indicate the approximate racial/ethnic compositio","numeric",17545
+"Q540R1","Q540r1: Separate from the approximate racial/ethnic composition, about what perc","numeric",17545
+"Q541","Q541: For each item, indicate which statement you agree with most even if neithe","factor",17545
+"Q542","Q542: For each item, indicate which statement you agree with most even if neithe","factor",17545
+"Q543","Q543: For each item, indicate which statement you agree with most even if neithe","factor",17545
+"Q544","Q544: For each item, indicate which statement you agree with most even if neithe","factor",17545
+"Q545R7","Q545r7: Indicate your perceptions of Latino immigrants on a seven-point scale, b","factor",17545
+"Q546R7","Q546r7: Indicate your perceptions of Latino immigrants on a seven-point scale, b","factor",17545
+"Q547R7","Q547r7: Indicate your perceptions of Latino immigrants on a seven-point scale, b","factor",17545
+"Q548R7","Q548r7: Indicate your perceptions of Latino immigrants on a seven-point scale, b","factor",17545
+"Q549R7","Q549r7: Indicate your perceptions of Latino immigrants on a seven-point scale, b","factor",17545
+"Q550R1","Q550r1: Yes, my spouse, partner, boyfriend or girlfriend - Do you know anyone wh","factor",17545
+"Q550R2","Q550r2: Yes, one of my parents or grandparents - Do you know anyone who is a Lat","factor",17545
+"Q550R3","Q550r3: Yes, one of my children - Do you know anyone who is a Latino immigrant?","factor",17545
+"Q550R4","Q550r4: Yes, one of my close friends - Do you know anyone who is a Latino immigr","factor",17545
+"Q550R5","Q550r5: No, I do not know a Latino immigrant - Do you know anyone who is a Latin","factor",17545
+"Q550R6","Q550r6: Not sure - Do you know anyone who is a Latino immigrant?","factor",17545
+"Q551_Q559R1","Q551_Q559r1: What happens to Black people will have","factor",17545
+"Q551_Q559R2","Q551_Q559r2: What happens to Hispanic people will have","factor",17545
+"Q551_Q559R3","Q551_Q559r3: What happens to LGBTQ people will have","factor",17545
+"Q551_Q559R4","Q551_Q559r4: What happens to White people will have","factor",17545
+"Q551_Q559R5","Q551_Q559r5: What happens to Asian people will have","factor",17545
+"Q551_Q559R6","Q551_Q559r6: What happens to Muslim people will have","factor",17545
+"Q551_Q559R7","Q551_Q559r7: What happens to Native or indigenous people will have","factor",17545
+"Q551_Q559R8","Q551_Q559r8: What happens to","factor",17545
+"Q551_Q559R9","Q551_Q559r9: What happens to","factor",17545
+"Q560R1","Q560r1: Racial identity - How important are the following identities to you pers","factor",17545
+"Q560R2","Q560r2: Gender identity - How important are the following identities to you pers","factor",17545
+"Q560R3","Q560r3: Religious identity - How important are the following identities to you p","factor",17545
+"Q560R4","Q560r4: Party identity - How important are the following identities to you perso","factor",17545
+"Q560R5","Q560r5: Cultural identity - How important are the following identities to you pe","factor",17545
+"Q560R6","Q560r6: Class identity - How important are the following identities to you perso","factor",17545
+"Q560R7","Q560r7: City/town/community identity - How important are the following identitie","factor",17545
+"Q560R8","Q560r8: American identity - How important are the following identities to you pe","factor",17545
+"Q561","Q561: Do you think of yourself as a woman of color?","factor",6851
+"Q562","Q562: Thinking about government services, political power and representation, wo","factor",13590
+"Q563_Q572R1","Q563_Q572r1: Women - Think about the size of the following groups in the U.S. po","factor",17545
+"Q563_Q572R2","Q563_Q572r2: Men - Think about the size of the following groups in the U.S. popu","factor",17545
+"Q563_Q572R3","Q563_Q572r3: Immigrants - Think about the size of the following groups in the U.","factor",17545
+"Q563_Q572R4","Q563_Q572r4: Native Americans - Think about the size of the following groups in","factor",17545
+"Q563_Q572R5","Q563_Q572r5: Whites - Think about the size of the following groups in the U.S. p","factor",17545
+"Q563_Q572R6","Q563_Q572r6: Blacks - Think about the size of the following groups in the U.S. p","factor",17545
+"Q563_Q572R7","Q563_Q572r7: Latinos - Think about the size of the following groups in the U.S.","factor",17545
+"Q563_Q572R8","Q563_Q572r8: Asians - Think about the size of the following groups in the U.S. p","factor",17545
+"Q563_Q572R9","Q563_Q572r9: Muslims - Think about the size of the following groups in the U.S.","factor",17545
+"Q563_Q572R10","Q563_Q572r10: LGBTQ - Think about the size of the following groups in the U.S. p","factor",17545
+"Q573","Q573: If offered the opportunity, would you consider running for political offic","factor",17545
+"Q574","Q574: Imagine you are new politician in the area where you live, would you feel","factor",17545
+"Q575_Q581R1","Q575_Q581r1: Women of color congressional candidates - We'd like to get your fee","numeric",9394
+"Q575_Q581R2","Q575_Q581r2: Representative Alexandria Ocasio-Cortez (AOC) - We'd like to get yo","numeric",9394
+"Q575_Q581R3","Q575_Q581r3: Black men congressional candidates - We'd like to get your feelings","numeric",9394
+"Q575_Q581R4","Q575_Q581r4: Latina women congressional candidates - We'd like to get your feeli","numeric",9394
+"Q575_Q581R5","Q575_Q581r5: Black women congressional candidates - We'd like to get your feelin","numeric",9394
+"Q575_Q581R6","Q575_Q581r6: Latino men congressional candidates - We'd like to get your feeling","numeric",9394
+"Q575_Q581R7","Q575_Q581r7: Representative Ayanna Pressley - We'd like to get your feelings tow","numeric",9394
+"Q582","Q582: In deciding how to vote, is the candidate being a woman of color an import","factor",9094
+"Q583","Q583: Do you think the quality of services provided by the government is general","factor",5479
+"Q584","Q584: Do you favor or oppose having a national health plan, sometimes called Med","factor",17545
+"Q585_Q590R1","Q585_Q590r1: Put off or postpone getting health care you needed because of the c","factor",5479
+"Q585_Q590R2","Q585_Q590r2: Have problems paying or an inability to pay for any medical bills -","factor",5479
+"Q585_Q590R3","Q585_Q590r3: Get charged more than you expected for a bill you received from a d","factor",5479
+"Q585_Q590R4","Q585_Q590r4: Have an unexpected injury, serious illness, or other medical event","factor",5479
+"Q585_Q590R5","Q585_Q590r5: Feel you were mistreated by a healthcare provider because of your r","factor",5479
+"Q585_Q590R6","Q585_Q590r6: Put off or postpone getting health care due to concerns related to","factor",5479
+"Q591_Q596R1","Q591_Q596r1: Asian or Asian American people - How often did your parents and fam","factor",17545
+"Q591_Q596R2","Q591_Q596r2: Black or African American people - How often did your parents and f","factor",17545
+"Q591_Q596R3","Q591_Q596r3: Hispanic or Latino people - How often did your parents and family t","factor",17545
+"Q591_Q596R4","Q591_Q596r4: Native American people - How often did your parents and family talk","factor",17545
+"Q591_Q596R5","Q591_Q596r5: Middle Eastern people - How often did your parents and family talk","factor",17545
+"Q591_Q596R6","Q591_Q596r6: White people - How often did your parents and family talk about the","factor",17545
+"Q597_Q602R1","Q597_Q602r1: Asian or Asian American people - In school, how much did you learn","factor",17545
+"Q597_Q602R2","Q597_Q602r2: Black or African American people - In school, how much did you lear","factor",17545
+"Q597_Q602R3","Q597_Q602r3: Hispanic or Latino people - In school, how much did you learn about","factor",17545
+"Q597_Q602R4","Q597_Q602r4: Native American people - In school, how much did you learn about th","factor",17545
+"Q597_Q602R5","Q597_Q602r5: Middle Eastern people - In school, how much did you learn about the","factor",17545
+"Q597_Q602R6","Q597_Q602r6: White people - In school, how much did you learn about the history","factor",17545
+"Q603R1","Q603r1: Parents and Family - In general, where do you learn the most about other","numeric",17545
+"Q603R2","Q603r2: Film or TV - In general, where do you learn the most about other racial","numeric",17545
+"Q603R3","Q603r3: Friends - In general, where do you learn the most about other racial gro","numeric",17545
+"Q603R4","Q603r4: News coverage - In general, where do you learn the most about other raci","numeric",17545
+"Q603R5","Q603r5: Spouse or partner - In general, where do you learn the most about other","numeric",17545
+"Q603R6","Q603r6: Work/ Place of employment - In general, where do you learn the most abou","numeric",17545
+"Q603R7","Q603r7: Personal interactions with others - In general, where do you learn the m","numeric",17545
+"Q603R8","Q603r8: Personal research - In general, where do you learn the most about other","numeric",17545
+"Q603R9","Q603r9: K-12 school - In general, where do you learn the most about other racial","numeric",17545
+"Q603R10","Q603r10: College - In general, where do you learn the most about other racial gr","numeric",17545
+"Q604_Q605R1","Q604_Q605r1: Groups who have faced racial or ethnic oppression are obligated to","factor",17545
+"Q604_Q605R2","Q604_Q605r2: Groups who have faced racial or ethnic oppression have a better und","factor",17545
+"Q606R1","Q606r1: White supremacists (such as the KKK) - Which of the following groups do","factor",14521
+"Q606R2","Q606r2: Anti-abortion activists - Which of the following groups do you most DISL","factor",9100
+"Q606R3","Q606r3: Black Lives Matter activists - Which of the following groups do you most","factor",5184
+"Q606R4","Q606r4: Militant anti-fascists (such as Antifa) - Which of the following groups","factor",11575
+"Q606R5","Q606r5: Democratic Socialists - Which of the following groups do you most DISLIK","factor",4799
+"Q606R6","Q606r6: The Tea Party - Which of the following groups do you most DISLIKE?Rank t","factor",7456
+"Q607TEXT","Q607text: text","factor",17545
+"Q607_Q610R1","Q607_Q610r1: [pipe: Q607text] are a threat to my safety or that of my family - D","factor",17545
+"Q607_Q610R2","Q607_Q610r2: [pipe: Q607text] are a threat to Americans","factor",17545
+"Q607_Q610R3","Q607_Q610r3: [pipe: Q607text] should be banned from holding public rallies - Do","factor",17545
+"Q607_Q610R4","Q607_Q610r4: [pipe: Q607text] should be banned from running for public office -","factor",17545
+"Q611","Q611: If someone is from the Middle East or North Africa (for example, Lebanon,","factor",17545
+"Q613","Q613: In the US we use a number of categories to describe ourselves racially. Do","factor",4975
+"Q614","Q614: This year there has been a lot of discussion President Trump","factor",4975
+"Q615","Q615: Regardless of whether you support or oppose Trump","factor",4975
+"Q616_Q618R1","Q616_Q618r1: Black people - Thinking about issues like job opportunities, income","factor",4975
+"Q616_Q618R2","Q616_Q618r2: Latino people - Thinking about issues like job opportunities, incom","factor",4975
+"Q616_Q618R3","Q616_Q618r3: Immigrants - Thinking about issues like job opportunities, income a","factor",4975
+"Q619_Q626R1","Q619_Q626r1: Whites - How much discrimination, if any, do you think exists again","factor",17545
+"Q619_Q626R2","Q619_Q626r2: Blacks - How much discrimination, if any, do you think exists again","factor",17545
+"Q619_Q626R3","Q619_Q626r3: Asian Americans - How much discrimination, if any, do you think exi","factor",17545
+"Q619_Q626R4","Q619_Q626r4: Native Americans - How much discrimination, if any, do you think ex","factor",17545
+"Q619_Q626R5","Q619_Q626r5: Immigrants - How much discrimination, if any, do you think exists a","factor",17545
+"Q619_Q626R6","Q619_Q626r6: Latinos - How much discrimination, if any, do you think exists agai","factor",17545
+"Q619_Q626R7","Q619_Q626r7: Gays and Lesbians - How much discrimination, if any, do you think e","factor",17545
+"Q619_Q626R8","Q619_Q626r8: Muslims - How much discrimination, if any, do you think exists agai","factor",17545
+"Q627","Q627: Have you ever been treated unfairly or personally experienced discriminati","factor",17545
+"Q628","Q628: Did you experience that discrimination here in the United States, or in yo","factor",1836
+"Q629R1","Q629r1: Racial background or ethnicity - In your opinion, were you unfairly trea","factor",8365
+"Q629R2","Q629r2: Skin color - In your opinion, were you unfairly treated because of your","factor",8365
+"Q629R3","Q629r3: Gender - In your opinion, were you unfairly treated because of your","factor",8365
+"Q629R4","Q629r4: Sexuality or sexual orientation - In your opinion, were you unfairly tre","factor",8365
+"Q629R5","Q629r5: Immigration status - In your opinion, were you unfairly treated because","factor",8365
+"Q629R6","Q629r6: Religion - In your opinion, were you unfairly treated because of your","factor",8365
+"Q629R7","Q629r7: Accent, regardless of whether or not you have an accent - In your opinio","factor",8365
+"Q630_Q632R1","Q630_Q632r1: People ever act as if you don","factor",17545
+"Q630_Q632R2","Q630_Q632r2: People assume that you are good at math or science - In an average","factor",17545
+"Q630_Q632R3","Q630_Q632r3: People assume that you are not American - In an average month, do a","factor",17545
+"Q633","Q633: Overall, how much has discrimination interfered with you having a full and","factor",17545
+"SPLITQ634_Q638","splitQ634_Q638: New Single Select Question","factor",17545
+"Q639","Q639: Do you currently own or rent your home, or live with someone who owns or r","factor",17545
+"Q640_Q645R1","Q640_Q645r1: Problems with a landlord (for example, eviction or threat of evicti","factor",2759
+"Q640_Q645R2","Q640_Q645r2: Problems with a bank, lender, or debt collector (for example, decep","factor",5740
+"Q640_Q645R3","Q640_Q645r3: Other financial problems (for example, bankruptcy, identity theft,","factor",5740
+"Q640_Q645R4","Q640_Q645r4: Problems with medical care or health insurance (for example, billin","factor",5740
+"Q640_Q645R5","Q640_Q645r5: Problems obtaining or keeping government benefits (for example, une","factor",5740
+"Q640_Q645R6","Q640_Q645r6: Problems with an employer (for example, wage theft, unsafe working","factor",5740
+"Q646_Q651R1","Q646_Q651r1: Problems with a bank, lender, or debt collector (for example, decep","factor",5918
+"Q646_Q651R2","Q646_Q651r2: Other financial problems (for example, bankruptcy, identity theft,","factor",5918
+"Q646_Q651R3","Q646_Q651r3: Problems with medical care or health insurance (for example, billin","factor",5918
+"Q646_Q651R4","Q646_Q651r4: Problems obtaining or keeping government benefits (for example, une","factor",5918
+"Q646_Q651R5","Q646_Q651r5: Problems with an employer (for example, wage theft, unsafe working","factor",5918
+"Q646_Q651R6","Q646_Q651r6: Had difficulty getting security deposit back - In the past 2 years","factor",2058
+"Q646_Q651R7","Q646_Q651r7: Landlord or someone associated with landlord destroyed or removed p","factor",2058
+"Q646_Q651R8","Q646_Q651r8: Landlord denied a reasonable accommodation for disability or medica","factor",2058
+"Q646_Q651R9","Q646_Q651r9: Landlord failed to provide basic services, repairs, safe accommodat","factor",2058
+"Q646_Q651R10","Q646_Q651r10: Evicted or threatened with eviction - In the past 2 years did you","factor",2058
+"Q646_Q651R11","Q646_Q651r11: Threatened by landlord for exercising tenants","factor",2058
+"Q652_Q658R1","Q652_Q658r1: Problems with misleading, unfair, or deceptive lending practices -","factor",5887
+"Q652_Q658R2","Q652_Q658r2: Problems getting access to credit or loan - In the past 2 years did","factor",5887
+"Q652_Q658R3","Q652_Q658r3: Problems with identity theft - In the past 2 years did you or any m","factor",5887
+"Q652_Q658R4","Q652_Q658r4: Problems with terms of repayment or interest rates charged by lende","factor",5887
+"Q652_Q658R5","Q652_Q658r5: Problems with harassment by creditors or collection agencies, inclu","factor",5887
+"Q652_Q658R6","Q652_Q658r6: Had a home go into foreclosure - In the past 2 years did you or any","factor",5887
+"Q652_Q658R7","Q652_Q658r7: Filed or considered filing for bankruptcy - In the past 2 years did","factor",5887
+"Q659R1","Q659r1: Online resource - At any time while you were dealing with any of these p","factor",6282
+"Q659R2","Q659r2: Paid Private Attorney - At any time while you were dealing with any of t","factor",6282
+"Q659R3","Q659r3: Volunteer Attorney - At any time while you were dealing with any of thes","factor",6282
+"Q659R4","Q659r4: Legal Aid Organization or Attorney - At any time while you were dealing","factor",6282
+"Q659R5","Q659r5: Legal Hotline - At any time while you were dealing with any of these pro","factor",6282
+"Q659R6","Q659r6: Community, Nonprofit, or Social Service Organization - At any time while","factor",6282
+"Q659R7","Q659r7: Law School Clinic - At any time while you were dealing with any of these","factor",6282
+"Q659R8","Q659r8: Family or Friend - At any time while you were dealing with any of these","factor",6282
+"Q660","Q660: To what extent do you think people like you have the ability to use the co","factor",17545
+"Q661","Q661: To what extent do you think people like you are treated fairly in the civi","factor",17545
+"Q662R1","Q662r1: Credit card debt - Which of the following types of debt have you had in","factor",17545
+"Q662R2","Q662r2: Mortgage loan debt - Which of the following types of debt have you had i","factor",17545
+"Q662R3","Q662r3: Auto loan debt - Which of the following types of debt have you had in th","factor",17545
+"Q662R4","Q662r4: Student loan debt - Which of the following types of debt have you had in","factor",17545
+"Q662R5","Q662r5: Payday loan debt - Which of the following types of debt have you had in","factor",17545
+"Q662R6","Q662r6: Other personal loan debt - Which of the following types of debt have you","factor",17545
+"Q663_Q666R1","Q663_Q666r1: Credit card - How likely would you be to use each of the following","factor",17545
+"Q663_Q666R2","Q663_Q666r2: Payday or other short-term loan - How likely would you be to use ea","factor",17545
+"Q663_Q666R3","Q663_Q666r3: Public benefits (such as unemployment insurance, food stamps) - How","factor",17545
+"Q663_Q666R4","Q663_Q666r4: Financial support from family or friends - How likely would you be","factor",17545
+"Q667_Q671R1","Q667_Q671r1: Check-cashing store - In the past 12 months, have you used any of t","factor",17545
+"Q667_Q671R2","Q667_Q671r2: Payday lending store or cash advance service - In the past 12 month","factor",17545
+"Q667_Q671R3","Q667_Q671r3: Bank account - In the past 12 months, have you used any of the foll","factor",17545
+"Q667_Q671R4","Q667_Q671r4: Pawnshop - In the past 12 months, have you used any of the followin","factor",17545
+"Q667_Q671R5","Q667_Q671r5: Title loan - In the past 12 months, have you used any of the follow","factor",17545
+"Q672","Q672: In the past 5 years, have you used a payday lending store or cash advance","factor",17545
+"Q673","Q673: In the past 5 years, has someone in your family used a payday lending stor","factor",17545
+"Q674R1","Q674r1: How much do you trust banks on a scale from 0 (no trust) to 10 (total tr","numeric",17545
+"Q675","Q675: Do you have a bank account?","factor",17545
+"Q676_Q678R1","Q676_Q678r1: The bank is owned by members of your tribe? - Suppose you are think","factor",2829
+"Q676_Q678R2","Q676_Q678r2: The bank is owned by Native Americans who are not members of your t","factor",2829
+"Q676_Q678R3","Q676_Q678r3: The bank is owned by an American (United States) company? - Suppose","factor",2829
+"Q679_Q682R1","Q679_Q682r1: My tribal government should NOT share financial data outside the tr","factor",2829
+"Q679_Q682R2","Q679_Q682r2: My tribal government should share financial data outside the tribe","factor",2829
+"Q679_Q682R3","Q679_Q682r3: My tribe should share data IF it means that my tribe","factor",2829
+"Q679_Q682R4","Q679_Q682r4: My tribe should share data IF it means that economic development in","factor",2829
+"Q683","Q683: As you may know, the Voting Rights Act was passed in the 1965s to prevent","factor",17545
+"Q684","Q684: When thinking about the November 2020 election, which potential outcome do","factor",17545
+"Q685","Q685: When you think about national security, do you think of that more as keepi","factor",17545
+"Q686","Q686: Have you been requested to report for, or serve for jury duty within the l","factor",17545
+"Q687","Q687: In your most recent request to serve for jury duty, were you selected to s","factor",4240
+"Q688","Q688: If not, was that because...","factor",5007
+"Q689","Q689: Should federal spending on science and technology be increased, decreased,","factor",17545
+"Q690","Q690: Thinking about the police department in your community, do you think that","factor",17545
+"Q691","Q691: Compared to current levels of involvement, how involved do you think scien","factor",17545
+"Q692","Q692: Think about events that have prevented 10 or more people from being able t","factor",17545
+"SPLITQ693_Q700","splitQ693_Q700: New Single Select Question","factor",17545
+"Q693_Q700R1","Q693_Q700r1: Low-income people - How much of the time do you think you can trust","factor",17545
+"Q693_Q700R2","Q693_Q700r2: Middle- income people - How much of the time do you think you can t","factor",17545
+"Q693_Q700R3","Q693_Q700r3: High-income people - How much of the time do you think you can trus","factor",17545
+"Q693_Q700R4","Q693_Q700r4: Women - How much of the time do you think you can trust the [pipe:","factor",17545
+"Q693_Q700R5","Q693_Q700r5: Immigrants - How much of the time do you think you can trust the [p","factor",17545
+"Q693_Q700R6","Q693_Q700r6: Black people - How much of the time do you think you can trust the","factor",17545
+"Q693_Q700R7","Q693_Q700r7: White people - How much of the time do you think you can trust the","factor",17545
+"Q693_Q700R8","Q693_Q700r8: Hispanic people - How much of the time do you think you can trust t","factor",17545
+"Q701_Q705R1","Q701_Q705r1: Congressional Black Caucus - How much do you approve of the perform","factor",17545
+"Q701_Q705R2","Q701_Q705r2: Congressional Hispanic Caucus - How much do you approve of the perf","factor",17545
+"Q701_Q705R3","Q701_Q705r3: Congressional Asian Pacific American Caucus - How much do you appro","factor",17545
+"Q701_Q705R4","Q701_Q705r4: House Freedom Caucus - How much do you approve of the performance o","factor",17545
+"Q701_Q705R5","Q701_Q705r5: Congressional Caucus for Women","factor",17545
+"Q706_Q708R1","Q706_Q708r1: Cut funding for police departments and reinvest in community progra","factor",17545
+"Q706_Q708R2","Q706_Q708r2: Abolish the police - Here are some things that have been proposed t","factor",17545
+"Q706_Q708R3","Q706_Q708r3: Create a new agency of first responders, like emergency medical ser","factor",17545
+"Q709_712R1","Q709_712r1: White privilege is a major problem in the U.S. today. - Please indic","factor",17545
+"Q709_712R2","Q709_712r2: Discrimination against Whites has become as big a problem as discrim","factor",17545
+"Q709_712R3","Q709_712r3: The American way of life needs to be protected against foreign influ","factor",17545
+"Q709_712R4","Q709_712r4: Anti-Black racism is a major problem in the [pipe: S2_Race_Prime] co","factor",17545
+"Q713","Q713: Do you describe yourself or think of yourself as an immigrant or part of t","factor",17545
+"Q714","Q714: How often are you asked about your family origin or where you are from?","factor",17545
+"SPLITQ716","splitQ716: New Single Select Question","factor",17545
+"Q715_718R1","Q715_718r1: How much do you believe that you belong in U.S. society? - Next, we","factor",9147
+"Q715_718R2","Q715_718r2: How much do you believe you are an [pipe: splitQ716] in the United S","factor",9147
+"Q715_718R3","Q715_718r3: How much you believe that others in U.S. society value and respect y","factor",9147
+"Q715_718R4","Q715_718r4: How much you believe that you are accepted and included by others in","factor",9147
+"Q719","Q719: Would you say that the country is governed by a few powerful interests loo","factor",17545
+"Q720_Q722R1","Q720_Q722r1: U.S. House of Representative","factor",17545
+"Q720_Q722R2","Q720_Q722r2: [pipe: S4] State Senator - How good or poor of a job do you think y","factor",17545
+"Q720_Q722R3","Q720_Q722r3: [pipe: S4] State Representative (State Assembly, House of Delegates","factor",17545
+"Q723_Q725R1","Q723_Q725r1: U.S. House of Representative","factor",4975
+"Q723_Q725R2","Q723_Q725r2: [pipe: S4]","factor",4975
+"Q723_Q725R3","Q723_Q725r3: [pipe: S4] State Representative (State Assembly, House of Delegates","factor",4975
+"Q726","Q726: If we had more Latinos in elected office, America would be","factor",4975
+"Q727_Q731R1","Q727_Q731r1: Have contact with people outside of your family who are","factor",17545
+"Q727_Q731R2","Q727_Q731r2: Have contact with people outside of your family who are not","factor",17545
+"Q727_Q731R3","Q727_Q731r3: Take children to school, activities, practices, lessons, etc. - Rig","factor",17545
+"Q727_Q731R4","Q727_Q731r4: Work for pay outside of your home. - Right now, during an average w","factor",17545
+"Q727_Q731R5","Q727_Q731r5: Act as the main caretaker for children, elders or others in your ho","factor",17545
+"Q732_Q737R1","Q732_Q737r1: If Black people carried themselves better, White people would treat","factor",5479
+"Q732_Q737R2","Q732_Q737r2: Black people would face fewer problems if some members of the group","factor",5479
+"Q732_Q737R3","Q732_Q737r3: Black people would fare better in society if they behaved more like","factor",5479
+"Q732_Q737R4","Q732_Q737r4: It is important to me that other Black people behave in ways that c","factor",5479
+"Q732_Q737R5","Q732_Q737r5: It matters to me that other Black people behave appropriately in pu","factor",5479
+"Q732_Q737R6","Q732_Q737r6: It is important to me that other Black people carry themselves in w","factor",5479
+"Q738_Q740R1","Q738_Q740r1: When people see a Black person behave inappropriately, they make ne","factor",5479
+"Q738_Q740R2","Q738_Q740r2: Society tries to punish all Black people for what one Black person","factor",5479
+"Q738_Q740R3","Q738_Q740r3: People draw conclusions about Black people as a group, based on the","factor",5479
+"Q741","Q741: Are you currently","factor",17545
+"Q742","Q742: In what year were you first married?","factor",9545
+"Q743","Q743: Generally speaking, does your spouse or partner think of themselves as a R","factor",10247
+"Q744","Q744: Would your spouse or partner call themselves a strong [pipe: Q743], or not","factor",6897
+"Q745","Q745: Does your spouse or partner think of themselves as closer to the Democrati","factor",3350
+"Q746A","Q746a: What was the race or ethnicity of your spouse or partner?","factor",1811
+"Q746B","Q746b: What is the race or ethnicity of your spouse or partner?","factor",10247
+"Q747","Q747: Where was your spouse or partner born?","factor",12058
+"Q748","Q748: Do you currently have children under the age of 18 living in your househol","factor",17545
+"Q749","Q749: Do you currently have any adult children 18 or older living in your househ","factor",17545
+"Q750R1","Q750r1: No, no other adult family member - Do you currently have any other adult","factor",17545
+"Q750R2","Q750r2: My own mother or father - Do you currently have any other adult family m","factor",17545
+"Q750R3","Q750r3: My spouse","factor",17545
+"Q750R4","Q750r4: An aunt, uncle or cousin - Do you currently have any other adult family","factor",17545
+"Q750R5","Q750r5: My own grandparent - Do you currently have any other adult family member","factor",17545
+"Q750R6","Q750r6: My spouse","factor",17545
+"Q750R7","Q750r7: Another adult family member lives here - Do you currently have any other","factor",17545
+"Q751R1","Q751r1: Yes, I have had coronavirus - Have you or a family member or friend cont","factor",17545
+"Q751R2","Q751r2: Yes, someone in my household has had coronavirus - Have you or a family","factor",17545
+"Q751R3","Q751r3: Yes, family outside of my household has had coronavirus - Have you or a","factor",17545
+"Q751R4","Q751r4: Yes, someone else I know has had coronavirus - Have you or a family memb","factor",17545
+"Q751R5","Q751r5: No, nobody I know has had the virus - Have you or a family member or fri","factor",17545
+"Q752","Q752: How would you describe your symptoms?","factor",1803
+"Q753","Q753: How would you describe that person","factor",8373
+"Q754_Q762R1C1","Q754_Q762r1c1: Yes, me - Lost job - For each of the following, please indicate w","factor",17545
+"Q754_Q762R1C2","Q754_Q762r1c2: Yes, someone else in my household - Lost job - For each of the fo","factor",17545
+"Q754_Q762R1C3","Q754_Q762r1c3: No, nobody in my household - Lost job - For each of the following","factor",17545
+"Q754_Q762R2C1","Q754_Q762r2c1: Yes, me - Had work hours cut, or pay cut, but kept job - For each","factor",17545
+"Q754_Q762R2C2","Q754_Q762r2c2: Yes, someone else in my household - Had work hours cut, or pay cu","factor",17545
+"Q754_Q762R2C3","Q754_Q762r2c3: No, nobody in my household - Had work hours cut, or pay cut, but","factor",17545
+"Q754_Q762R3C1","Q754_Q762r3c1: Yes, me - Had to temporarily or permanently close my business or","factor",17545
+"Q754_Q762R3C2","Q754_Q762r3c2: Yes, someone else in my household - Had to temporarily or permane","factor",17545
+"Q754_Q762R3C3","Q754_Q762r3c3: No, nobody in my household - Had to temporarily or permanently cl","factor",17545
+"Q754_Q762R4C1","Q754_Q762r4c1: Yes, me - Currently unemployed and looking for work - For each of","factor",17545
+"Q754_Q762R4C2","Q754_Q762r4c2: Yes, someone else in my household - Currently unemployed and look","factor",17545
+"Q754_Q762R4C3","Q754_Q762r4c3: No, nobody in my household - Currently unemployed and looking for","factor",17545
+"Q754_Q762R5C1","Q754_Q762r5c1: Yes, me - Lost access to health insurance - For each of the follo","factor",17545
+"Q754_Q762R5C2","Q754_Q762r5c2: Yes, someone else in my household - Lost access to health insuran","factor",17545
+"Q754_Q762R5C3","Q754_Q762r5c3: No, nobody in my household - Lost access to health insurance - Fo","factor",17545
+"Q754_Q762R6C1","Q754_Q762r6c1: Yes, me - Was not able to pay monthly rent or mortgage - For each","factor",17545
+"Q754_Q762R6C2","Q754_Q762r6c2: Yes, someone else in my household - Was not able to pay monthly r","factor",17545
+"Q754_Q762R6C3","Q754_Q762r6c3: No, nobody in my household - Was not able to pay monthly rent or","factor",17545
+"Q754_Q762R7C1","Q754_Q762r7c1: Yes, me - Had to borrow money from a friend or family - For each","factor",17545
+"Q754_Q762R7C2","Q754_Q762r7c2: Yes, someone else in my household - Had to borrow money from a fr","factor",17545
+"Q754_Q762R7C3","Q754_Q762r7c3: No, nobody in my household - Had to borrow money from a friend or","factor",17545
+"Q754_Q762R8C1","Q754_Q762r8c1: Yes, me - Used a foodbank or charity to get access to groceries a","factor",17545
+"Q754_Q762R8C2","Q754_Q762r8c2: Yes, someone else in my household - Used a foodbank or charity to","factor",17545
+"Q754_Q762R8C3","Q754_Q762r8c3: No, nobody in my household - Used a foodbank or charity to get ac","factor",17545
+"Q754_Q762R9C1","Q754_Q762r9c1: Yes, me - Had to spend money buying additional computers, technol","factor",17545
+"Q754_Q762R9C2","Q754_Q762r9c2: Yes, someone else in my household - Had to spend money buying add","factor",17545
+"Q754_Q762R9C3","Q754_Q762r9c3: No, nobody in my household - Had to spend money buying additional","factor",17545
+"Q763_Q766R1","Q763_Q766r1: Did not have enough computers or tablets for everyone to use - Thin","factor",5536
+"Q763_Q766R2","Q763_Q766r2: My kids had trouble connecting to the internet for their online sch","factor",5536
+"Q763_Q766R3","Q763_Q766r3: I did not feel prepared to help with my kids school assignments - T","factor",5536
+"Q763_Q766R4","Q763_Q766r4: My kids had increased stress and emotional problems - Thinking spec","factor",5536
+"Q767_Q771R1","Q767_Q771r1: Sent money to family or friends in your home country - Thinking abo","factor",4248
+"Q767_Q771R2","Q767_Q771r2: Voted in an election in your home country - Thinking about the coun","factor",4248
+"Q767_Q771R3","Q767_Q771r3: Donated to a political cause in your home country - Thinking about","factor",4248
+"Q767_Q771R4","Q767_Q771r4: Donated to a charitable cause in your home country - Thinking about","factor",4248
+"Q767_Q771R5","Q767_Q771r5: Volunteered for a cause in your home country - Thinking about the c","factor",4248
+"Q772","Q772: What is the name of the current city you reside in here in [pipe: S4]?","factor",17545
+"Q773","Q773: How long have you lived in your current city or town?","factor",17544
+"VQ773","vQ773: How long have you lived in your current city or town?","factor",17544
+"Q774","Q774: And how long have you have been living at your current address?","factor",16291
+"NOANSWERQ774_R1","noanswerQ774_r1: And how long have you have been living at your current address?","factor",17545
+"VQ774","vQ774: And how long have you have been living at your current address?","factor",16291
+"NOANSWERVQ774_R1","noanswervQ774_r1: And how long have you have been living at your current address","numeric",0
+"Q775","Q775: Have you ever lived somewhere else besides this current city?","factor",17545
+"Q776","Q776: What city did you used to live in just before?","factor",17545
+"Q777","Q777: Please select which state you lived in before.","factor",5507
+"Q777B","Q777b: Which country did you used to live in just before?","factor",17545
+"Q778R1","Q778r1: Okay, something a little different, what city, state or country did you","factor",17545
+"Q779","Q779: State:","factor",12481
+"Q780R1","Q780r1: Country:","factor",17545
+"Q781","Q781: What city, state or province, and country were you born in?City:","factor",17545
+"Q782","Q782: State:","factor",10248
+"Q783","Q783: State or Province:","factor",17545
+"Q784","Q784: Country:","factor",17545
+"Q785","Q785: Did you ever live somewhere else besides the city you were born in before","factor",4248
+"Q786R1","Q786r1: City: - What city, state and country did you move to before coming to th","factor",17545
+"Q786R2","Q786r2: State or Province: - What city, state and country did you move to before","factor",17545
+"Q786R3","Q786r3: Country: - What city, state and country did you move to before coming to","factor",17545
+"Q787R1","Q787r1: When you arrived to the US, in what city and state did you first live?","factor",17545
+"Q788","Q788: State:","factor",4248
+"Q789R1","Q789r1: In what city and state have you lived the longest in the US?","factor",17545
+"Q790","Q790: State:","factor",13848
+"Q793R1","Q793r1: Better economic/job opportunities in the U.S. - Immigrants come to the U","factor",4219
+"Q793R2","Q793r2: To reunite with family already in the U.S. - Immigrants come to the U.S.","factor",4147
+"Q793R3","Q793r3: Better stability and safety in the U.S. - Immigrants come to the U.S. fo","factor",4222
+"Q793R4","Q793r4: To escape political oppression / more freedoms in the U.S. - Immigrants","factor",4069
+"Q793R5","Q793r5: Because of climate impacts in my home country - Immigrants come to the U","factor",4016
+"Q794R1","Q794r1: No, I do not send money or remittances - Do you ever send money or remit","factor",9147
+"Q794R2","Q794r2: Yes, to my parents - Do you ever send money or remittances to friends or","factor",9147
+"Q794R3","Q794r3: Yes, to my children - Do you ever send money or remittances to friends o","factor",9147
+"Q794R4","Q794r4: Yes, to my grandparents - Do you ever send money or remittances to frien","factor",9147
+"Q794R5","Q794r5: Yes to other family members - Do you ever send money or remittances to f","factor",9147
+"Q794R6","Q794r6: Yes, to my friends - Do you ever send money or remittances to friends or","factor",9147
+"Q795","Q795: How has the COVID-19 pandemic this year affected the amount of remittances","factor",8696
+"Q796R1","Q796r1: Loss of job/income - How has COVID-19 pandemic affected your family or f","factor",4248
+"Q796R2","Q796r2: Trouble paying basic monthly bills - How has COVID-19 pandemic affected","factor",4248
+"Q796R3","Q796r3: Lost their house or place they live - How has COVID-19 pandemic affected","factor",4248
+"Q796R4","Q796r4: Health problems, sick with covid - How has COVID-19 pandemic affected yo","factor",4248
+"Q796R5","Q796r5: I know someone back home who has died - How has COVID-19 pandemic affect","factor",4248
+"Q797R1","Q797r1: White - What is the race of your biological mother?","factor",17545
+"Q797R2","Q797r2: Hispanic or Latino - What is the race of your biological mother?","factor",17545
+"Q797R3","Q797r3: Black or African American - What is the race of your biological mother?","factor",17545
+"Q797R4","Q797r4: Asian American - What is the race of your biological mother?","factor",17545
+"Q797R5","Q797r5: American Indian/Native American - What is the race of your biological mo","factor",17545
+"Q797R6","Q797r6: Arab, Middle Eastern or North African - What is the race of your biologi","factor",17545
+"Q797R7","Q797r7: Native Hawaiian - What is the race of your biological mother?","factor",17545
+"Q797R8","Q797r8: Not Hawaiian, but other Pacific Islander - What is the race of your biol","factor",17545
+"Q797R9","Q797r9: Other (Specify) - What is the race of your biological mother?","factor",17545
+"Q797R10","Q797r10: Don","factor",17545
+"Q797R9OE","Q797r9oe: What is the race of your biological mother? - Other (Specify)","factor",17545
+"Q798R1","Q798r1: White - What is the race of your biological father?","factor",17545
+"Q798R2","Q798r2: Hispanic or Latino - What is the race of your biological father?","factor",17545
+"Q798R3","Q798r3: Black or African American - What is the race of your biological father?","factor",17545
+"Q798R4","Q798r4: Asian American - What is the race of your biological father?","factor",17545
+"Q798R5","Q798r5: American Indian/Native American - What is the race of your biological fa","factor",17545
+"Q798R6","Q798r6: Arab, Middle Eastern or North African - What is the race of your biologi","factor",17545
+"Q798R7","Q798r7: Native Hawaiian - What is the race of your biological father?","factor",17545
+"Q798R8","Q798r8: Not Hawaiian, but other Pacific Islander - What is the race of your biol","factor",17545
+"Q798R9","Q798r9: Other (Specify) - What is the race of your biological father?","factor",17545
+"Q798R10","Q798r10: Don","factor",17545
+"Q798R9OE","Q798r9oe: What is the race of your biological father? - Other (Specify)","factor",17545
+"SPLITQ799","splitQ799: Holds value for split","factor",17545
+"Q799R1C1","Q799r1c1: White, not Hispanic - When we think of people in racial or ethnic term","numeric",6393
+"Q799R2C1","Q799r2c1: Black or African American - When we think of people in racial or ethni","numeric",5755
+"Q799R3C1","Q799r3c1: Hispanic or Latino - When we think of people in racial or ethnic terms","numeric",5556
+"Q799R4C1","Q799r4c1: Asian American - When we think of people in racial or ethnic terms, we","numeric",5495
+"Q799R5C1","Q799r5c1: Native American or American Indian - When we think of people in racial","numeric",4938
+"Q799R6C1","Q799r6c1: Native Hawiian - When we think of people in racial or ethnic terms, we","numeric",4426
+"Q799R7C1","Q799r7c1: Pacific Islander (not Hawiian) - When we think of people in racial or","numeric",4449
+"Q799R8C1","Q799r8c1: Arab, Middle Eastern or North African - When we think of people in rac","numeric",4454
+"Q800R1C1","Q800r1c1: White, not Hispanic - When we think of people in racial or ethnic term","numeric",6285
+"Q800R2C1","Q800r2c1: Black or African American - When we think of people in racial or ethni","numeric",5779
+"Q800R3C1","Q800r3c1: Hispanic or Latino - When we think of people in racial or ethnic terms","numeric",5538
+"Q800R4C1","Q800r4c1: Asian American - When we think of people in racial or ethnic terms, we","numeric",5600
+"Q800R5C1","Q800r5c1: Native American or American Indian - When we think of people in racial","numeric",4924
+"Q800R6C1","Q800r6c1: Native Hawiian - When we think of people in racial or ethnic terms, we","numeric",4485
+"Q800R7C1","Q800r7c1: Pacific Islander (not Hawiian) - When we think of people in racial or","numeric",4496
+"Q800R8C1","Q800r8c1: Arab, Middle Eastern or North African - When we think of people in rac","numeric",4500
+"Q801","Q801: If you were walking down the street, what race do you think other American","factor",17545
+"Q801R9OE","Q801r9oe: If you were walking down the street, what race do you think other Amer","factor",17545
+"Q802","Q802: There are many different ways to describe race among Caribbean and Latino","factor",1323
+"Q802R9OE","Q802r9oe: There are many different ways to describe race among Caribbean and Lat","factor",17545
+"Q803","Q803: Which racial category did you choose on the 2020 U.S. Census?","factor",17545
+"Q804","Q804: Mother","factor",17545
+"Q805","Q805: Father","factor",17545
+"Q806","Q806: What year did you first arrive to live in the [pipe: Q806verb]","factor",4248
+"Q807","Q807: Which of the following best describes you","factor",3962
+"Q807R8OE","Q807r8oe: Which of the following best describes you","factor",17545
+"Q808","Q808: In what year did you become a naturalized U.S. citizen?","factor",13592
+"Q809","Q809: Were your parents born in the United States, [pipe: Q809verb] or in anothe","factor",13297
+"Q810","Q810: Year mother came to the U.S.","factor",4397
+"Q811","Q811: Year father came to the U.S.","factor",4397
+"Q812","Q812: How about your grandparents? Where were they born?","factor",10165
+"Q813","Q813: What was your total combined household income in 2020 before taxes. This q","factor",17545
+"Q814","Q814: Are you currently","factor",17545
+"Q815","Q815: Which of the following is your MAIN source of health insurance coverage?","factor",17545
+"Q815R7OE","Q815r7oe: Which of the following is your MAIN source of health insurance coverag","factor",17545
+"Q816","Q816: Regardless of what language you took this survey, how often do you speak S","factor",4975
+"Q817","Q817: Regardless of what language you took this survey, how often do you speak [","factor",3955
+"Q818","Q818: Regardless of what language you took this survey, how often do you speak a","factor",3369
+"Q819","Q819: How well, if at all, do you speak another Native or Tribal language?","factor",2829
+"Q820","Q820: Regardless of what language you took this survey, how often do you speak E","factor",17545
+"QCOND1SPLIT","qcond1split: holds split for cond1","factor",190
+"QCOND2SPLIT","qcond2split: holds split for cond2","factor",105
+"QCOND3SPLIT","qcond3split: holds split for cond3","factor",217
+"QCOND4SPLIT","qcond4split: holds split for cond4","factor",343
+"QCOND5SPLIT","qcond5split: holds split for cond5","factor",276
+"QCOND6SPLIT","qcond6split: holds split for cond6","factor",638
+"QCOND7SPLIT","qcond7split: holds split for cond7","factor",105
+"HOLDCONDR1","holdcondr1: transgender men - New Autofill","factor",17545
+"HOLDCONDR2","holdcondr2: transgender women - New Autofill","factor",17545
+"HOLDCONDR3","holdcondr3: Lesbians - New Autofill","factor",17545
+"HOLDCONDR4","holdcondr4: gays - New Autofill","factor",17545
+"HOLDCONDR5","holdcondr5: bisexual men - New Autofill","factor",17545
+"HOLDCONDR6","holdcondr6: bisexuals women - New Autofill","factor",17545
+"HOLDCONDR7","holdcondr7: queer people - New Autofill","factor",17545
+"HOLDCONDR8","holdcondr8: trans people - New Autofill","factor",17545
+"HOLDCONDR9","holdcondr9: gays and lesbians - New Autofill","factor",17545
+"HOLDCONDR10","holdcondr10: gays, lesbians, and bisexuals - New Autofill","factor",17545
+"HOLDCONDR11","holdcondr11: LGBTQ people - New Autofill","factor",17545
+"HOLDCONDNONE","holdcondnone: None of These Classifications Apply - New Autofill","factor",17545
+"QRANDOMSPLIT","qrandomsplit: holds split for rotation","factor",1647
+"Q821J","Q821J: What share of your friends, co-workers, and family members are [pipe: hol","factor",308
+"Q825J","Q825J: How much do you think what happens to [pipe: holdcond] in this country wi","factor",308
+"Q822J","Q822J: How much effort should your state government put into alleviating poverty","factor",308
+"Q823J","Q823J: How much effort should your state government put into reducing discrimina","factor",308
+"Q824J","Q824J: Your state government should officially recognize June as Pride Month.","factor",308
+"Q822K","Q822K: How much effort should your state government put into alleviating poverty","factor",322
+"Q825K","Q825K: How much do you think what happens to [pipe: holdcond] in this country wi","factor",322
+"Q821K","Q821K: What share of your friends, co-workers, and family members are [pipe: hol","factor",322
+"Q823K","Q823K: How much effort should your state government put into reducing discrimina","factor",322
+"Q824K","Q824K: Your state government should officially recognize June as Pride Month.","factor",322
+"Q823L","Q823L: How much effort should your state government put into reducing discrimina","factor",336
+"Q825L","Q825L: How much do you think what happens to [pipe: holdcond] in this country wi","factor",336
+"Q821L","Q821L: What share of your friends, co-workers, and family members are [pipe: hol","factor",336
+"Q822L","Q822L: How much effort should your state government put into alleviating poverty","factor",336
+"Q824L","Q824L: Your state government should officially recognize June as Pride Month.","factor",336
+"Q824M","Q824M: Your state government should officially recognize June as Pride Month.","factor",333
+"Q825M","Q825M: How much do you think what happens to [pipe: holdcond] in this country wi","factor",333
+"Q821M","Q821M: What share of your friends, co-workers, and family members are [pipe: hol","factor",333
+"Q822M","Q822M: How much effort should your state government put into alleviating poverty","factor",333
+"Q823M","Q823M: How much effort should your state government put into reducing discrimina","factor",333
+"Q825N","Q825N: How much do you think what happens to [pipe: holdcond] in this country wi","factor",348
+"Q821N","Q821N: What share of your friends, co-workers, and family members are [pipe: hol","factor",348
+"Q822N","Q822N: How much effort should your state government put into alleviating poverty","factor",348
+"Q823N","Q823N: How much effort should your state government put into reducing discrimina","factor",348
+"Q824N","Q824N: Your state government should officially recognize June as Pride Month.","factor",348
+"Q821","Q821: What share of your friends, co-workers, and family members are [pipe: hold","factor",1647
+"Q822","Q822: How much effort should your state government put into alleviating poverty","factor",1647
+"Q823","Q823: How much effort should your state government put into reducing discriminat","factor",1647
+"Q824","Q824: Your state government should officially recognize June as Pride Month.","factor",1647
+"Q825","Q825: How much do you think what happens to [pipe: holdcond] in this country wil","numeric",0
+"Q826R1","Q826r1: Family - To which of these groups have you disclosed your LGBTQ identity","factor",1647
+"Q826R2","Q826r2: Friends - To which of these groups have you disclosed your LGBTQ identit","factor",1647
+"Q826R3","Q826r3: Co-workers - To which of these groups have you disclosed your LGBTQ iden","factor",1647
+"Q826R4","Q826r4: Social media - To which of these groups have you disclosed your LGBTQ id","factor",1647
+"Q826R5","Q826r5: Everyone - To which of these groups have you disclosed your LGBTQ identi","factor",1647
+"Q826R7","Q826r7: Management at my place of employment - To which of these groups have you","factor",1647
+"Q826R6","Q826r6: No one - To which of these groups have you disclosed your LGBTQ identity","factor",1647
+"Q826A","Q826a: Did a parent assist you with completing this survey?","numeric",0
+"SCREENTIMESCM6T","ScreenTimescm6t: cm6 - Screen times in seconds","numeric",14288
+"QTIME","qtime: Total Interview Time","numeric",17545
+"VOS","vos: Operating System","factor",17545
+"VBROWSER","vbrowser: Browser","factor",17545
+"VMOBILEDEVICE","vmobiledevice: Mobile device category","factor",17545
+"VMOBILEOS","vmobileos: Mobile OS","factor",17545
+"START_DATE","start_date: Survey start time","factor",17545
+"RACE","Primary race","factor",16143
+"WEIGHT","Primary sample weights ONLY","numeric",17545
+"BASELINE","Sept 1 2021 release","numeric",17545
+"MENA_MUSLIM","MENA / MUSLIM","numeric",17545
+"HAWAII_PI","Hawaiian Pacific Islander","numeric",17545
+"LGBTQ","LGBTQ","numeric",17545
+"AFROLAT","Afro-Latino","numeric",17545
+"BLACKIMM","Black Immigrant ancestry","numeric",17545
+"NATIVEAM","American Indian","numeric",17545
+"OS_WEIGHT","Oversample weight","numeric",17545

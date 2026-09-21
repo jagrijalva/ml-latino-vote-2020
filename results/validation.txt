@@ -1,0 +1,8 @@
+NINE FROZEN-GRID FOREST FITS VALIDATED
+Primary-release Latino registered reported voters; vote/support routing checked; WEIGHT used without trimming or balancing.
+Nested source and encoded-item sets passed for all seeds; identified exclusions absent; ideology retained.
+Training-only preprocessing and internal validation; all nine grid cells evaluated for each fit.
+Maximum SHAP reconstruction error: 5.77316e-15
+fraction40 selected in 2 of 9 fits; no grid expansion.
+All-item rankings and top-50 profiles saved. Signed cells require at least 10 holdout observations.
+Measurement review flags: Q315/Q603R2 wording discrepancies, published/local release counts, and remaining truncated labels.

@@ -1,0 +1,1054 @@
+---
+title: "CMPS 2020: Latino presidential vote"
+subtitle: "Three nested random forests and item-level SHAP"
+format:
+  pdf:
+    pdf-engine: xelatex
+    keep-tex: false
+    latex-auto-install: false
+    toc: false
+    fontsize: 10pt
+    geometry: margin=0.7in
+    include-in-header:
+      text: |
+        \usepackage{longtable,booktabs,array}
+        \setlength{\tabcolsep}{4pt}
+        \AtBeginEnvironment{longtable}{\small}
+execute:
+  echo: false
+  cache: false
+  freeze: false
+  warning: true
+  message: false
+---
+
+
+# Question
+
+Which survey responses distinguish reported Trump voters from other presidential
+voters among Latinos in the 2020 CMPS? Three nested models describe the full
+predictive structure, then the structure remaining after withholding information
+close to the electoral choice and direct partisan attachment. This post-election
+analysis describes predictive associations, not causes of vote choice.
+
+```{r}
+#| label: source-sample-policy
+#| include: false
+suppressPackageStartupMessages({library(ranger);library(treeshap)})
+stopifnot(requireNamespace("digest",quietly=TRUE))
+source_root<-Sys.getenv("CMPS2020_SOURCE","/Users/jessala/Desktop/Active/Github/ml-latino-vote-2020")
+raw_file<-file.path(source_root,"data/raw/39096-0001-Data.rda")
+raw_md5<-unname(tools::md5sum(raw_file))
+stopifnot(raw_md5=="a02f00860e598a49720a396c6f829873")
+e<-new.env();load(raw_file,envir=e);raw<-e[["da39096.0001"]];rm(e)
+stopifnot(identical(dim(raw),c(17545L,1490L)))
+code<-function(x) {
+ if(is.numeric(x))return(as.numeric(x))
+ suppressWarnings(as.numeric(sub("^\\(([0-9]+)\\).*","\\1",as.character(x))))
+}
+clean_text<-function(x)trimws(iconv(x,from="",to="UTF-8",sub=""))
+latino<-code(raw$MAIN_ETH_QUOTA)==2
+primary_sample<-code(raw$BASELINE)==1
+registered<-code(raw$S6)==1
+voted<-code(raw$Q12)%in%1:2
+candidate<-code(raw$Q14)
+rows<-which(latino & primary_sample & registered & voted & candidate%in%1:5)
+d<-raw[rows,,drop=FALSE];y<-as.integer(code(d$Q14)==1);w<-as.numeric(d$WEIGHT)
+stopifnot(length(y)==2082L,all(is.finite(w)),all(w>0),!anyNA(y),!anyDuplicated(rows))
+flow<-data.frame(stage=c("Raw records","Latino quota, all releases","Registered Latino, all releases",
+ "Reported voters, all releases","Valid choice, all releases","Primary release, all races",
+ "Primary Latino quota","Registered primary Latino","Reported primary Latino voters","Valid choice: final sample"),
+ n=c(nrow(raw),sum(latino),sum(latino & registered),sum(latino & registered & voted),
+ sum(latino & registered & voted & candidate%in%1:5),sum(primary_sample),sum(primary_sample & latino),
+ sum(primary_sample & latino & registered),sum(primary_sample & latino & registered & voted),length(y)))
+contract<-data.frame(n=length(y),trump=sum(y),unweighted_trump=mean(y),weighted_trump=weighted.mean(y,w),
+ weight_min=min(w),weight_max=max(w),weight_kish_n=sum(w)^2/sum(w^2))
+out<-"results";dir.create(out,showWarnings=FALSE)
+write.csv(flow,file.path(out,"sample-flow.csv"),row.names=FALSE)
+write.csv(contract,file.path(out,"sample-summary.csv"),row.names=FALSE)
+candidates<-data.frame(candidate=levels(d$Q14),n=as.integer(table(d$Q14)),
+ weighted_share=as.numeric(tapply(w,d$Q14,sum)/sum(w)))
+write.csv(candidates,file.path(out,"candidate-distribution.csv"),row.names=FALSE)
+vars<-names(raw);labels<-attr(raw,"variable.labels")
+label<-setNames(vapply(vars,function(n){a<-labels[n];if(is.na(a))n else clean_text(a)},character(1)),vars)
+short_labels<-c("Q385"="Defunding police: too far/not far enough","Q131R3"="Ending parent-child border separation","Q144"="COVID-19 vaccine intentions","Q60"="Theological self-identification","Q1R19"="Border security as issue priority","Q606R1"="Dislike ranking: White supremacists","Q606R3"="Dislike ranking: BLM activists","Q21"="Party identification","Q22"="Partisan strength","Q23"="Party leaning","Q24"="Republican party history","Q25"="Democratic party history","Q26"="Independent party history","Q43"="Ideology","Q13"="Voting method","Q15"="Congressional vote","S5"="Birth year","S4"="State of residence","S13"="Education","S3B"="Gender","S3"="Sexual orientation","Q27"="Groups associated with Democrats","Q28"="Groups associated with Republicans","Q1"="Issue priorities (eligible components)","Q58"="Religious identification","Q130"="Trump responsibility for COVID-19","Q47"="Election-fraud news awareness","Q53"="Description of January 6 events","Q54"="Trump responsibility for January 6","Q55"="Republican challenge to certification","Q56"="Racial motives of January 6 rioters","Q614"="Trump immigration-policy approval","Q615"="Expression of Trump immigration view","Q619_Q626R1"="Discrimination against Whites","Q619_Q626R2"="Discrimination against Blacks","Q619_Q626R3"="Discrimination against Asian Americans","Q619_Q626R4"="Discrimination against Native Americans","Q619_Q626R5"="Discrimination against immigrants","Q619_Q626R6"="Discrimination against Latinos","Q619_Q626R7"="Discrimination against gays and lesbians","Q619_Q626R8"="Discrimination against Muslims","Q2R1"="Trump favorability","Q2R2"="Pence favorability","Q2R3"="Biden favorability","Q2R4"="Harris favorability","Q2R5"="Barack Obama favorability","Q2R6"="George W. Bush favorability","Q2R7"="Hillary Clinton favorability","Q2R8"="Melania Trump favorability","Q2R9"="Michelle Obama favorability","Q2R10"="Jill Biden favorability","Q543"="Border-security spending and wall","Q358"="BLM movement support","Q606"="Most-disliked groups: ranking","Q485"="Racial bias in police/immigration treatment","Q183"="ICE favorability","Q184R1"="Border priority despite migrant deaths","Q368"="Race and racism in K–12 history","Q683"="Voting Rights Act necessity","Q743"="Spouse's party identification","Q504R6"="Anxiety from white supremacy","Q504R3"="Anxiety from climate change","Q504R11"="Anxiety from Trump","Q504R12"="Anxiety from Biden","Q33R3"="CNN news exposure","Q117R11"="Priority: immigrant rights","Q131R1"="Two-trillion-dollar stimulus policy","Q131R9"="Legal abortion policy","Q154R1"="Pride in flag or national anthem","Q217R1"="White racial advantages","Q208R5"="Government reducing income differences","Q359R2"="Own group benefits from BLM","Q225R11"="Republicans: support/threat to own vision","Q225R10"="Democrats: support/threat to own vision","Q295"="Identity point allocation (no party)","Q301"="Identity point allocation (with party)","Q329"="Groups Congress should attend to","Q51"="Fraud claim after election","Q52"="Fraud claim after Biden certification","Q308R1"="Undocumented immigrants warmth","Q308R2"="Gun owners warmth","Q308R3"="Veterans warmth","Q308R4"="Welfare recipients warmth","Q308R5"="Climate activists warmth","Q308R6"="MeToo warmth","Q308R7"="BLM warmth","Q563_Q572R1"="Women: political representation","Q563_Q572R2"="Men: political representation","Q563_Q572R3"="Immigrants: political representation","Q563_Q572R4"="Native Americans: political representation","Q563_Q572R5"="Whites: political representation","Q563_Q572R6"="Blacks: political representation","Q563_Q572R7"="Latinos: political representation","Q563_Q572R8"="Asians: political representation","Q563_Q572R9"="Muslims: political representation","Q563_Q572R10"="LGBTQ: political representation","Q607_Q610R1"="Threat to family safety (least-liked group)","Q607_Q610R2"="Threat to American way of life (least-liked group)","Q607_Q610R3"="Ban public rallies (least-liked group)","Q607_Q610R4"="Ban candidacy (least-liked group)","Q706_Q708R1"="Shift police funds to community","Q706_Q708R2"="Abolish police","Q706_Q708R3"="New non-police first responders","Q709_712R1"="White privilege as major problem","Q709_712R2"="Anti-White discrimination comparison","Q709_712R3"="Protect way of life from foreign influence","Q709_712R4"="Anti-Black racism in own community","Q195A1"="Ranked-choice vignette (short, 4 candidates)","Q197A1"="Single-choice vignette (short, 4 candidates)","Q195A2"="Ranked-choice vignette (short, 10 candidates)","Q197A2"="Single-choice vignette (short, 10 candidates)","Q195B1"="Ranked-choice vignette (long, 4 candidates)","Q197B1"="Single-choice vignette (long, 4 candidates)","Q195B2"="Ranked-choice vignette (long, 10 candidates)","Q197B2"="Single-choice vignette (long, 10 candidates)")
+pretty_item<-function(n)ifelse(n%in%names(short_labels),unname(short_labels[n]),n)
+codebook_page<-c("RECORD"=5,"UUID"=5,"DATE"=5,"S1"=5,"S2_RACER1"=6,"S2_RACER2"=6,"S2_RACER3"=6,"S2_RACER4"=6,"S2_RACER5"=7,"S2_RACER6"=7,"S2_RACER7"=7,"S2_RACER8"=8,"S2_RACE_PRIME"=8,"MAIN_ETH_QUOTA"=9,"S2_HISPANICR1"=9,"S2_HISPANICR2"=9,"S2_HISPANICR3"=10,"S2_HISPANICR4"=10,"S2_HISPANICR5"=11,"S2_NATIVER1"=11,"S2_NATIVER2"=11,"S2_NATIVER3"=12,"S2_NATIVER4"=12,"S2_NATIVER5"=12,"S2_AFROLAT_TEXT"=12,"S2_AFROLATR1"=13,"S2_AFROLATR2"=13,"S2_AFROLATR3"=14,"S2_AFROLATR4"=14,"S2_AFROLATR5"=14,"S3"=15,"S3R4OE"=15,"S3B"=15,"S3BR4OE"=16,"S3C"=16,"S4"=16,"S5"=18,"S5_AGE"=20,"S6"=20,"S6_NON"=20,"S7"=21,"S8"=21,"S8R16OE"=22,"ASIAN_ETH"=22,"S8_PACIFIC"=23,"S8_PACIFICR8OE"=23,"S9"=23,"S9R19OE"=24,"S10"=24,"S10R22OE"=25,"S10_MEX"=26,"S11"=26,"S11R13OE"=27,"S12"=27,"S12R27OE"=28,"S2_M"=28,"S13"=28,"S14"=29,"S15"=29,"Q58R1"=30,"Q58R2"=30,"Q58R3"=30,"Q58R4"=31,"Q58R5"=31,"Q58R6"=31,"Q58R7"=32,"Q58R8"=32,"Q58R9"=32,"Q58R10"=33,"Q58R11"=33,"Q58R12"=33,"Q58R13"=34,"Q58R14"=34,"Q58R15"=35,"Q58R16"=35,"Q58R17"=35,"Q58R17OE"=36,"Q3B_PLURAL"=36,"Q3B_PLURALR4OE"=36,"Q1R1"=36,"Q1R2"=37,"Q1R3"=37,"Q1R4"=37,"Q1R5"=38,"Q1R6"=38,"Q1R7"=38,"Q1R8"=39,"Q1R9"=39,"Q1R10"=39,"Q1R11"=39,"Q1R12"=40,"Q1R13"=40,"Q1R14"=40,"Q1R15"=41,"Q1R16"=41,"Q1R17"=41,"Q1R18"=42,"Q1R19"=42,"Q1R20"=42,"Q1R21"=43,"Q1R22"=43,"Q1R23"=43,"Q2R1"=43,"Q2R2"=44,"Q2R3"=44,"Q2R4"=45,"Q2R5"=45,"Q2R6"=46,"Q2R7"=46,"Q2R8"=46,"Q2R9"=47,"Q2R10"=47,"Q12"=48,"Q13"=48,"Q14"=48,"Q14R5OE"=49,"Q15"=49,"Q15R3OE"=49,"Q16"=50,"Q17"=50,"Q18"=50,"Q19"=51,"Q20"=51,"Q21"=52,"Q22"=52,"Q23"=52,"Q24"=53,"Q25"=53,"Q26"=54,"Q27R1"=54,"Q27R2"=54,"Q27R3"=55,"Q27R4"=55,"Q27R5"=55,"Q27R6"=56,"Q27R7"=56,"Q27R8"=56,"Q27R9"=56,"Q27R10"=57,"Q27R11"=57,"Q27R12"=57,"Q27R13"=58,"Q27R14"=58,"Q27R15"=58,"Q27R16"=59,"Q27R17"=59,"Q27R18"=59,"Q27R19"=59,"Q28R1"=60,"Q28R2"=60,"Q28R3"=60,"Q28R4"=61,"Q28R5"=61,"Q28R6"=61,"Q28R7"=62,"Q28R8"=62,"Q28R9"=62,"Q28R10"=63,"Q28R11"=63,"Q28R12"=63,"Q28R13"=63,"Q28R14"=64,"Q28R15"=64,"Q28R16"=64,"Q28R17"=65,"Q28R18"=65,"Q28R19"=65,"Q29"=66,"Q30"=66,"Q30R5OE"=66,"Q31"=67,"Q31R5OE"=67,"Q32R1"=67,"Q32R2"=68,"Q32R3"=68,"Q32R4"=69,"Q32R5"=70,"Q32R6"=70,"Q32R7"=71,"Q32R8"=71,"Q32R9"=72,"Q33R1"=72,"Q33R2"=73,"Q33R3"=73,"Q33R4"=73,"Q33R5"=74,"Q38R1"=74,"Q38R2"=74,"Q38R3"=75,"Q38R4"=75,"Q39R1"=75,"Q39R2"=75,"Q39R3"=76,"Q39R4"=76,"Q39R5"=77,"Q39R6"=77,"Q39R7"=77,"Q40"=78,"Q41R1"=78,"Q41R2"=78,"Q41R3"=79,"Q41R4"=79,"Q42"=79,"Q43"=80,"Q44"=80,"Q45"=80,"Q46"=81,"Q47"=81,"Q48_50SPLIT"=82,"Q48"=82,"Q49"=82,"Q50"=83,"Q51_52SPLIT"=83,"Q51"=83,"Q52"=84,"Q53"=84,"Q54"=85,"Q55"=85,"Q56"=85,"Q57"=86,"Q58_COUNT"=86,"Q58SELECT"=87,"Q59"=87,"Q60R1"=88,"Q60R2"=88,"Q60R3"=88,"Q60R4"=89,"Q60R5"=89,"Q60R6"=89,"Q61"=90,"Q61R17OE"=90,"Q62R1"=91,"Q62R2"=91,"Q62R3"=91,"Q62R4"=92,"Q62R5"=92,"NEWQ67"=93,"Q67"=93,"Q68"=93,"Q69"=94,"Q70R1"=94,"Q70R2"=94,"Q70R3"=95,"Q70R4"=95,"Q70R5"=96,"Q75"=96,"Q76R1"=96,"Q76R2"=97,"Q76R3"=97,"Q76R4"=98,"Q76R5"=98,"Q76R6"=98,"Q77R1"=99,"Q77R2"=99,"Q77R3"=100,"Q77R4"=100,"Q77R5"=100,"Q77R6"=101,"Q77R7"=101,"Q77R8"=102,"Q77R9"=102,"Q78"=102,"Q79"=103,"Q84"=103,"Q85"=103,"Q85B"=104,"Q86"=104,"Q87"=105,"Q88"=105,"Q93"=105,"Q94"=106,"Q95"=106,"Q96R1"=106,"Q96R2"=107,"Q96R3"=107,"Q96R4"=107,"Q96R5"=108,"Q96R6"=108,"Q96R7"=109,"Q96R8"=109,"Q96R9"=109,"Q96R10"=110,"Q96R11"=110,"Q96R12"=110,"Q96R13"=111,"Q96R14"=111,"Q96R14OE"=111,"Q97"=112,"Q98R1"=112,"Q98R2"=112,"Q98R3"=113,"Q98R4"=113,"Q98R5"=113,"Q98R6"=114,"Q98R7"=114,"Q98R8"=114,"Q98R9"=115,"Q98R10"=115,"Q98R11"=115,"Q98R11OE"=116,"Q99R1"=116,"Q99R2"=116,"Q99R3"=117,"Q99R4"=117,"Q99R5"=118,"Q99R6"=118,"Q99R7"=118,"Q99R8"=119,"Q99R9"=119,"Q99R10"=120,"Q99R11"=120,"Q110R1"=120,"Q110R2"=121,"Q110R3"=121,"Q110R4"=121,"Q110R5"=121,"Q110R6"=122,"Q110R7"=122,"Q110R8"=122,"Q111R1"=123,"Q111R2"=123,"Q111R3"=123,"Q111R4"=124,"Q111R5"=124,"Q116R1"=125,"Q116R2"=125,"Q116R3"=125,"Q116R4"=126,"Q116R5"=126,"Q116R6"=127,"Q116R7"=127,"Q116R8"=127,"Q116R9"=128,"Q116R10"=128,"Q116R11"=128,"Q116R12"=129,"Q116R13"=129,"Q116R14"=130,"Q117R1"=130,"Q117R2"=130,"Q117R3"=131,"Q117R4"=131,"Q117R5"=131,"Q117R6"=132,"Q117R7"=132,"Q117R8"=132,"Q117R9"=133,"Q117R10"=133,"Q117R11"=134,"Q117R12"=134,"Q117R13"=134,"Q130"=135,"Q131SPLIT"=135,"Q131R1"=135,"Q131R2"=136,"Q131R3"=136,"Q131R4"=136,"Q131R5"=137,"Q131R6"=137,"Q131R7"=138,"Q131R8"=138,"Q131R9"=139,"Q131R10"=139,"Q131R11"=140,"Q131R12"=140,"Q131R13"=140,"Q144"=141,"Q145"=141,"Q146"=142,"Q147"=142,"Q148"=142,"Q149"=143,"Q150"=143,"Q151"=143,"Q152"=144,"Q153"=144,"Q154R1"=145,"Q154R2"=145,"Q154R3"=145,"Q154R4"=146,"Q154R5"=146,"Q159R1"=147,"Q159R2"=147,"Q159R3"=147,"Q162R1"=148,"Q162R2"=148,"Q162R3"=149,"Q162R4"=149,"Q162R5"=149,"Q162R6"=150,"Q162R7"=150,"Q162R8"=151,"Q170"=151,"Q171R1"=151,"Q171R2"=152,"Q171R3"=152,"Q171R4"=153,"Q171R5"=153,"Q171R6"=153,"Q171R7"=154,"Q171R8"=154,"Q171R9"=154,"Q171R8OE"=155,"Q172R1"=155,"Q172R2"=155,"Q172R3"=156,"Q175R1"=156,"Q175R2"=156,"Q175R3"=157,"Q178R1"=157,"Q178R2"=157,"Q178R3"=158,"Q178R4"=158,"Q182"=158,"Q183"=159,"Q184R1"=159,"Q184R2"=159,"Q184R3"=160,"Q187R1"=160,"Q187R2"=161,"Q187R3"=161,"Q187R4"=161,"Q187R5"=162,"Q192"=162,"Q193SPLIT"=163,"Q193"=163,"Q194"=163,"LONGSHORTSPLIT"=164,"Q195A1R1"=164,"Q195A1R2"=164,"Q195A1R3"=165,"Q195A1R4"=165,"Q195A2R1"=166,"Q195A2R2"=166,"Q195A2R3"=166,"Q195A2R4"=167,"Q195A2R5"=167,"Q195A2R6"=168,"Q195A2R7"=168,"Q195A2R8"=169,"Q195A2R9"=169,"Q195A2R10"=170,"Q195B1R1"=170,"Q195B1R2"=170,"Q195B1R3"=171,"Q195B1R4"=171,"Q195B2R1"=172,"Q195B2R2"=172,"Q195B2R3"=173,"Q195B2R4"=173,"Q195B2R5"=173,"Q195B2R6"=174,"Q195B2R7"=174,"Q195B2R8"=175,"Q195B2R9"=175,"Q195B2R10"=176,"Q196"=176,"Q197A1"=177,"Q197A2"=177,"Q197B1"=178,"Q197B2"=178,"Q198"=179,"Q199SPLIT"=179,"Q199"=180,"Q200"=180,"Q201"=180,"Q202R1"=181,"Q202R2"=181,"Q202R3"=181,"Q203"=182,"Q204"=182,"Q205"=182,"Q206"=183,"Q207"=184,"Q208R1"=186,"Q208R2"=186,"Q208R3"=187,"Q208R4"=187,"Q208R5"=188,"Q213R1"=188,"Q213R2"=188,"Q213R3"=189,"Q213R4"=189,"Q217R1"=189,"Q217R2"=190,"Q217R3"=190,"Q217R4"=191,"Q221R1"=191,"Q221R2"=191,"Q221R3"=192,"Q221R4"=192,"Q225R1"=193,"Q225R2"=193,"Q225R3"=193,"Q225R4"=194,"Q225R5"=194,"Q225R6"=195,"Q225R7"=195,"Q225R8"=196,"Q225R9"=196,"Q225R10"=197,"Q225R11"=197,"Q225R12"=197,"Q225R13"=198,"Q225R14"=198,"Q239R1"=199,"Q239R2"=199,"Q239R3"=199,"Q239R4"=200,"Q243R1"=200,"Q243R2"=201,"Q243R3"=201,"Q243R4"=201,"Q247"=202,"Q248"=202,"Q249"=203,"Q250R1"=203,"Q250R2"=203,"Q250R3"=204,"Q250R4"=204,"Q250R5"=205,"Q250R6"=205,"Q250R7"=205,"Q250R8"=206,"Q251"=206,"Q252"=207,"Q253"=207,"Q254"=208,"Q255"=208,"Q256"=208,"Q257SPLIT"=209,"Q257AR1"=209,"Q257AR2"=209,"Q257AR3"=210,"Q257AR4"=210,"Q257BR1"=211,"Q257BR2"=211,"Q257BR3"=211,"Q257BR4"=212,"Q257CR1"=212,"Q257CR2"=213,"Q257CR3"=213,"Q257CR4"=214,"Q258SPLIT"=214,"Q258"=214,"Q259"=215,"Q260"=215,"Q261"=216,"Q262"=216,"Q262R7OE"=217,"Q263"=217,"Q263R6OE"=217,"Q264"=217,"Q265"=218,"Q266"=218,"Q267"=219,"Q268"=219,"Q269"=220,"Q270"=220,"Q271"=221,"TABLE1_HID"=221,"TABLE2_HID"=221,"AGE1_HID"=222,"AGE2_HID"=222,"PROF1_HID"=222,"PROF2_HID"=223,"POLEXP1_HID"=223,"POLEXP2_HID"=223,"RAND_POS1"=223,"RAND_POS2"=224,"RAND_SCORE1"=224,"RAND_SCORE2"=224,"Q272"=225,"Q273R1"=225,"Q273R2"=225,"Q273R3"=226,"Q273R4"=226,"Q273R5"=227,"S10HOLD"=227,"Q278"=228,"Q279"=229,"Q280"=229,"Q281R1"=229,"Q281R2"=230,"Q281R3"=230,"Q281R4"=230,"Q281R5"=231,"Q281R6"=231,"Q281R7"=231,"Q281R8"=232,"Q281R9"=232,"Q282SPLIT"=232,"Q282"=233,"Q283"=233,"Q284"=233,"Q285SPLIT"=234,"Q285"=234,"Q286"=234,"Q287SPLIT"=235,"Q287R1"=235,"Q287R2"=236,"Q287R3"=236,"Q287R4"=236,"Q287R5"=237,"Q287R6"=237,"Q287R7"=238,"Q287R7OE"=238,"Q294"=238,"Q294R7OE"=239,"Q295R1"=239,"Q295R2"=241,"Q295R3"=243,"Q295R4"=244,"Q295R5"=246,"Q295R6"=248,"Q295R6OE"=249,"C2PID"=250,"C2PP"=250,"Q301R1"=252,"Q301R2"=254,"Q301R3"=255,"Q301R4"=257,"Q301R5"=259,"Q301R6"=260,"Q301R7"=262,"Q301R7OE"=264,"C3PID"=264,"C3PP"=265,"Q308R1"=266,"Q308R2"=268,"Q308R3"=270,"Q308R4"=271,"Q308R5"=273,"Q308R6"=275,"Q308R7"=276,"Q315_TEXT"=278,"Q315"=278,"Q316R1"=279,"Q316R2"=279,"Q316R3"=279,"Q316R4"=280,"Q316R5"=280,"Q316R6"=281,"Q316R7"=281,"Q323BLWSPLIT"=281,"BLWNAMESPLIT"=282,"BLWETHSPLIT"=283,"BLWGENDERSPLIT"=283,"BLWSTATEMENTSPLIT"=284,"Q323APISPLIT"=285,"APINAMESPLIT"=285,"APIETHSPLIT"=286,"APIGENDERSPLIT"=287,"APISTATEMENTSPLIT"=287,"Q323NINHSPLIT"=288,"NINHNAMESPLIT"=288,"NINHETHSPLIT"=289,"NINHGENDERSPLIT"=290,"NINHSTATEMENTSPLIT"=290,"Q323_BLW"=291,"Q323_API"=291,"Q323_NINH"=292,"Q324"=292,"Q325_BLW"=293,"Q325_API"=293,"Q325_NINH"=293,"Q326R1"=294,"Q326R2"=294,"Q326R3"=295,"Q326R4"=295,"Q326R5"=296,"Q326R6"=296,"Q326R7"=296,"Q329R1"=297,"Q329R2"=297,"Q329R3"=298,"Q329R4"=298,"Q329R5"=298,"Q329R6"=299,"Q329R7"=299,"Q329R8"=299,"Q329R9"=300,"Q329R10"=300,"Q330"=301,"Q331"=302,"Q332"=304,"Q333"=306,"Q334"=306,"Q335"=306,"Q336R1C1"=307,"Q336R2C1"=307,"Q336R3C1"=308,"Q339"=309,"Q340_RACE_1"=309,"Q340_RACE_2"=309,"Q340_GENDER_1"=310,"Q340_GENDER_2"=310,"Q340_EXP_1"=310,"Q340_EXP_2"=311,"Q340_VOUCHER_1"=311,"Q340_VOUCHER_2"=312,"Q340_EVICT_1"=312,"Q340_EVICT_2"=312,"Q340_BUILD_1"=313,"Q340_BUILD_2"=313,"Q340_GUN_1"=314,"Q340_GUN_2"=314,"Q340AR1"=314,"Q340AR2"=315,"Q340AR3"=315,"Q340AR4"=315,"Q340AR5"=316,"Q340AR6"=316,"Q340AR7"=316,"Q340BR1"=316,"Q340BR2"=317,"Q340BR3"=317,"Q340BR4"=317,"Q340BR5"=318,"Q340BR6"=318,"Q340BR7"=318,"Q340AAR1"=319,"Q340BBR1"=319,"Q340"=319,"Q341R1"=319,"Q341R2"=321,"Q343R1"=322,"Q343R2"=323,"Q343R3"=323,"Q343R4"=323,"Q347SPLIT"=324,"Q347"=324,"Q348"=325,"Q349"=325,"Q350"=325,"Q351"=326,"Q352"=326,"Q353"=326,"Q354"=327,"Q355R1"=327,"Q355R2"=328,"Q355R3"=328,"Q355R4"=328,"Q355R5"=329,"Q355R6"=329,"Q355R7"=329,"Q355R8"=330,"Q355R9"=330,"Q356"=330,"Q357"=331,"Q358"=331,"Q359R1"=332,"Q359R2"=332,"Q359R3"=332,"Q359R4"=333,"Q363"=333,"Q364SPLIT"=333,"Q364"=334,"Q365"=334,"Q366R1"=335,"Q366R2"=335,"Q366R3"=335,"Q366R4"=336,"Q367"=336,"Q368"=336,"Q369"=337,"Q370"=337,"Q371"=337,"Q372"=338,"Q373"=338,"Q374"=338,"Q375"=339,"Q376"=339,"Q377"=340,"Q378"=340,"Q379"=341,"Q380"=341,"Q381_Q383R1"=341,"Q381_Q383R2"=342,"Q381_Q383R3"=342,"Q384R1"=343,"Q385"=343,"Q386_Q390R1"=344,"Q386_Q390R2"=344,"Q386_Q390R3"=345,"Q386_Q390R4"=345,"Q386_Q390R5"=346,"Q391_Q393R1"=346,"Q391_Q393R2"=346,"Q391_Q393R3"=347,"Q394"=347,"Q395"=348,"Q396_Q398R1"=348,"Q396_Q398R2"=349,"Q396_Q398R3"=349,"Q399"=349,"Q400"=350,"Q401_Q404R1"=350,"Q401_Q404R2"=351,"Q401_Q404R3"=351,"Q401_Q404R4"=352,"Q405"=352,"Q406"=352,"Q407R1"=353,"Q407R2"=353,"Q407R3"=354,"Q407R4"=354,"Q407R5"=354,"Q407R5OE"=355,"Q408"=355,"Q409"=355,"Q410"=356,"Q411_Q416R1"=356,"Q411_Q416R2"=356,"Q411_Q416R3"=357,"Q411_Q416R4"=357,"Q411_Q416R5"=358,"Q411_Q416R6"=358,"SPLITQ417_Q424"=358,"Q417_Q424R1"=359,"Q417_Q424R2"=359,"Q417_Q424R3"=360,"Q417_Q424R4"=360,"Q417_Q424R5"=360,"Q417_Q424R6"=361,"Q417_Q424R7"=361,"Q417_Q424R8"=362,"Q425"=362,"Q426R1"=363,"Q426R2"=363,"NOANSWERQ426_R3"=363,"Q427R1"=364,"Q427R2"=364,"NOANSWERQ427_R3"=364,"Q428R1"=365,"Q428R2"=366,"Q428R3"=368,"Q428R4"=370,"Q428R6"=371,"Q428R5"=373,"Q429_Q440R1"=375,"Q429_Q440R2"=375,"Q429_Q440R3"=376,"Q429_Q440R4"=376,"Q429_Q440R5"=376,"Q429_Q440R6"=377,"Q429_Q440R7"=377,"Q429_Q440R8"=378,"Q429_Q440R9"=378,"Q429_Q440R10"=378,"Q429_Q440R11"=379,"Q429_Q440R12"=379,"Q441_Q452R1"=379,"Q441_Q452R2"=380,"Q441_Q452R3"=380,"Q441_Q452R4"=381,"Q441_Q452R5"=381,"Q441_Q452R6"=381,"Q441_Q452R7"=382,"Q441_Q452R8"=382,"Q441_Q452R9"=382,"Q441_Q452R10"=383,"Q441_Q452R11"=383,"Q441_Q452R12"=383,"Q453"=384,"Q454"=384,"Q455"=384,"Q456_Q461R1"=385,"Q456_Q461R2"=385,"Q456_Q461R3"=386,"Q456_Q461R4"=386,"Q456_Q461R5"=386,"Q456_Q461R6"=387,"Q462"=387,"Q463"=388,"Q464"=388,"Q465R1"=388,"Q465R2"=389,"Q466"=389,"Q467_Q469R1"=389,"Q467_Q469R2"=390,"Q467_Q469R3"=390,"Q470"=390,"Q471R1"=391,"Q471R2"=391,"Q471R3"=391,"Q471R4"=391,"Q471R5"=392,"Q471R6"=392,"Q471R7"=392,"Q471R8"=393,"Q471R9"=393,"Q472_Q474R1"=394,"Q472_Q474R2"=394,"Q472_Q474R3"=394,"Q475R1"=395,"Q475R2"=395,"Q475R3"=396,"Q475R4"=396,"Q475R5"=397,"Q475R6"=397,"Q475R7"=398,"Q476"=398,"Q477"=399,"Q478_Q483R1"=399,"Q478_Q483R2"=400,"Q478_Q483R3"=400,"Q478_Q483R4"=400,"Q478_Q483R5"=401,"Q478_Q483R6"=401,"Q484"=402,"Q485"=402,"Q486"=403,"Q487_Q489R1"=403,"Q487_Q489R2"=403,"Q487_Q489R3"=404,"Q490R1"=404,"Q490R2"=405,"Q490R3"=405,"Q490R4"=405,"Q490R5"=406,"Q490R6"=406,"Q490R7"=406,"Q490R8"=407,"Q491A"=407,"Q491R1"=407,"Q491R2"=408,"Q491R3"=408,"Q491R4"=408,"Q491R5"=408,"Q491R6"=409,"Q491R7"=409,"Q492"=409,"Q493"=410,"Q494_Q503R1"=410,"Q494_Q503R2"=411,"Q494_Q503R3"=411,"Q494_Q503R4"=411,"Q494_Q503R5"=412,"Q494_Q503R6"=412,"Q494_Q503R7"=412,"Q494_Q503R8"=413,"Q494_Q503R9"=413,"Q494_Q503R10"=413,"Q504R1"=414,"Q504R2"=414,"Q504R3"=415,"Q504R4"=415,"Q504R5"=416,"Q504R6"=416,"Q504R7"=417,"Q504R8"=418,"Q504R11"=418,"Q504R12"=419,"Q505_Q508R1"=419,"Q505_Q508R2"=420,"Q505_Q508R3"=420,"Q505_Q508R4"=421,"Q509_Q511R1"=421,"Q509_Q511R2"=421,"Q509_Q511R3"=422,"Q512R1"=422,"Q512R2"=422,"Q512R3"=423,"Q513_Q516R1"=423,"Q513_Q516R2"=423,"Q513_Q516R3"=424,"SPLITQ517_Q520"=424,"SPLITA"=424,"Q517"=425,"Q518"=425,"Q519"=426,"Q520"=426,"Q521_Q528R1"=427,"Q521_Q528R2"=427,"Q521_Q528R3"=427,"Q521_Q528R4"=428,"Q521_Q528R5"=428,"Q521_Q528R6"=429,"Q521_Q528R7"=429,"Q521_Q528R8"=429,"Q529"=430,"Q530"=430,"Q531"=430,"Q532"=431,"Q533"=431,"Q534R1"=432,"Q534R2"=432,"Q534R3"=432,"Q534R4"=433,"Q534R5"=433,"Q535_Q538R1"=433,"Q535_Q538R2"=434,"Q535_Q538R3"=434,"Q535_Q538R4"=434,"Q539R1"=435,"Q539R2"=436,"Q539R3"=438,"Q539R4"=440,"Q539R6"=441,"Q539R5"=443,"Q540R1"=445,"Q541"=446,"Q542"=447,"Q543"=447,"Q544"=447,"Q545R7"=448,"Q546R7"=448,"Q547R7"=449,"Q548R7"=449,"Q549R7"=450,"Q550R1"=450,"Q550R2"=450,"Q550R3"=451,"Q550R4"=451,"Q550R5"=451,"Q550R6"=451,"Q551_Q559R1"=452,"Q551_Q559R2"=452,"Q551_Q559R3"=453,"Q551_Q559R4"=453,"Q551_Q559R5"=453,"Q551_Q559R6"=454,"Q551_Q559R7"=454,"Q551_Q559R8"=454,"Q551_Q559R9"=455,"Q560R1"=455,"Q560R2"=456,"Q560R3"=456,"Q560R4"=457,"Q560R5"=457,"Q560R6"=457,"Q560R7"=458,"Q560R8"=458,"Q561"=459,"Q562"=459,"Q563_Q572R1"=460,"Q563_Q572R2"=460,"Q563_Q572R3"=460,"Q563_Q572R4"=461,"Q563_Q572R5"=461,"Q563_Q572R6"=462,"Q563_Q572R7"=462,"Q563_Q572R8"=462,"Q563_Q572R9"=463,"Q563_Q572R10"=463,"Q573"=463,"Q574"=464,"Q575_Q581R1"=464,"Q575_Q581R2"=466,"Q575_Q581R3"=467,"Q575_Q581R4"=469,"Q575_Q581R5"=471,"Q575_Q581R6"=473,"Q575_Q581R7"=474,"Q582"=476,"Q583"=476,"Q584"=477,"Q585_Q590R1"=477,"Q585_Q590R2"=478,"Q585_Q590R3"=478,"Q585_Q590R4"=478,"Q585_Q590R5"=479,"Q585_Q590R6"=479,"Q591_Q596R1"=480,"Q591_Q596R2"=480,"Q591_Q596R3"=480,"Q591_Q596R4"=481,"Q591_Q596R5"=481,"Q591_Q596R6"=482,"Q597_Q602R1"=482,"Q597_Q602R2"=482,"Q597_Q602R3"=483,"Q597_Q602R4"=483,"Q597_Q602R5"=484,"Q597_Q602R6"=484,"Q603R1"=484,"Q603R2"=485,"Q603R3"=486,"Q603R4"=486,"Q603R5"=487,"Q603R6"=487,"Q603R7"=488,"Q603R8"=488,"Q603R9"=489,"Q603R10"=490,"Q604_Q605R1"=490,"Q604_Q605R2"=491,"Q606R1"=491,"Q606R2"=491,"Q606R3"=492,"Q606R4"=492,"Q606R5"=492,"Q606R6"=493,"Q607TEXT"=493,"Q607_Q610R1"=494,"Q607_Q610R2"=494,"Q607_Q610R3"=494,"Q607_Q610R4"=495,"Q611"=495,"Q613"=495,"Q614"=496,"Q615"=496,"Q616_Q618R1"=497,"Q616_Q618R2"=497,"Q616_Q618R3"=497,"Q619_Q626R1"=498,"Q619_Q626R2"=498,"Q619_Q626R3"=499,"Q619_Q626R4"=499,"Q619_Q626R5"=499,"Q619_Q626R6"=500,"Q619_Q626R7"=500,"Q619_Q626R8"=501,"Q627"=501,"Q628"=501,"Q629R1"=502,"Q629R2"=502,"Q629R3"=502,"Q629R4"=503,"Q629R5"=503,"Q629R6"=504,"Q629R7"=504,"Q630_Q632R1"=504,"Q630_Q632R2"=505,"Q630_Q632R3"=505,"Q633"=505,"SPLITQ634_Q638"=506,"Q639"=506,"Q640_Q645R1"=506,"Q640_Q645R2"=507,"Q640_Q645R3"=507,"Q640_Q645R4"=507,"Q640_Q645R5"=508,"Q640_Q645R6"=508,"Q646_Q651R1"=509,"Q646_Q651R2"=509,"Q646_Q651R3"=509,"Q646_Q651R4"=510,"Q646_Q651R5"=510,"Q646_Q651R6"=510,"Q646_Q651R7"=511,"Q646_Q651R8"=511,"Q646_Q651R9"=512,"Q646_Q651R10"=512,"Q646_Q651R11"=512,"Q652_Q658R1"=513,"Q652_Q658R2"=513,"Q652_Q658R3"=513,"Q652_Q658R4"=514,"Q652_Q658R5"=514,"Q652_Q658R6"=515,"Q652_Q658R7"=515,"Q659R1"=515,"Q659R2"=516,"Q659R3"=516,"Q659R4"=516,"Q659R5"=517,"Q659R6"=517,"Q659R7"=517,"Q659R8"=518,"Q660"=518,"Q661"=518,"Q662R1"=519,"Q662R2"=519,"Q662R3"=519,"Q662R4"=520,"Q662R5"=520,"Q662R6"=520,"Q663_Q666R1"=521,"Q663_Q666R2"=521,"Q663_Q666R3"=522,"Q663_Q666R4"=522,"Q667_Q671R1"=522,"Q667_Q671R2"=523,"Q667_Q671R3"=523,"Q667_Q671R4"=523,"Q667_Q671R5"=524,"Q672"=524,"Q673"=524,"Q674R1"=525,"Q675"=525,"Q676_Q678R1"=526,"Q676_Q678R2"=526,"Q676_Q678R3"=526,"Q679_Q682R1"=527,"Q679_Q682R2"=527,"Q679_Q682R3"=528,"Q679_Q682R4"=528,"Q683"=529,"Q684"=529,"Q685"=529,"Q686"=530,"Q687"=530,"Q688"=530,"Q689"=531,"Q690"=531,"Q691"=532,"Q692"=532,"SPLITQ693_Q700"=532,"Q693_Q700R1"=533,"Q693_Q700R2"=533,"Q693_Q700R3"=533,"Q693_Q700R4"=534,"Q693_Q700R5"=534,"Q693_Q700R6"=534,"Q693_Q700R7"=535,"Q693_Q700R8"=535,"Q701_Q705R1"=536,"Q701_Q705R2"=536,"Q701_Q705R3"=536,"Q701_Q705R4"=537,"Q701_Q705R5"=537,"Q706_Q708R1"=538,"Q706_Q708R2"=538,"Q706_Q708R3"=538,"Q709_712R1"=539,"Q709_712R2"=539,"Q709_712R3"=540,"Q709_712R4"=540,"Q713"=540,"Q714"=541,"SPLITQ716"=541,"Q715_718R1"=541,"Q715_718R2"=542,"Q715_718R3"=542,"Q715_718R4"=543,"Q719"=543,"Q720_Q722R1"=543,"Q720_Q722R2"=544,"Q720_Q722R3"=544,"Q723_Q725R1"=544,"Q723_Q725R2"=545,"Q723_Q725R3"=545,"Q726"=546,"Q727_Q731R1"=546,"Q727_Q731R2"=547,"Q727_Q731R3"=547,"Q727_Q731R4"=548,"Q727_Q731R5"=548,"Q732_Q737R1"=548,"Q732_Q737R2"=549,"Q732_Q737R3"=549,"Q732_Q737R4"=550,"Q732_Q737R5"=550,"Q732_Q737R6"=551,"Q738_Q740R1"=551,"Q738_Q740R2"=552,"Q738_Q740R3"=552,"Q741"=553,"Q742"=553,"Q743"=555,"Q744"=555,"Q745"=556,"Q746A"=556,"Q746B"=557,"Q747"=557,"Q748"=558,"Q749"=558,"Q750R1"=558,"Q750R2"=559,"Q750R3"=559,"Q750R4"=559,"Q750R5"=560,"Q750R6"=560,"Q750R7"=560,"Q751R1"=560,"Q751R2"=561,"Q751R3"=561,"Q751R4"=561,"Q751R5"=562,"Q752"=562,"Q753"=562,"Q754_Q762R1C1"=563,"Q754_Q762R1C2"=563,"Q754_Q762R1C3"=564,"Q754_Q762R2C1"=564,"Q754_Q762R2C2"=564,"Q754_Q762R2C3"=565,"Q754_Q762R3C1"=565,"Q754_Q762R3C2"=565,"Q754_Q762R3C3"=566,"Q754_Q762R4C1"=566,"Q754_Q762R4C2"=566,"Q754_Q762R4C3"=567,"Q754_Q762R5C1"=567,"Q754_Q762R5C2"=567,"Q754_Q762R5C3"=568,"Q754_Q762R6C1"=568,"Q754_Q762R6C2"=568,"Q754_Q762R6C3"=569,"Q754_Q762R7C1"=569,"Q754_Q762R7C2"=569,"Q754_Q762R7C3"=570,"Q754_Q762R8C1"=570,"Q754_Q762R8C2"=570,"Q754_Q762R8C3"=571,"Q754_Q762R9C1"=571,"Q754_Q762R9C2"=571,"Q754_Q762R9C3"=572,"Q763_Q766R1"=572,"Q763_Q766R2"=572,"Q763_Q766R3"=573,"Q763_Q766R4"=573,"Q767_Q771R1"=573,"Q767_Q771R2"=574,"Q767_Q771R3"=574,"Q767_Q771R4"=575,"Q767_Q771R5"=575,"Q772"=575,"Q773"=575,"VQ773"=577,"Q774"=579,"NOANSWERQ774_R1"=580,"VQ774"=581,"NOANSWERVQ774_R1"=582,"Q775"=583,"Q776"=583,"Q777"=583,"Q777B"=585,"Q778R1"=585,"Q779"=585,"Q780R1"=587,"Q781"=587,"Q782"=587,"Q783"=589,"Q784"=589,"Q785"=590,"Q786R1"=590,"Q786R2"=590,"Q786R3"=590,"Q787R1"=591,"Q788"=591,"Q789R1"=593,"Q790"=593,"Q793R1"=594,"Q793R2"=595,"Q793R3"=595,"Q793R4"=596,"Q793R5"=596,"Q794R1"=597,"Q794R2"=597,"Q794R3"=597,"Q794R4"=598,"Q794R5"=598,"Q794R6"=598,"Q795"=599,"Q796R1"=599,"Q796R2"=600,"Q796R3"=600,"Q796R4"=600,"Q796R5"=601,"Q797R1"=601,"Q797R2"=601,"Q797R3"=602,"Q797R4"=602,"Q797R5"=602,"Q797R6"=603,"Q797R7"=603,"Q797R8"=603,"Q797R9"=603,"Q797R10"=604,"Q797R9OE"=604,"Q798R1"=604,"Q798R2"=605,"Q798R3"=605,"Q798R4"=605,"Q798R5"=606,"Q798R6"=606,"Q798R7"=606,"Q798R8"=606,"Q798R9"=607,"Q798R10"=607,"Q798R9OE"=607,"SPLITQ799"=608,"Q799R1C1"=608,"Q799R2C1"=609,"Q799R3C1"=609,"Q799R4C1"=610,"Q799R5C1"=611,"Q799R6C1"=611,"Q799R7C1"=612,"Q799R8C1"=612,"Q800R1C1"=613,"Q800R2C1"=614,"Q800R3C1"=614,"Q800R4C1"=615,"Q800R5C1"=616,"Q800R6C1"=616,"Q800R7C1"=617,"Q800R8C1"=618,"Q801"=618,"Q801R9OE"=619,"Q802"=619,"Q802R9OE"=620,"Q803"=620,"Q804"=620,"Q805"=621,"Q806"=621,"Q807"=623,"Q807R8OE"=623,"Q808"=624,"Q809"=625,"Q810"=626,"Q811"=627,"Q812"=629,"Q813"=630,"Q814"=630,"Q815"=630,"Q815R7OE"=631,"Q816"=631,"Q817"=632,"Q818"=632,"Q819"=632,"Q820"=633,"QCOND1SPLIT"=633,"QCOND2SPLIT"=634,"QCOND3SPLIT"=634,"QCOND4SPLIT"=634,"QCOND5SPLIT"=635,"QCOND6SPLIT"=635,"QCOND7SPLIT"=636,"HOLDCONDR1"=636,"HOLDCONDR2"=636,"HOLDCONDR3"=636,"HOLDCONDR4"=637,"HOLDCONDR5"=637,"HOLDCONDR6"=637,"HOLDCONDR7"=638,"HOLDCONDR8"=638,"HOLDCONDR9"=638,"HOLDCONDR10"=639,"HOLDCONDR11"=639,"HOLDCONDNONE"=639,"QRANDOMSPLIT"=640,"Q821J"=640,"Q825J"=640,"Q822J"=641,"Q823J"=641,"Q824J"=642,"Q822K"=642,"Q825K"=643,"Q821K"=643,"Q823K"=643,"Q824K"=644,"Q823L"=644,"Q825L"=645,"Q821L"=645,"Q822L"=646,"Q824L"=646,"Q824M"=647,"Q825M"=647,"Q821M"=647,"Q822M"=648,"Q823M"=648,"Q825N"=649,"Q821N"=649,"Q822N"=650,"Q823N"=650,"Q824N"=650,"Q821"=651,"Q822"=651,"Q823"=652,"Q824"=652,"Q825"=653,"Q826R1"=653,"Q826R2"=653,"Q826R3"=654,"Q826R4"=654,"Q826R5"=654,"Q826R7"=655,"Q826R6"=655,"Q826A"=656,"SCREENTIMESCM6T"=656,"QTIME"=656,"VOS"=656,"VBROWSER"=657,"VMOBILEDEVICE"=658,"VMOBILEOS"=658,"START_DATE"=658,"RACE"=659,"WEIGHT"=659,"BASELINE"=661,"MENA_MUSLIM"=661,"HAWAII_PI"=661,"LGBTQ"=662,"AFROLAT"=662,"BLACKIMM"=662,"NATIVEAM"=663,"OS_WEIGHT"=663)
+masked<-c("S3BR4OE","S3R4OE","S8_PACIFICR8OE","S8R16OE","S9R19OE","S10R22OE","S11R13OE","S12R27OE","S15",
+ "Q259","Q426R1","Q426R2","Q427R1","Q427R2",paste0("Q471R",1:5),"Q772","Q776","Q777B","Q778R1","Q780R1",
+ "Q781","Q783","Q784",paste0("Q786R",1:3),"Q787R1","Q789R1")
+admin<-c("RECORD","UUID","DATE","START_DATE","MAIN_ETH_QUOTA","RACE","BASELINE","WEIGHT","OS_WEIGHT",
+ "S6","S6_NON","Q12","Q14","S5_AGE","Q3B_PLURAL","ASIAN_ETH","MENA_MUSLIM","HAWAII_PI","LGBTQ","AFROLAT","BLACKIMM","NATIVEAM",
+ "S10HOLD","Q58_COUNT","Q58SELECT","C2PID","C2PP","C3PID","C3PP","SCREENTIMESCM6T","QTIME","VOS","VBROWSER","VMOBILEDEVICE","VMOBILEOS")
+is_survey<-grepl("^(S[0-9]|Q[0-9]|NEWQ[0-9]|VQ[0-9])",vars)
+context<-rep(FALSE,length(vars)) # No appended census contextual fields in this release.
+metadata<-grepl("SPLIT|_HID$|^RAND_|_TEXT$|TEXT$|^Q340_|^Q340(A|B)|^HOLDCOND|^NOANSWER",vars)
+free_text<-grepl("OE$",vars) | vapply(raw,function(v)is.factor(v) &&
+ !all(grepl("^\\([0-9]+\\)",levels(v),useBytes=TRUE)),logical(1)) & !vars%in%c("S4")
+reason<-ifelse(is_survey,"Eligible","Not a source survey response; administration or derived metadata")
+reason[metadata]<-"Routing/experiment metadata; joined to response where required"
+reason[free_text]<-"Uncoded/free-text field; no text model"
+reason[vars%in%admin]<-"Outcome, selection, administration, weights or duplicate"
+reason[vars%in%masked]<-"ICPSR disclosure-masked field"
+# Conceptual exclusions fixed before fitting; no importance-dependent exclusions.
+qnum<-suppressWarnings(as.integer(sub("^Q([0-9]+).*","\\1",vars)))
+proximate<-vars[(qnum%in%c(2,15,47:56,130,195:201,272,323:328,340:341,575,614:615,684)) |
+ vars%in%c("Q96R10","Q96R11","Q96R12","Q98R8","Q98R9","Q504R11","Q504R12","Q509_Q511R3")]
+partisan<-vars[qnum%in%c(17:19,21:28,294,301,315,334,743:745) |
+ vars%in%c("Q1R17","Q1R18","Q225R10","Q225R11","Q287R6","Q316R7","Q560R4")]
+proximate<-na.omit(proximate);partisan<-na.omit(partisan)
+# Numeric ratings/ranks are categorical; continuous sliders and allocations retain magnitudes.
+ordinal_numeric<-grep("^Q504R|^Q603R|^Q674R?",vars,value=TRUE)
+continuous<-vars[vapply(raw,is.numeric,logical(1)) & !vars%in%ordinal_numeric & reason=="Eligible"]
+continuous<-union(continuous,c("Q742","Q806","Q808"))
+x<-d[,vars[reason=="Eligible"],drop=FALSE]
+for(n in names(x)) {
+ if(n%in%c("Q742","Q806","Q808"))x[[n]]<-suppressWarnings(as.numeric(sub("^\\([0-9]+\\) *","",as.character(x[[n]]))))
+ else if(n%in%ordinal_numeric)x[[n]]<-ifelse(is.na(x[[n]]),NA_character_,as.character(x[[n]]))
+ else if(is.factor(x[[n]]))x[[n]]<-clean_text(as.character(x[[n]]))
+}
+# Conditions are excluded as standalone predictors. Fields already separated by wording
+# retain separate source codes, with condition text appended for explicit interpretation.
+condition<-setNames(rep(list(character()),length(vars)),vars)
+join_condition<-function(n,cond){for(v in intersect(n,names(x)))condition[[v]]<<-unique(c(condition[[v]],cond))}
+join_condition(paste0("Q",48:50),"Q48_50SPLIT")
+join_condition(paste0("Q",51:52),"Q51_52SPLIT")
+join_condition(grep("^Q257[A-C]R",vars,value=TRUE),"Q257SPLIT")
+join_condition("Q258","Q258SPLIT")
+join_condition("Q272",c("RAND_POS1","RAND_POS2","RAND_SCORE1","RAND_SCORE2"))
+join_condition(grep("^Q323_|^Q325_|^Q326R|^Q324$",vars,value=TRUE),"Q323BLWSPLIT")
+join_condition(paste0("Q",347:349),"Q347SPLIT")
+join_condition(paste0("Q",517:520),"SPLITA")
+join_condition(grep("^Q693_Q700R",vars,value=TRUE),"SPLITQ693_Q700")
+join_condition("Q715_718R2","SPLITQ716")
+join_condition(grep("^Q607_Q610R",vars,value=TRUE),"Q607TEXT")
+join_condition("Q340",grep("^Q340_",vars,value=TRUE))
+join_condition("Q341R1",grep("^Q340_.*_1$",vars,value=TRUE))
+join_condition("Q341R2",grep("^Q340_.*_2$",vars,value=TRUE))
+# Piped identity targets vary even within the Latino quota.
+for(n in names(x)[grepl("S2_Race_Prime",label[names(x)],fixed=TRUE)])join_condition(n,"S2_RACE_PRIME")
+join_condition(c("Q287R6"),c("Q21","Q23"))
+join_condition("Q22","Q21")
+join_condition("Q744","Q743")
+# Q315 wording is disputed; preserve supplied categories and join selected identity,
+# while removing it entirely in Model 3 because the target can reveal party identity.
+identity_target<-as.character(d$Q294)
+identity_target[code(d$Q287SPLIT)==2]<-as.character(d$C2PID[code(d$Q287SPLIT)==2])
+identity_target[code(d$Q287SPLIT)==3]<-as.character(d$C3PID[code(d$Q287SPLIT)==3])
+if("Q315"%in%names(x))x$Q315<-paste(x$Q315,identity_target,sep=" | Selected identity: ")
+for(n in names(x))if(length(condition[[n]])) {
+ response<-as.character(x[[n]])
+ cond<-vapply(seq_len(nrow(d)),function(i)paste(vapply(condition[[n]],function(cn){a<-clean_text(as.character(d[[cn]][i]));
+  if(is.na(a))a<-"Condition not recorded";paste0(cn,": ",a)},character(1)),collapse=" | "),character(1))
+ x[[n]]<-ifelse(is.na(response),NA_character_,paste(response,cond,sep=" | "))
+}
+# Group only components of one question (checkbox, ranking, constrained allocation).
+# Distinct numbered questions in rating batteries remain separate questionnaire items.
+grouped_prefixes<-c("Q32","Q39","Q41","Q60","Q76","Q110","Q116","Q281","Q355","Q366","Q465","Q471","Q475","Q490","Q491","Q512","Q534","Q550","Q659","Q662","Q750","Q751","Q793","Q794","Q796","Q826","S2_RACE","S2_HISPANIC","S2_NATIVE","S2_AFROLAT","Q1","Q27","Q28","Q30","Q31","Q38","Q58","Q61",
+ "Q96","Q98","Q171","Q195A1","Q195A2","Q195B1","Q195B2","Q202","Q262","Q263","Q295","Q301","Q329","Q336",
+ "Q407","Q428","Q539","Q603","Q606","Q629","Q797","Q798","Q799","Q800","Q801","Q802","Q807","Q815")
+item_of<-function(n){if(grepl("^Q754_Q762R[0-9]+C[0-9]+$",n))return(sub("C[0-9]+$","",n));a<-sub("R[0-9]+(C[0-9]+)?$","",n);if(a%in%grouped_prefixes)a else n}
+item_map<-setNames(vapply(names(x),item_of,character(1)),names(x))
+ledger<-data.frame(variable=vars,item=vapply(vars,item_of,character(1)),verified_short_label=pretty_item(vars),
+ construct=unname(label),wording_source="ICPSR variable label; may be truncated",codebook_pdf_page=unname(codebook_page[vars]),
+ source_type=ifelse(is_survey,"Survey item or survey routing field","Administration / derived field"),appended_context=context,
+ routing_notes=ifelse(vapply(condition,length,integer(1))>0,paste("Condition joined:",vapply(condition,paste,collapse="; ",character(1))),
+ "Original questionnaire route / module retained; system NA not interpreted as a substantive answer"),
+ missingness_type=ifelse(vars%in%masked,"Disclosure masked", "System NA: routing, nonresponse or unavailable; labelled responses preserved"),
+ sample_system_missing=vapply(d,function(v)sum(is.na(v)),integer(1)),base_decision=reason,
+ model1=reason=="Eligible",model2=reason=="Eligible" & !vars%in%proximate,
+ model3=reason=="Eligible" & !vars%in%union(proximate,partisan),
+ exclusion_note=ifelse(reason!="Eligible",reason,ifelse(vars%in%proximate,"Candidate/election-proximate; Model 1 only",
+ ifelse(vars%in%partisan,"Direct partisan or party-selected identity; withheld in Model 3","Eligible subject to training-only screening"))),
+ label_review=ifelse(vars%in%c("Q315","Q603R2"),"Documented questionnaire/data discrepancy: unresolved",
+ ifelse(vars%in%names(short_labels),"Verified short label","Code retained; full wording/short label requires review")),row.names=NULL)
+ledger$routing_notes[vars%in%c("Q315","Q301R1","Q301R2","Q301R3","Q301R4","Q301R5","Q301R6","Q301R7")]<-
+ "Party can be selected as identity; complete Q301 allocation withheld in Model 3 because total 100 reveals omitted party allocation"
+
+# Routing notes supplement the codebook source construct without guessing missing reasons.
+route_notes<-c(Q13="Questionnaire Q13: asked only when Q12=1 (certain voter)",
+ Q22="Asked Q21=Republican or Democrat; party identity piped",Q23="Asked nonmajor-party identification",
+ Q24="Asked Q21=Republican",Q25="Asked Q21=Democrat",Q26="Asked Q21=Independent or Other",
+ Q39="Asked when any campaign contact at Q38",Q41="Asked when cultural/advocacy contact at Q40",
+ Q60="Questionnaire Q58 religion categories 1,2,3,13:17",Q116="Skipped when all Q111:115 donation amounts zero",
+ Q258="Black-targeted module with randomized congressional group",Q287="Random identity exercise split A",
+ Q294="Random identity exercise split A; identity target includes party",Q295="Random identity exercise split B",
+ Q301="Random identity exercise split C; 100-point total includes party",
+ Q334="Asked Q333=majorities in some districts",Q335="Asked Q333=spread evenly",
+ Q355="Muslim-targeted module",Q407="Skipped Q406=3, unchanged political activity",
+ Q465="Asked when recording police incident (Q463=2 or 3)",Q471="Asked program use Q470=1",
+ Q659="Asked any reported problem in split A/B/C legal-problem module",Q742="Ever married",
+ Q744="Spouse identified as Republican or Democrat at Q743",Q745="Spouse not major-party identifier at Q743",
+ Q793="Foreign-born (S7=2 or 3)",Q794="Asian/Latino module",Q796="Foreign-born (S7=2 or 3)",
+ Q799="Randomized racial-identity example A",Q800="Randomized racial-identity example B",Q826="LGBTQ-targeted module")
+for(v in vars){prefix<-sub("R[0-9]+(C[0-9]+)?$","",v)
+ if(prefix%in%names(route_notes))ledger$routing_notes[ledger$variable==v]<-paste(route_notes[[prefix]],ledger$routing_notes[ledger$variable==v],sep="; ")}
+ledger$raw_observed<-vapply(raw,function(v)sum(!is.na(v)),integer(1))
+ledger$measurement<-ifelse(vars%in%continuous,"Continuous quantity / allocation",
+ ifelse(vars%in%ordinal_numeric,"Numeric source rating/rank retained categorically","Original labelled categories or source type"))
+ledger$verified_short_label<-pretty_item(vars)
+ledger$label_review[vars%in%names(short_labels)]<-"Verified short label; original source construct retained"
+stopifnot(nrow(ledger)==1490L,!anyDuplicated(ledger$variable),all(!is.na(ledger$codebook_pdf_page)))
+
+questionnaire_crosswalk<-data.frame(variable=c("Q15","Q21","Q22","Q23","Q24","Q25","Q26","Q43","Q543","Q358","Q130","Q54","Q55","Q614","Q615","Q613","Q606","Q485","Q183","Q368","Q683","Q743","Q329","Q385","Q33R3","Q117R11","Q154R1","Q217R1","Q208R5","Q359R2","Q184R1","Q131R1","Q131R9","Q225R10","Q225R11","Q2R1","Q2R2","Q2R3","Q2R4","Q2R5","Q2R6","Q2R7","Q2R8","Q2R9","Q2R10","Q308R1","Q308R2","Q308R3","Q308R4","Q308R5","Q308R6","Q308R7","Q619_Q626R1","Q619_Q626R2","Q619_Q626R3","Q619_Q626R4","Q619_Q626R5","Q619_Q626R6","Q619_Q626R7","Q619_Q626R8","Q563_Q572R1","Q563_Q572R2","Q563_Q572R3","Q563_Q572R4","Q563_Q572R5","Q563_Q572R6","Q563_Q572R7","Q563_Q572R8","Q563_Q572R9","Q563_Q572R10","Q607_Q610R1","Q709_712R1","Q607_Q610R2","Q709_712R2","Q607_Q610R3","Q709_712R3","Q607_Q610R4","Q709_712R4","Q706_Q708R1","Q706_Q708R2","Q706_Q708R3","Q504R6","Q504R3","Q504R11","Q504R12","Q197A1","Q195A1R1","Q195A1R2","Q195A1R3","Q195A1R4","Q195A1R5","Q195A1R6","Q195A1R7","Q195A1R8","Q195A1R9","Q195A1R10","Q197A2","Q195A2R1","Q195A2R2","Q195A2R3","Q195A2R4","Q195A2R5","Q195A2R6","Q195A2R7","Q195A2R8","Q195A2R9","Q195A2R10","Q197B1","Q195B1R1","Q195B1R2","Q195B1R3","Q195B1R4","Q195B1R5","Q195B1R6","Q195B1R7","Q195B1R8","Q195B1R9","Q195B1R10","Q197B2","Q195B2R1","Q195B2R2","Q195B2R3","Q195B2R4","Q195B2R5","Q195B2R6","Q195B2R7","Q195B2R8","Q195B2R9","Q195B2R10"),questionnaire_item=c(15,21,22,23,24,25,26,43,543,358,130,54,55,613,614,612,606,485,183,368,683,743,329,385,35,127,154,217,212,360,184,131,139,234,235,2,3,4,5,6,7,8,9,10,11,308,309,310,311,312,313,314,618,619,620,621,622,623,624,625,563,564,565,566,567,568,569,570,571,572,607,709,608,710,609,711,610,712,706,707,708,504,504,504,504,197,195,195,195,195,195,195,195,195,195,195,197,195,195,195,195,195,195,195,195,195,195,197,195,195,195,195,195,195,195,195,195,195,197,195,195,195,195,195,195,195,195,195,195),questionnaire_pdf_page=c(13,15,15,15,15,15,15,19,94,69,30,21,21,101,101,101,100,86,35,71,108,114,62,75,18,30,32,44,43,69,35,31,31,45,45,12,12,12,12,12,12,12,12,12,13,59,59,59,59,59,59,59,102,102,102,102,102,102,102,102,96,96,96,97,97,97,97,97,97,97,100,111,100,111,100,111,100,111,111,111,111,89,89,89,89,39,37,37,37,37,37,37,37,37,37,37,39,37,37,37,37,37,37,37,37,37,37,39,37,37,37,37,37,37,37,37,37,37,39,37,37,37,37,37,37,37,37,37,37),source_excerpt=c("15. How about in the election for U.S. Congress, here in your district in [STATE] [IF Q12=1 or 2 “did you vote for”;  all others: “even if you did not vote, did you support”; if age=16-17 “even though you’re not old enough to vote,  did you support” [ROTATE] the Republican candidate or the Democratic candidate for Congress?   ===== PDF PAGE 14 =====","21. [IF S7=2 or 3 “When it comes to politics in the U.S.”] Generally speaking, do you think of yourself as a  Republican, a Democrat, an independent, or something else?    Republican ........................................................................ 1  Democrat .......................................................................... 2 ","22. [IF 21=1 or 2] Do you consider yourself to be a strong {Dem/Rep}, or not?    Strong ................................................................................ 1  Not strong ......................................................................... 2   ","23. [IF 21=3-4] If you had to choose, do you consider yourself closer to the Republican party or the Democratic  party?  Republican ........................................................................ 1  Democrat .......................................................................... 2  Independent ..................................................................... 3 ","24. [If 21=1] Have you always called yourself a Republican, or did you used to call yourself a Democrat?    Always called myself a Republican ................................... 1  Used to call myself a Democrat ........................................ 2  Used to call myself an Independent ................................. 3 ","25. [If 21=2] Have you always called yourself a Democrat, or did you used to call yourself a Republican?    Always called myself a Democrat ..................................... 1  Used to call myself a Republican ...................................... 2  Used to call myself an Independent ................................. 3 ","26. [If 21=3 or 4] Have you always called yourself an Independent, or did you used to think of yourself as closer to  the Democratic or Republican parties?     ===== PDF PAGE 16 =====","43. When it comes to politics, do you think of yourself as liberal, moderate, or conservative?    Very Liberal ....................................................................... 1  Somewhat Liberal ............................................................. 2  Moderate .......................................................................... 3 ","543. How about… [randomize order]     Support government increasing spending by $25 billion on border security, including building a wall between the  U.S. and Mexico……1   Oppose government increasing spending by $25 billion on border security, including building a wall between the ","358. Based on everything you have heard or seen, how much do you support or oppose the Black Lives Matter  movement?  Strongly support 1  Somewhat support 2  Neither support nor oppose 3 ","130................................................................. Looking back over the past ten months that our nation has been  dealing with the coronavirus pandemic, which statement is closer to your view? [ROTATE]    President Trump ignored the early warning signs of coronavirus and because of his mismanagement, millions of  Americans became sick and more than 400,000 died. .................................................................................1 ","54. Some people have said that former President Donald Trump encouraged or incited the rioters to carry out the  attack on the U.S. Capitol, while other people have said Trump had no connection and the rioters did this on their  own.  Which comes closest to your own beliefs.  [rotate order of answer choices]   ","55. Do you think the Republican members of Congress who tried to stop the formal certification of Joe Biden’s  victory in the 2020 presidential election were undermining democracy, or protecting democracy?    Undermining democracy .................................................. 1  Protecting democracy ....................................................... 2 ","613. [L] This year there has been a lot of discussion President Trump’s immigration policies, including  deportation, detention and how the US treats people seeking asylum. Which best describes your position?    I oppose Trump’s immigration policies ............................ 1  I support Trump’s immigration policies ........................... 2 ","614. [L] Regardless of whether you support or oppose Trump’s immigration policies, did you do any of the  following to share that opinion with others?    I attended an in-person event to express this view .................................... 1  I participated online and/or on social media to express this view ............. 2 ","612. [L] In the US we use a number of categories to describe ourselves racially. Do you feel that Latinos make  up a distinctive racial group in America?    Yes ..................................................................................... 1  No ...................................................................................... 2 ","606. Which of the following groups do you most DISLIKE? [Randomize] [Rank Widget] Rank the groups from 1  to 3 with 1 being the group you DISLIKE the most.    White supremacists (such as the KKK)  Anti-abortion activists ","485........................................................................................................................................................................... W hen it comes to the treatment of Black people by the police and the treatment of Latino immigrants by  immigration officials, which comes closest to your view: [rotate]    Neither treatment of Blacks by police nor treatment of Latinos by immigration officials are racially ","183. Is your overall opinion of Immigration and Customs Enforcement, known as ICE:     Very unfavorable .............................................................. 1  Mostly unfavorable ........................................................... 2  Mostly favorable ............................................................... 3 ","368........................................................................................................................................................................... D uring the summer of 2020, Black Lives Matter and protesters around the world stressed bringing an end to  racism among individuals and within larger society. Part of these protests involved acknowledging the history  of racism in the United States and beyond.    ","683. As you may know, the Voting Rights Act was passed in the 1965s to prevent state and local governments  from using rules and procedures which prevented many Black people from voting. Do you think the Voting  Rights Act is necessary today to make sure that Blacks are allowed to vote, or do you think the Voting Rights  Act is no longer necessary?  Necessary today ................................................................ 1 ","743.  [If Q741=1, 3, 4] Generally speaking, does your spouse or partner think of themselves as a Republican,  Democrat, an independent, or something else?    Republican ........................................................................ 1  ","329............. Choosing only three groups from the list below, please indicate how much attention Congress  should give to each group of Americans when creating policies to deal with the economy.  Please drag the  group to the appropriate box.  [Rank widget: A good deal, A lot, A moderate amount]  [Randomize]    Whites ","385. As you may have heard, in the wake of the murder of George Floyd and protests, there has been some  talk of defunding the police. Some say that defunding the police is pushing things too far. Others feel that  defunding the police is not going far enough. How about you - what do you think about defunding the police?    [Widget scale ranging from 1=Defunding the police is pushing things too far to 7=Defunding the police is not going ","35. CNN  36. New York Times  37. National Public Radio (NPR)  Very often ......................................................................... 1  Occasionally, but not often............................................... 2 ","127. Supporting immigrant rights  128. Ending coronavirus quarantine  129. A national mandate to wear a mask in public when coronavirus cases are high    Very Low Priority ............................................................... 1 ","154. You see an American flag or hear the national anthem?  155. You participate in a civic or political action, such as voting, contacting an elected official or discussing  issues with others?  156. You view news or think about protests on issues that are important for [R’s racial group]?  157. You see a {ANS S2} individual accomplishing a major milestone? ","217. White people in the U.S. have certain advantages because of their race.  218. Racial problems in the U.S. are rare, isolated situations.  219. I am angry that racism exists.  220. I am sometimes fearful of people of other races.   ","212. It is the responsibility of the government to reduce the differences in income between people with high  incomes and those with low incomes?    Strongly agree 1  Somewhat agree 2 ","360. [ANS to S2] will benefit from the success of the Black Lives Matter movement.  361.  When Americans speak up and protest injustice in the U.S., it always makes the country better.   ===== PDF PAGE 70 =====  ","184.  Increasing security at the U.S.-Mexico border should be a national priority even if it means that some  migrants will die attempting to cross    185. This country should make it easier for immigrants to obtain visas and citizenship.   ","131. Congress should pass a comprehensive stimulus bill with over 2 trillion dollars in additional funding for  unemployment benefits, stimulus payments, small business loans, and support for state and local  government.  132...... [SPLIT A] As long as the coronavirus is a threat, we need a national mandate to wear masks in public.  133. [SPLIT B] We should end the policy of separating immigrant children from their parents at the border. ","139. [SPLIT B] Abortion should remain a legal option in the United States.  140. [SPLIT A] Washington D.C. should be a full state and have 2 U.S. Senators and Representative in the U.S.  Congress   141. [SPLIT B] Puerto Rico should be a full state and have 2 U.S. Senators and Representatives in the U.S.  Congress ","234. Democrats  235. Republicans  236. LGBTQ people  237. Immigrants  238. White nationalists ","235. Republicans  236. LGBTQ people  237. Immigrants  238. White nationalists  Strongly supports .............................................................. 1 ","2. Former President Donald Trump   3. Former Vice President Mike Pence   4. President Joe Biden   5. Vice President Kamala Harris   6. Former President Barack Obama ","3. Former Vice President Mike Pence   4. President Joe Biden   5. Vice President Kamala Harris   6. Former President Barack Obama  7. Former President George W. Bush ","4. President Joe Biden   5. Vice President Kamala Harris   6. Former President Barack Obama  7. Former President George W. Bush  8. Former Secretary of State Hillary Clinton ","5. Vice President Kamala Harris   6. Former President Barack Obama  7. Former President George W. Bush  8. Former Secretary of State Hillary Clinton  9. Former first-lady Melania Trump  ","6. Former President Barack Obama  7. Former President George W. Bush  8. Former Secretary of State Hillary Clinton  9. Former first-lady Melania Trump   10. Former first-lady Michelle Obama ","7. Former President George W. Bush  8. Former Secretary of State Hillary Clinton  9. Former first-lady Melania Trump   10. Former first-lady Michelle Obama  ","8. Former Secretary of State Hillary Clinton  9. Former first-lady Melania Trump   10. Former first-lady Michelle Obama   ===== PDF PAGE 13 =====","9. Former first-lady Melania Trump   10. Former first-lady Michelle Obama   ===== PDF PAGE 13 =====  ","10. Former first-lady Michelle Obama   ===== PDF PAGE 13 =====    ","11. First-lady Dr. Jill Biden    Very favorable ........................................................1  Somewhat favorable ..............................................2  Somewhat unfavorable ..........................................3 ","308..Undocumented immigrants  309..Gun owners  310..Veterans  311..Welfare recipients  312..Climate change activists ","309..Gun owners  310..Veterans  311..Welfare recipients  312..Climate change activists  313..#MeToo Movement ","310..Veterans  311..Welfare recipients  312..Climate change activists  313..#MeToo Movement  314..#BlackLivesMatter ","311..Welfare recipients  312..Climate change activists  313..#MeToo Movement  314..#BlackLivesMatter   ","312..Climate change activists  313..#MeToo Movement  314..#BlackLivesMatter      How close do you feel to other [Insert text: Q294 or C2PID or C3PID] people? ","313..#MeToo Movement  314..#BlackLivesMatter      How close do you feel to other [Insert text: Q294 or C2PID or C3PID] people?  315.............  ","314..#BlackLivesMatter      How close do you feel to other [Insert text: Q294 or C2PID or C3PID] people?  315.............   • Not close at all ","618. Whites  619. Blacks  620. Asian Americans  621. Native Americans  622. Immigrants ","619. Blacks  620. Asian Americans  621. Native Americans  622. Immigrants  623. Latinos ","620. Asian Americans  621. Native Americans  622. Immigrants  623. Latinos  624. Gays and Lesbians ","621. Native Americans  622. Immigrants  623. Latinos  624. Gays and Lesbians  625. Muslims ","622. Immigrants  623. Latinos  624. Gays and Lesbians  625. Muslims  A lot.... ............................................................................... 1 ","623. Latinos  624. Gays and Lesbians  625. Muslims  A lot.... ............................................................................... 1  Some... .............................................................................. 2 ","624. Gays and Lesbians  625. Muslims  A lot.... ............................................................................... 1  Some... .............................................................................. 2  A little.... ............................................................................ 3 ","625. Muslims  A lot.... ............................................................................... 1  Some... .............................................................................. 2  A little.... ............................................................................ 3  None at all... ...................................................................... 4 ","563. Women  564. Men  565. Immigrants   ===== PDF PAGE 97 =====","564. Men  565. Immigrants   ===== PDF PAGE 97 =====  ","565. Immigrants   ===== PDF PAGE 97 =====    ","566. Native Americans  567. Whites  568. Blacks  569. Latinos  570. Asians ","567. Whites  568. Blacks  569. Latinos  570. Asians  571. Muslims ","568. Blacks  569. Latinos  570. Asians  571. Muslims  572. LGBTQ ","569. Latinos  570. Asians  571. Muslims  572. LGBTQ   ","570. Asians  571. Muslims  572. LGBTQ    Underrepresented ............................................................ 1 ","571. Muslims  572. LGBTQ    Underrepresented ............................................................ 1  Fairly represented ............................................................. 2 ","572. LGBTQ    Underrepresented ............................................................ 1  Fairly represented ............................................................. 2  Overrepresented............................................................... 3 ","607. are a threat to my safety or that of my family  608. are a threat to Americans’ way of life  609. should be banned from holding public rallies  610. should be banned from running for public office   ","709. White privilege is a major problem in the U.S. today.    710. Discrimination against Whites has become as big a problem as discrimination against racial minorities    711. The American way of life needs to be protected against foreign influence. ","608. are a threat to Americans’ way of life  609. should be banned from holding public rallies  610. should be banned from running for public office    Strongly disagree .............................................................. 1 ","710. Discrimination against Whites has become as big a problem as discrimination against racial minorities    711. The American way of life needs to be protected against foreign influence.    712. Anti-Black racism is a major problem in the [R RACIAL GROUP] community. ","609. should be banned from holding public rallies  610. should be banned from running for public office    Strongly disagree .............................................................. 1  ","711. The American way of life needs to be protected against foreign influence.    712. Anti-Black racism is a major problem in the [R RACIAL GROUP] community.    Strongly agree ................................................................... 1 ","610. should be banned from running for public office    Strongly disagree .............................................................. 1   ===== PDF PAGE 101 =====","712. Anti-Black racism is a major problem in the [R RACIAL GROUP] community.    Strongly agree ................................................................... 1  Agree ................................................................................. 2  Disagree ............................................................................ 3 ","706. Cut funding for police departments and reinvest in community programs  707. Abolish the police  708. Create a new agency of first responders, like emergency medical services or firefighters, to deal with  issues related to addiction or mental illness than need to be remedied but do not need police   ","707. Abolish the police  708. Create a new agency of first responders, like emergency medical services or firefighters, to deal with  issues related to addiction or mental illness than need to be remedied but do not need police    Strongly favor .................................................................... 1 ","708. Create a new agency of first responders, like emergency medical services or firefighters, to deal with  issues related to addiction or mental illness than need to be remedied but do not need police    Strongly favor .................................................................... 1  Somewhat favor ................................................................ 2 ","504. In the past year, which of the following has caused you the most anxiety or stress? Give each item a  number between 1 – 10, ranging from 1=least anxiety to 10=most anxiety. [Randomize Responses 1-8, Keep  Trump and Biden last but rotate]    My employment ............................................................ [   ] ","504. In the past year, which of the following has caused you the most anxiety or stress? Give each item a  number between 1 – 10, ranging from 1=least anxiety to 10=most anxiety. [Randomize Responses 1-8, Keep  Trump and Biden last but rotate]    My employment ............................................................ [   ] ","504. In the past year, which of the following has caused you the most anxiety or stress? Give each item a  number between 1 – 10, ranging from 1=least anxiety to 10=most anxiety. [Randomize Responses 1-8, Keep  Trump and Biden last but rotate]    My employment ............................................................ [   ] ","504. In the past year, which of the following has caused you the most anxiety or stress? Give each item a  number between 1 – 10, ranging from 1=least anxiety to 10=most anxiety. [Randomize Responses 1-8, Keep  Trump and Biden last but rotate]    My employment ............................................................ [   ] ","197. [Split A.1: Single-Short-4] One way of voting involves a single vote, in which you vote for one candidate.     ===== PDF PAGE 40 =====  ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","197. [Split A.1: Single-Short-4] One way of voting involves a single vote, in which you vote for one candidate.     ===== PDF PAGE 40 =====  ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","197. [Split A.1: Single-Short-4] One way of voting involves a single vote, in which you vote for one candidate.     ===== PDF PAGE 40 =====  ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","197. [Split A.1: Single-Short-4] One way of voting involves a single vote, in which you vote for one candidate.     ===== PDF PAGE 40 =====  ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which ","195. [ Split A.1: RCV-Short-4] One way of voting uses a ranked vote, in which you rank candidates to indicate your  first choice, your second choice, and so on.    For example, if Joe Biden decides not to run for re-election and the 2024 presidential election was today which "))
+questionnaire_crosswalk<-questionnaire_crosswalk[questionnaire_crosswalk$variable%in%vars,]
+write.csv(questionnaire_crosswalk,file.path(out,"questionnaire-crosswalk-verified.csv"),row.names=FALSE)
+ledger$questionnaire_item<-questionnaire_crosswalk$questionnaire_item[match(vars,questionnaire_crosswalk$variable)]
+ledger$questionnaire_pdf_page<-questionnaire_crosswalk$questionnaire_pdf_page[match(vars,questionnaire_crosswalk$variable)]
+
+write.csv(ledger,file.path(out,"predictor-ledger.csv"),row.names=FALSE)
+write.csv(data.frame(variable=vars,construct=unname(label),storage=vapply(raw,function(v)class(v)[1],character(1)),
+ raw_observed=vapply(raw,function(v)sum(!is.na(v)),integer(1))),file.path(out,"source-inventory.csv"),row.names=FALSE)
+levels_table<-do.call(rbind,lapply(vars[reason=="Eligible"],function(n){v<-d[[n]];if(!is.factor(v))return(NULL)
+ data.frame(variable=n,response=clean_text(levels(v)),sample_n=as.integer(table(v)))}))
+write.csv(levels_table,file.path(out,"coded-response-levels.csv"),row.names=FALSE)
+write.csv(data.frame(variable=names(x),item=unname(item_map)),file.path(out,"item-map.csv"),row.names=FALSE)
+source_manifest<-data.frame(path=c("/Users/jessala/Desktop/Active/Github/ml-latino-vote-2020/data/raw/39096-0001-Data.rda","/Users/jessala/Desktop/Active/Github/ml-latino-vote-2020/docs/39096-Questionnaire.pdf","/Users/jessala/Desktop/Active/Github/ml-latino-vote-2020/docs/39096-0001-Codebook-ICPSR.pdf","https://ucla.box.com/shared/static/v11w0d769vvpu2skia9fym12q34ef4rj.pdf","/Users/jessala/.codex/.chatgpt-projects/g-p-6aaab30dd7f08191b485caf467ef8022/preparation-2026-09-17/2020/prepare.R","/Users/jessala/.codex/.chatgpt-projects/g-p-6aaab30dd7f08191b485caf467ef8022/preparation-2026-09-17/2020/latino-2020.qmd","/Users/jessala/Desktop/Active/Github/ml-latino-vote-2020/latino-2020.qmd","/Users/jessala/.codex/.chatgpt-projects/g-p-6aaab30dd7f08191b485caf467ef8022/analysis-2016/stable/cmps2016_latino_trump_analysis.qmd"),relative_path=c("data/raw/39096-0001-Data.rda","docs/39096-Questionnaire.pdf","docs/39096-0001-Codebook-ICPSR.pdf","","","","",""),role=c("Raw data","Questionnaire","ICPSR codebook","Official primary-sample methodology","Prior preparation inspected, not sourced","Prior prepared analysis inspected, not sourced","Existing local analysis inspected, not sourced","Frozen methodological template"),md5=c("a02f00860e598a49720a396c6f829873","daac04772fbba4e118882a49693fd8b0","481f8b0dc4353399207e007fbfa8cb00","7d686e9f047daf54a4b948837e05633d","475fb529991d5f3383549d7dc660708c","aaf18e154175154ebdced638cf5a0477","aaf18e154175154ebdced638cf5a0477","fe6327df00d669569835c1ff3f29655c"),sha256=c("8083bdeeaf5c5a1b4d8ba0300b3ee7308180695e49ea56fc43d804560e8ea89f","ee440ffdcd8a361c62c6a20d1ec234dad665e09ec41b3585f5e8163a61499339","4d3ba7492bc2d11e20a46c485bcb3c9305a934a1bfeb0ddf4f3a1f9a88ae29e9","b131ac3c2b4ca68d97f761da1d4718788dae60cb1762ab4237830fed93ea953b","24b8b2a0aee1de5575d9e92a5812f44071c9cea2a6f6ef81dcdc8d5dc79142d8","97702b6fdb10ab7ca9a4228937b9712643fc7833bd78b88743ffed57b1854390","97702b6fdb10ab7ca9a4228937b9712643fc7833bd78b88743ffed57b1854390","9825b157b71809186216e4d6d18e6c768d33d57c57bbf320754d9143ab967b8d"))
+write.csv(source_manifest,file.path(out,"source-manifest.csv"),row.names=FALSE)
+# Assert the three local inputs defining the data contract; remote methodology is
+# documented by URL and the checksum of the copy read during source auditing.
+for(i in 1:3)stopifnot(unname(tools::md5sum(file.path(source_root,source_manifest$relative_path[i])))==source_manifest$md5[i])
+stopifnot(!any(c("Q14","RECORD","UUID","WEIGHT","OS_WEIGHT")%in%names(x)),"Q43"%in%names(x),
+ all(ledger$model3<=ledger$model2),all(ledger$model2<=ledger$model1))
+```
+```{r}
+#| label: modeling-functions
+#| include: false
+auc_weighted <- function(y,p,w) {
+ o<-order(p); y<-y[o]; p<-p[o]; w<-w[o]
+ g<-cumsum(c(TRUE,diff(p)!=0)); pos<-as.numeric(rowsum(w*y,g)); neg<-as.numeric(rowsum(w*(1-y),g))
+ sum(pos*(cumsum(neg)-neg/2))/(sum(pos)*sum(neg))
+}
+split_train <- function(y,seed,fraction=.75) {
+ set.seed(seed)
+ sort(unlist(lapply(split(seq_along(y),y),function(i)sample(i,floor(length(i)*fraction)))))
+}
+preprocess <- function(z,train,test) {
+ a<-z[train,,drop=FALSE]; b<-z[test,,drop=FALSE]
+ keep<-vapply(a,function(v)sum(!is.na(v))>=30 && mean(is.na(v))<=.9 &&
+ length(unique(v[!is.na(v)]))>1,logical(1))
+ a<-a[,keep,drop=FALSE];b<-b[,keep,drop=FALSE]
+ aa<-bb<-list(); map<-character(); j<-0L
+ add<-function(at,bt,item) {
+  j<<-j+1L; key<-paste0("v",j)
+  aa[[key]]<<-as.numeric(at);bb[[key]]<<-as.numeric(bt);map[key]<<-item
+ }
+ for(n in names(a)) {
+  v<-a[[n]];q<-b[[n]];it<-item_map[[n]]
+  if(is.character(v)||is.factor(v)) {
+   v<-as.character(v);q<-as.character(q)
+   v[is.na(v)]<-"Not observed / routed";q[is.na(q)]<-"Not observed / routed"
+   tab<-table(v); good<-names(tab)[tab>=10]
+   v[!v %in% good]<-"Rare / novel";q[!q %in% good]<-"Rare / novel"
+   for(l in sort(unique(v))) add(v==l,q==l,it)
+  } else {
+   med<-median(v,na.rm=TRUE)
+   add(ifelse(is.na(v),med,v),ifelse(is.na(q),med,q),it)
+   if(anyNA(v)) add(is.na(v),is.na(q),it)
+  }
+ }
+ aa<-as.data.frame(aa);bb<-as.data.frame(bb)
+ keep<-vapply(aa,function(v)length(unique(v))>1,logical(1))
+ aa<-aa[,keep,drop=FALSE];bb<-bb[,keep,drop=FALSE];map<-map[keep]
+ stopifnot(ncol(aa)>0,identical(names(aa),names(bb)),!anyNA(aa),!anyNA(bb),
+ all(is.finite(as.matrix(aa))),all(is.finite(as.matrix(bb))))
+ list(train=aa,test=bb,map=map,retained=names(a))
+}
+rf_fit <- function(a,y,w,mtry_kind,node,trees,seed) {
+ p<-ncol(a)
+ mtry<-switch(mtry_kind,
+  sqrt=floor(sqrt(p)),
+  fraction20=floor(0.20*p),
+  fraction40=floor(0.40*p),
+  stop("Unknown mtry option: ",mtry_kind))
+ ranger::ranger(x=a,y=factor(y,levels=0:1),probability=TRUE,num.trees=trees,
+ mtry=max(1L,mtry),min.node.size=node,case.weights=w/mean(w),
+ num.threads=2,seed=seed,write.forest=TRUE)
+}
+rf_predict <- function(f,a) predict(f,data=a,num.threads=2)$predictions[,"1"]
+metrics <- function(y,p,w,reference) {
+ p<-pmin(pmax(p,1e-6),1-1e-6);lp<-qlogis(p)
+ cal<-suppressWarnings(glm(y~lp,weights=w/mean(w),family=quasibinomial()))
+ intercept<-suppressWarnings(glm(y~1,offset=lp,weights=w/mean(w),family=quasibinomial()))
+ data.frame(n=length(y),trump=sum(y),prevalence=weighted.mean(y,w),
+ auc=auc_weighted(y,p,w),brier=weighted.mean((y-p)^2,w),
+ reference_brier=weighted.mean((y-reference)^2,w),mean_prediction=weighted.mean(p,w),
+ calibration_intercept=unname(coef(intercept)[1]),calibration_slope=unname(coef(cal)[2]))
+}
+cal_bins <- function(y,p,w) {
+ bin<-cut(p,breaks=seq(0,1,.2),include.lowest=TRUE)
+ do.call(rbind,lapply(levels(bin),function(k){i<-which(bin==k);if(length(i)<10)return(NULL)
+ data.frame(bin=k,n=length(i),mean_prediction=weighted.mean(p[i],w[i]),
+ observed_share=weighted.mean(y[i],w[i]))}))
+}
+explain_aggregate <- function(f,prep,z,test,w,seed) {
+ ref<-prep$train
+ u<-treeshap::ranger.unify(f,ref)
+ sh<-as.matrix(treeshap::treeshap(u,prep$test,verbose=FALSE)$shaps)
+ p<-rf_predict(f,prep$test);base<-mean(rf_predict(f,ref))
+ error<-max(abs(base+rowSums(sh)-p));
+ message("SHAP reconstruction maximum error=",error)
+ stopifnot(error<1e-6)
+ grouped<-t(rowsum(t(sh),group=prep$map,reorder=FALSE))
+ imp<-colSums(abs(grouped)*w$test)/sum(w$test)
+ global<-data.frame(item=names(imp),importance=as.numeric(imp),row.names=NULL)
+ global$rank<-rank(-global$importance,ties.method="min")
+ # Save aggregate directional cells for every retained source variable, not individual scores.
+ direction<-list()
+ for(n in prep$retained) {
+  it<-item_map[[n]];if(!it %in% colnames(grouped))next
+  v<-z[[n]][test]
+  if(is.numeric(v)&&length(unique(v[!is.na(v)]))>12) {
+   breaks<-unique(quantile(z[[n]][attr(z,"train")],c(0,.25,.5,.75,1),na.rm=TRUE))
+   if(length(breaks)>2){breaks[c(1,length(breaks))]<-c(-Inf,Inf);v<-as.character(cut(v,breaks,include.lowest=TRUE))}
+  }
+  v<-as.character(v);v[is.na(v)]<-"Not observed / routed"
+  direction[[n]]<-do.call(rbind,lapply(sort(unique(v)),function(l){i<-which(v==l);if(length(i)<10)return(NULL)
+   data.frame(item=it,variable=n,response=l,n=length(i),weight_sum=sum(w$test[i]),
+   mean_shap=weighted.mean(grouped[i,it],w$test[i]),
+   positive_share=weighted.mean(grouped[i,it]>0,w$test[i]),row.names=NULL)
+  }))
+ }
+ list(importance=global[order(global$rank),],direction=do.call(rbind,direction),
+ additivity_error=error,baseline=base)
+}
+run_development <- function(spec,seed) {
+ message("Starting ",spec," ",seed)
+ train_all<-split_train(y,seed);test_all<-setdiff(seq_along(y),train_all)
+ use<-seq_along(y)
+ train<-intersect(train_all,use);test<-intersect(test_all,use)
+ eligible<-switch(spec,diagnostic=names(x),primary=setdiff(names(x),proximate),
+ withheld=setdiff(names(x),union(proximate,partisan)))
+ z<-x[,eligible,drop=FALSE];attr(z,"train")<-train
+ inner<-split_train(y[train],seed+11,.8);it<-train[inner];iv<-train[-inner]
+ tuning_pre<-preprocess(z,it,iv)
+ grid<-expand.grid(mtry=c("sqrt","fraction20","fraction40"),node=c(5L,20L,50L),stringsAsFactors=FALSE)
+ {
+  scores<-vapply(seq_len(nrow(grid)),function(k){
+   f<-rf_fit(tuning_pre$train,y[it],w[it],grid$mtry[k],grid$node[k],150L,seed+20)
+   p<-rf_predict(f,tuning_pre$test);weighted.mean((y[iv]-p)^2,w[iv])},numeric(1))
+  tuning<-cbind(grid,encoded_p=ncol(tuning_pre$train),
+   actual_mtry=vapply(grid$mtry,function(k)switch(k,sqrt=floor(sqrt(ncol(tuning_pre$train))),
+    fraction20=floor(.20*ncol(tuning_pre$train)),fraction40=floor(.40*ncol(tuning_pre$train)),
+    stop("Unknown mtry option")),numeric(1)),validation_brier=scores);best<-which.min(scores)
+  prep<-preprocess(z,train,test)
+  fit<-rf_fit(prep$train,y[train],w[train],grid$mtry[best],grid$node[best],300L,seed+30)
+  pred<-rf_predict(fit,prep$test)
+  agg<-explain_aggregate(fit,prep,z,test,list(train=w[train],test=w[test]),seed+40)
+ }
+ score<-metrics(y[test],pred,w[test],weighted.mean(y[train],w[train]))
+ score$n_train<-length(train);score$encoded_columns<-ncol(prep$train)
+ score$items<-length(unique(prep$map));score$seed<-seed;score$spec<-spec
+ score$learner<-"forest";score$population<-"All voters"
+ list(metrics=score,calibration=cal_bins(y[test],pred,w[test]),tuning=tuning,
+ chosen=tuning[best,,drop=FALSE],importance=agg$importance,direction=agg$direction,
+ additivity_error=agg$additivity_error,baseline=agg$baseline,
+ retained_variables=prep$retained,feature_map=data.frame(encoded=names(prep$map),item=unname(prep$map)))
+}
+```
+```{r}
+#| label: computational-checks
+#| include: false
+expected_method_hashes<-c(auc_weighted = "fd7106f3e554011efec68d5473222c6a", split_train = "ab1e2050a2977bddfbc768740b0d670a", 
+preprocess = "fa897007153b269f3be2a008d5094159", rf_fit = "3fe2c98ba5f36523ff34edfd23c29fd2", 
+rf_predict = "e3b1ba374beb4b07d9de66a77e34345b", metrics = "fc0114fd616f2eedc9552a0232c61542", 
+cal_bins = "c1a799de2b73e209b8664d57146e0417", explain_aggregate = "3b4c066d4b1b66877b2a7b9f4b75b8f4"
+)
+
+actual_method_hashes<-vapply(names(expected_method_hashes),function(n){v<-get(n);digest::digest(list(formals=deparse(formals(v)),body=deparse(body(v))))},character(1))
+stopifnot(identical(expected_method_hashes,actual_method_hashes))
+write.csv(data.frame(function_name=names(expected_method_hashes),same_as_frozen_template=expected_method_hashes==actual_method_hashes),file.path(out,"frozen-method-function-check.csv"),row.names=FALSE)
+
+# Independently verify weighted AUC including tied predictions using synthetic data.
+ty<-c(0,1,0,1,1);tp<-c(.2,.2,.7,.8,.8);tw<-c(1,2,3,4,2)
+positive<-which(ty==1);negative<-which(ty==0)
+manual_auc<-sum(vapply(positive,function(i)sum(tw[i]*tw[negative]*
+ ((tp[i]>tp[negative])+.5*(tp[i]==tp[negative]))),numeric(1)))/(sum(tw[positive])*sum(tw[negative]))
+stopifnot(abs(auc_weighted(ty,tp,tw)-manual_auc)<1e-12,
+ !any(proximate %in% ledger$variable[ledger$model2]))
+```
+```{r}
+#| label: execute-development
+#| include: false
+cfg<-list(seeds=202001:202003,trees=300L,tune_trees=150L,reference="complete unweighted training sample",
+ rare_n=10L,min_observed=30L,max_missing=.9,mtry_grid=c("sqrt","fraction20","fraction40"),node_grid=c(5L,20L,50L),version="frozen-grid-2020-primary-v1")
+functions_for_hash<-list(auc_weighted,split_train,preprocess,rf_fit,rf_predict,metrics,cal_bins,
+ explain_aggregate,run_development)
+# Hash function text, not R source references or execution environments.
+functions_for_hash<-lapply(functions_for_hash,function(f)list(formals=deparse(formals(f)),body=deparse(body(f))))
+key<-digest::digest(list(cfg,raw_md5,functions_for_hash,digest::digest(x),names(x),item_map,condition,
+ proximate,partisan,continuous,R.version.string,
+ vapply(c("ranger","treeshap"),function(p)as.character(packageVersion(p)),character(1))))
+result_dir<-file.path(out,"fits");dir.create(result_dir,showWarnings=FALSE)
+# Optional scratch storage supports layout-only rerenders; no permanent fit cache.
+ scratch<-Sys.getenv("CMPS2020_SCRATCH",tempfile("cmps2020-"))
+ dir.create(scratch,recursive=TRUE,showWarnings=FALSE)
+ objects<-c("raw_md5","rows","y","w","x","proximate","partisan","continuous","condition","item_map")
+ fun<-c("code","clean_text","auc_weighted","split_train","preprocess","rf_predict","metrics","cal_bins","explain_aggregate")
+ hashes<-data.frame(component=c(objects,fun),hash=c(vapply(objects,function(n)digest::digest(get(n)),character(1)),
+  vapply(fun,function(n){f<-get(n);digest::digest(list(formals=deparse(formals(f)),body=deparse(body(f))))},character(1))))
+ write.csv(hashes,file.path(out,"computation-component-hashes.csv"),row.names=FALSE)
+ # Explicit fitting-option contract, including rejection of unknown values.
+ stopifnot(inherits(try(rf_fit(data.frame(a=1:4),c(0,1,0,1),rep(1,4),"unknown",5L,1L,1L),silent=TRUE),"try-error"))
+
+{
+ jobs<-expand.grid(spec=c("diagnostic","primary","withheld"),seed=cfg$seeds,stringsAsFactors=FALSE)
+ jobs$learner<-"forest";jobs$two_party<-FALSE
+ results<-list()
+ for(j in seq_len(nrow(jobs))) {
+  job<-jobs[j,];name<-paste(job$spec,job$seed,job$learner,job$two_party,sep="_")
+  file<-file.path(scratch,paste0(name,".rds"))
+  old<-if(file.exists(file))readRDS(file) else NULL
+  if(!is.null(old)&&identical(old$key,key)){results[[name]]<-old$result;next}
+  ans<-run_development(job$spec,job$seed)
+  stopifnot(is.null(ans$model),is.null(ans$predictions),is.null(ans$signed_shap),
+   is.null(ans$row_id),is.null(ans$train_idx),is.null(ans$test_idx),
+   is.null(ans$direction)||all(ans$direction$n>=10))
+  saveRDS(list(key=key,result=ans),file)
+  results[[name]]<-ans
+  message("Completed ",name,": AUC=",round(ans$metrics$auc,3)," Brier=",round(ans$metrics$brier,3))
+ }
+ performance<-do.call(rbind,lapply(results,`[[`,"metrics"));rownames(performance)<-NULL
+ write.csv(performance,file.path(result_dir,"performance.csv"),row.names=FALSE)
+ bind_tagged<-function(field) {
+  pieces<-lapply(names(results),function(n){z<-results[[n]][[field]]
+   if(is.null(z)||!nrow(z))return(NULL);cbind(run=n,z)})
+  pieces<-Filter(Negate(is.null),pieces)
+  cols<-unique(unlist(lapply(pieces,names)))
+  do.call(rbind,lapply(pieces,function(z){for(n in setdiff(cols,names(z)))z[[n]]<-NA;z[,cols,drop=FALSE]}))
+ }
+ for(field in c("importance","direction","calibration","tuning"))
+  write.csv(bind_tagged(field),file.path(result_dir,paste0(field,".csv")),row.names=FALSE)
+ # Ranks and importance are conditional on retention; absent fits are recorded separately below.
+ imp<-bind_tagged("importance")
+ imp$spec<-sub("_[0-9].*","",imp$run)
+ imp$population<-ifelse(grepl("TRUE$",imp$run),"Two-party","All voters")
+ stability<-do.call(rbind,lapply(split(imp,interaction(imp$spec,imp$population,drop=TRUE)),function(z)
+  do.call(rbind,lapply(split(z,z$item),function(a)data.frame(spec=a$spec[1],population=a$population[1],
+  item=a$item[1],retained_refits=nrow(a),rank_mean=mean(a$rank),
+  rank_min=min(a$rank),rank_median=median(a$rank),rank_max=max(a$rank),
+  importance_mean=mean(a$importance),importance_min=min(a$importance),importance_max=max(a$importance))))))
+ write.csv(stability,file.path(result_dir,"stability.csv"),row.names=FALSE)
+ writeLines(c(paste("Computation fingerprint:",key),capture.output(dput(cfg)),
+  paste("Source:",normalizePath(raw_file)),paste("Raw MD5:",raw_md5)),file.path(out,"run-manifest.txt"))
+ writeLines(capture.output(sessionInfo()),file.path(out,"session-info.txt"))
+}
+```
+
+
+# Sample and outcome
+
+The sample comprises **2,082 Latino registered respondents in the primary release**
+who reported voting and named a valid presidential choice. It includes
+**`r sum(y)` Trump voters**: **`r sprintf("%.2f%%",100*mean(y))`** unweighted and **`r sprintf("%.2f%%",100*weighted.mean(y,w))`** weighted.
+The other reported choices are Biden, Jorgensen, Hawkins, or someone else.
+Respondents who answered a nonvoter candidate-support version are excluded.
+
+$$Y_i=\begin{cases}1&\text{Trump vote}\\0&\text{other reported presidential vote}\end{cases}$$
+
+The within-racial-group **WEIGHT** targets the 2019 ACS adult population using
+age, gender, education, nativity, and ancestry margins. The primary-sample
+methodology recommends this weight for multivariate analysis. It is applied to
+the voter subset without trimming or class balancing; it is not a separate
+calibration to Latino voters. The primary-release restriction excludes 138
+otherwise eligible quota-group voters whose weight scope is not established by
+that documentation. Exact definitions and release discrepancies appear in the audit.
+
+# Three nested models
+
+| Model | Information available | Purpose |
+|:--|:--|:--|
+| 1. Full | All otherwise eligible survey responses | Describe the full predictive structure |
+| 2. Outcome-proximate withheld | Model 1 minus candidate and election-proximate responses | Describe differentiation beyond information close to vote choice |
+| 3. Direct partisanship withheld | Model 2 minus direct partisan information; ideology retained | Describe differentiation beyond explicit partisan attachment |
+
+Model 2 withholds candidate evaluations, congressional vote, presidential-election
+fraud and January 6 reactions, candidate-framed anxiety and policy evaluations,
+and hypothetical candidate-response experiments. Model 3 additionally withholds
+party identification, strength, leaning, history, party associations and affinity,
+party-selected identity responses, partisan redistricting tradeoffs, and spouse's
+partisanship. Generic political activity and policy attitudes remain eligible.
+No exclusion depends on an item's fitted importance.
+
+# Why random forest + SHAP
+
+The random forest estimates $\hat p_i=f(X_i)$ and allows nonlinear relationships
+and interactions without specifying their forms beforehand. TreeSHAP decomposes
+its predictions relative to a training reference:
+
+$$\hat p_i\approx\phi_0+\sum_j\phi_{ij}.$$
+
+Weighted mean absolute SHAP, $I_j=E_w(|\phi_{ij}|)$, measures an item's overall
+predictive contribution. Contributions from encoded columns are summed back to
+the original item **before** taking absolute values. Signed SHAP describes
+responses associated with predictions above or below the model reference.
+Neither is a causal effect. Correlated items can share or substitute for one
+another's predictive contributions.
+
+The complete outer training sample supplies the unweighted TreeSHAP reference
+for tree-path frequencies. Survey weights enter forest resampling, evaluation,
+global importance, and response-level summaries. No individual predictions or
+individual SHAP arrays are exported.
+
+# Validation and stability
+
+Three outcome-stratified 75/25 outer splits use seeds **202001, 202002, 202003**.
+Each outer training portion has an 80/20 internal training/validation split.
+Nine candidates cross $\lfloor\sqrt p\rfloor$, $\lfloor0.20p\rfloor$, and
+$\lfloor0.40p\rfloor$ with node sizes 5, 20, and 50; $p$ is the encoded feature
+count after the relevant training-only preprocessing. Weighted validation Brier
+loss selects a setting using 150 trees; the final forest uses 300 trees.
+The grid is frozen even when 40% is selected.
+
+All screening and preprocessing use only the relevant training portion: at least
+30 observed responses, at most 90% system missingness, variation checks,
+category pooling below 10 training cases, numeric median imputation, and removal
+of constant encoded columns. Numeric missingness indicators belong to their
+source item. Categorical system missingness has an explicit “Not observed /
+routed” category. Original labelled responses—including don't know, refused,
+none, and unfamiliar—remain distinct unless pooled by the training rule.
+There is no blanket deletion of numeric codes and no reverse scoring.
+
+Randomized wording is joined to the relevant answer. Rating categories retain
+original orientation; numeric opinion scales and ranks are not automatically
+continuous. Continuous sliders, point allocations, birth year, and verified
+calendar-year quantities retain their magnitudes. Signed summaries use original
+responses, with at least 10 holdout observations per cell. Continuous measures
+with more than 12 distinct values use training-derived quartile bins.
+
+The holdouts never select predictors, transformations, or tuning settings. They
+overlap across fits: these are stability checks, not independent replications,
+and ranges are **not confidence intervals**. Calibration is diagnostic; fitted
+probabilities are not presented as individual political scores.
+
+```{r}
+#| label: research-summaries
+#| include: false
+names_pretty<-c(diagnostic="Model 1: Full",primary="Model 2: Outcome-proximate withheld", withheld="Model 3: Direct partisanship withheld")
+fmt<-function(z,digits=3)paste0(formatC(mean(z),digits=digits,format="f")," [",
+ formatC(min(z),digits=digits,format="f"),", ",formatC(max(z),digits=digits,format="f"),"]")
+summary_table<-do.call(rbind,lapply(names(names_pretty),function(s){z<-performance[performance$spec==s,]
+ data.frame(Model=paste("Model",match(s,names(names_pretty))),AUC=fmt(z$auc),Brier=fmt(z$brier),Reference=fmt(z$reference_brier))}))
+write.csv(summary_table,file.path(out,"performance-summary.csv"),row.names=FALSE)
+
+response_expansions<-data.frame(variable=c("Q543","Q543","Q614","Q614","Q2R1","Q24","Q25"),
+ code=c(1,2,1,2,6,88,88),
+ response=c("Support government increasing spending by $25 billion on border security, including building a wall between the U.S. and Mexico",
+ "Oppose government increasing spending by $25 billion on border security, including building a wall between the U.S. and Mexico",
+ "I oppose Trump's immigration policies","I support Trump's immigration policies","Haven't heard enough to say","Don't know","Don't know"),
+ questionnaire_pdf_page=c(94,94,101,101,13,15,15))
+write.csv(response_expansions,file.path(out,"response-label-expansions.csv"),row.names=FALSE)
+response_display<-function(v,r){rr<-r
+ for(i in seq_along(r)){hit<-which(response_expansions$variable==v & response_expansions$code==code(r[i]));
+ if(length(hit)==1)rr[i]<-paste0("(",code(r[i]),") ",response_expansions$response[hit])};rr}
+
+dirs<-bind_tagged("direction");dirs$spec<-sub("_[0-9].*","",dirs$run)
+groups<-split(seq_len(nrow(dirs)),paste(dirs$spec,dirs$variable,dirs$response,sep="\r"))
+directional_stability<-do.call(rbind,lapply(groups,function(i){a<-dirs[i,]
+ data.frame(spec=a$spec[1],item=a$item[1],variable=a$variable[1],response=a$response[1],
+ refits=nrow(a),n_min=min(a$n),n_max=max(a$n),mean_shap=mean(a$mean_shap),
+ minimum=min(a$mean_shap),maximum=max(a$mean_shap),positive_refits=sum(a$mean_shap>0),
+ negative_refits=sum(a$mean_shap<0),row.names=NULL)}))
+write.csv(directional_stability,file.path(out,"directional-stability.csv"),row.names=FALSE)
+profiles<-do.call(rbind,lapply(names(names_pretty),function(s){z<-stability[stability$spec==s,]
+ z<-z[order(-z$importance_mean,z$item),];z$ordered_position<-seq_len(nrow(z))
+ z$adjacent_gap<-z$importance_mean-c(z$importance_mean[-1],NA_real_);z}))
+profiles$label<-pretty_item(profiles$item)
+write.csv(profiles,file.path(out,"importance-profile-all-items.csv"),row.names=FALSE)
+# Complete eligible item-by-fit grid: absent fitted items are NA, never silent zeroes.
+all_ranks<-do.call(rbind,lapply(names(results),function(n){a<-results[[n]];s<-a$metrics$spec
+ eligible<-switch(s,diagnostic=names(x),primary=setdiff(names(x),proximate),
+  withheld=setdiff(names(x),union(proximate,partisan)))
+ g<-data.frame(item=unique(unname(item_map[eligible])))
+ g<-merge(g,a$importance,by="item",all.x=TRUE,sort=FALSE)
+ data.frame(run=n,spec=s,seed=a$metrics$seed,g,retained=!is.na(g$rank))}))
+write.csv(all_ranks,file.path(out,"item-ranks-every-fit.csv"),row.names=FALSE)
+
+plot_profile<-function(s) {
+ z<-head(profiles[profiles$spec==s,],50)
+ par(mar=c(4.3,4.5,2,1))
+ plot(z$ordered_position,100*z$importance_mean,type="b",pch=19,col="#246A8C",
+  xlab="Position in ordered mean importance (display window: 50 items)",
+  ylab="Weighted mean absolute SHAP (percentage points)",
+  ylim=range(c(0,100*z$importance_max)),main=names_pretty[[s]])
+ segments(z$ordered_position,100*z$importance_min,z$ordered_position,100*z$importance_max,col="#8097A2")
+ points(z$ordered_position,100*z$importance_mean,pch=19,col="#246A8C")
+}
+model_table<-function(s){z<-head(profiles[profiles$spec==s,],30)
+ tab<-knitr::kable(data.frame(Position=z$ordered_position,Item=ifelse(z$item==pretty_item(z$item),z$item,paste(z$item,pretty_item(z$item),sep=": ")),
+  `SHAP (pp)`=round(100*z$importance_mean,3),Rank=round(z$rank_mean,1),
+  Range=paste(z$rank_min,z$rank_max,sep="–"),Fits=z$retained_refits,
+  `Gap (pp)`=round(100*z$adjacent_gap,3),check.names=FALSE),row.names=FALSE,format="latex",booktabs=TRUE,longtable=TRUE,align=c("r","p{2.5in}","r","r","r","r","r"))
+ knitr::asis_output(sub("\\midrule","\\midrule\n\\endhead",as.character(tab),fixed=TRUE))
+}
+dir.create(file.path(out,"figures"),showWarnings=FALSE)
+for(s in names(names_pretty)) {
+ png(file.path(out,"figures",paste0(s,"-importance.png")),width=1400,height=800,res=160)
+ plot_profile(s);dev.off()
+}
+```
+
+
+# 2020 results
+
+Performance is reported as mean [minimum, maximum] across three weighted outer
+holdouts. Smaller Brier loss indicates smaller prediction error. The reference
+Brier uses the outer-training weighted Trump prevalence.
+
+```{r}
+knitr::kable(summary_table,row.names=FALSE)
+```
+
+## Model 1 — Full
+
+Congressional vote, Trump immigration-policy approval, and Trump favorability
+rank first, second, and third in every split. Their mean absolute contributions
+are 15.44, 6.56, and 4.23 percentage points. Trump responsibility for COVID-19 and
+January 6, other candidate evaluations, and hypothetical presidential choices
+follow. This strong predictive separation relies heavily on information close
+to the reported electoral choice.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 4.5
+#| fig-cap: "Model 1: top-50 importance profile. Vertical lines show the across-fit range."
+plot_profile("diagnostic")
+```
+```{r}
+model_table("diagnostic")
+```
+
+## Model 2 — Outcome-proximate measures withheld
+
+Party identification and Republican and Democratic party histories occupy the
+first three positions in mean importance, although their individual ranks vary.
+Border-security spending and issue priorities follow. Associations of groups
+with the two parties become especially prominent in one split, so a fixed order
+among partisan measures is not stable. BLM support, BLM warmth, and the
+most-disliked-group ranking also remain prominent. Routed party histories repeat
+information about attachment and should not be interpreted as independent
+partisan mechanisms.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 4.5
+#| fig-cap: "Model 2: top-50 profile. The display window is not a substantive cutoff."
+plot_profile("primary")
+```
+```{r}
+model_table("primary")
+```
+
+## Model 3 — Direct partisanship withheld
+
+Border-security spending and BLM support rank first and second in every split,
+with mean absolute contributions of 7.41 and 5.00 percentage points. The
+most-disliked-group ranking, issue priorities, and BLM warmth occupy positions
+3–5 in each fit. Ideology follows at ranks 6–7. Racial bias in policing and
+immigration enforcement, gun-owner warmth, and the border-priority tradeoff are
+also recurrent. These responses describe differentiation beyond explicit party
+attachment; they are not necessarily independent of partisanship.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 4.5
+#| fig-cap: "Model 3: top-50 profile. All retained items are ranked in the aggregate outputs."
+plot_profile("withheld")
+```
+```{r}
+model_table("withheld")
+```
+
+# How the prominent items behave
+
+## Importance and stability
+
+The three tables show the first 30 positions. All-item outputs include each fit's
+importance and rank, across-fit means and ranges, number of fits retained, and
+the adjacent mean-importance gap $\Delta_k=I_k-I_{k+1}$. Means weight fits equally
+after weighting within each holdout; item means are conditional on retention.
+The complete eligible item-by-fit grid records nonretention as missing, not zero.
+Gaps are descriptive, not significance tests. The top-50 profiles show the shape
+of the distribution without selecting a final substantive threshold.
+
+The sharpest stable ordering is at the top of Models 1 and 3. Below these leading
+positions, rank ranges often widen. In Model 2, party identification ranges from
+rank 1 to 3, but Democratic-group associations range from 1 to 15 and party
+leaning from 11 to 112. This variation cautions against treating small differences
+in average rank as fixed substantive distinctions. All displayed items are
+retained in all three fits; the complete output also records less consistently
+retained items.
+
+## Signed responses and nonlinear patterns
+
+Positive signed SHAP moves a fitted prediction toward Trump vote relative to the
+reference; negative values move it away. Each response mean is weighted within
+fit, then averaged across fits. Tables require at least 10 holdout observations
+in each of all three fits. “N per fit” gives the observed range; the saved
+`direction.csv` records the count separately for each fit. For grouped questions,
+a component response conditions the whole item's contribution, not an isolated
+component effect. Response labels below preserve the supplied categories;
+verified expansions of truncated labels are documented separately.
+
+```{r}
+#| label: signed-patterns
+#| results: asis
+selections<-list(diagnostic=c("Q15","Q614","Q2R1"),primary=c("Q21"),withheld=c("Q543","Q358","Q43","Q606R1","Q606R3"))
+for(s in names(selections))for(it in selections[[s]]) {
+ z<-directional_stability[directional_stability$spec==s &
+ directional_stability$variable==it & directional_stability$refits==3,]
+ if(!nrow(z))next
+ if(all(grepl("^[0-9]+$",z$response)))z<-z[order(as.numeric(z$response)),]
+ cat("\n\n### ",names_pretty[[s]]," — ",pretty_item(it)," (",it,")\n\n",sep="")
+ print(knitr::kable(data.frame(Response=sub("^\\([0-9]+\\) *","",response_display(it,z$response)),
+ `SHAP (pp)`=round(100*z$mean_shap,2),
+ `Range (pp)`=paste(round(100*z$minimum,2),round(100*z$maximum,2),sep=" to "),
+ `N per fit`=paste(z$n_min,z$n_max,sep="–"),check.names=FALSE),
+ format="latex",booktabs=TRUE,longtable=TRUE,align=c("p{3.05in}","r","r","r"),row.names=FALSE))
+ cat("\n\n")
+}
+```
+
+The signed patterns refine the interpretation of importance. In Model 1,
+Trump favorability is roughly ordered, but even “somewhat unfavorable” has a
+positive contribution relative to the reference; “very unfavorable” is the
+consistently negative category. The item should not be reduced to a favorable
+versus unfavorable contrast. Trump immigration-policy opposition and support
+have consistently opposite signs, as do Democratic and Republican congressional
+votes.
+
+In Model 2, Republican identification contributes positively and Democratic
+identification negatively in every fit. Independent and other-party means change
+sign across fits and are much closer to zero.
+
+In Model 3, support for the specified border-security spending and wall is
+positive in every fit; opposition is negative. BLM support shows an
+**extreme-category pattern**, not a smooth support-to-opposition gradient:
+strong opposition contributes +11.81 percentage points on average [10.30, 13.86],
+whereas somewhat opposing averages +0.58 [−1.01, 1.85], with an unstable sign.
+Strong support, somewhat support, and neither support nor oppose all have
+negative means. The same strong-opposition distinction appears in Model 2
+(+3.18 [2.20, 3.82]); somewhat opposing is near zero and unstable there too.
+
+Very conservative ideology contributes much more positively than somewhat
+conservative ideology; liberal and moderate responses are negative. This is a
+broad directional pattern with a pronounced conservative endpoint, rather than
+equal steps across an ordinal scale.
+
+The most-disliked-group ranking is also differentiated: placing White
+supremacists first is associated with a negative whole-item contribution, while
+placing them second or third is positive. Ranking BLM activists among the three
+most disliked groups is positive in every displayed rank. These are conditional
+summaries of the complete ranking, not separate effects of moving a group.
+
+Selecting border security as an issue priority (`Q1R19`) accompanies a +9.71
+percentage-point mean for the **whole priority item** [4.70, 12.92; 80–83 cases
+per fit], versus −1.78 [−2.25, −0.88; 438–441 cases] when not selected. This is
+not an isolated contribution of that checkbox. On anxiety from White supremacy
+(`Q504R6`, 1 = least, 10 = most), the lowest category contributes +0.94
+[0.56, 1.37; 69–84 cases], while categories 2 and 4 have means near zero with
+unstable signs. A simple linear anxiety interpretation is not supported.
+Continuous warmth measures have training-specific quartile boundaries; their
+saved signed cells should be compared only when the intervals match.
+
+# What is fixed for the later election analysis
+
+The later 2024 analysis preserves reported vote rather than nonvoter support,
+within-group weighting, the three nested information sets, training-only
+preprocessing, the frozen nine-setting grid, repeated holdout assessment,
+item-level SHAP, and signed response interpretation. Sample definitions, survey
+weights, wording, routing, and variable exclusions require fresh wave-specific
+audits. No cross-election harmonization, comparison, or final importance cutoff
+is established here.
+
+# Technical audit / reproducibility notes
+
+## Sources and sample construction
+
+The source data are `39096-0001-Data.rda`, object `da39096.0001`, with 17,545 rows
+and 1,490 variables. The local questionnaire and ICPSR codebook are
+`39096-Questionnaire.pdf` and `39096-0001-Codebook-ICPSR.pdf`.
+Exact paths, roles, MD5 and SHA-256 checksums are in `source-manifest.csv`.
+The earlier preparation and analysis files were inspected as context but are not
+sourced or used as a prepared dataset. The QMD contains all executable preparation,
+fitting, aggregation, and reporting functions.
+
+Questionnaire PDF pp. 5 and 13 (printed pp. 3 and 11) establish registration and vote routing:
+`S6=1`, `Q12=1` (“certain I voted”) or `Q12=2` (“think I voted”), and `Q14=1:5`.
+Trump is `Q14=1`; Biden is 2, Jorgensen 3, Hawkins 4, someone else 5. Nonvoters
+receive support wording in the same source field and are excluded by the turnout
+condition. Voting mode (`Q13`) is asked only of certain voters; its structural
+missingness remains explicit. Latino membership uses `MAIN_ETH_QUOTA=2`, not an
+assumption that every Hispanic-ancestry response identifies the same sample.
+
+`BASELINE=1` restricts the run to the primary release. This resolves the weight
+scope choice explicitly before fitting. The raw field is labelled “Sept 1 2021
+release”; it is the available primary-release indicator, not a claim that the
+public-use extract exactly reproduces the published primary sample.
+
+```{r}
+knitr::kable(flow,row.names=FALSE)
+```
+
+The [official primary-sample methodology](https://ucla.box.com/shared/static/v11w0d769vvpu2skia9fym12q34ef4rj.pdf),
+linked from the [CMPS 2020 survey page](https://cmps.ss.ucla.edu/2020-survey/), reports
+14,988 primary interviews and 4,006 Latinos. The local primary indicator identifies
+14,977 records, including 3,942 Latino-quota records (3,951 with `RACE=2`). These
+counts differ from the publication and from each other; no cases are added or
+reassigned to match published totals. The precise origin of the discrepancy
+remains unresolved. The primary methodology describes April 2–August 25, 2021
+fieldwork, after the election and January 6 events.
+
+The methodology's pp. 1–2 specify within-racial-group raking to 2019 ACS one-year
+adult margins for age, gender, education, nativity, and ancestry, within plus or
+minus two percentage points, and recommend the weight for multivariate analysis.
+The codebook labels `WEIGHT` “Primary sample weights ONLY”; `OS_WEIGHT` is an
+oversample weight. The latter is not substituted for this primary-only run.
+Weighting adults does not separately calibrate the selected registered voters.
+
+## Wave-specific exclusion and routing rules
+
+The ledger covers every source variable before any fit, including masked,
+administrative, routing, and otherwise eligible fields. Common exclusions remove
+the outcome and selection fields, identifiers, dates, weights, release flags,
+uncoded/open text, masked fields, duplicate age categories, and routing-only
+metadata. No appended census-context fields are identified in this extract.
+Every remaining field is screened separately on the appropriate training data.
+
+The following lists give eligible source fields removed at each step. Detailed
+reasons and codebook PDF pages remain in the ledger.
+
+```{r}
+#| results: asis
+for(k in c("Outcome-proximate","Direct partisan")) {
+ v<-if(k=="Outcome-proximate")intersect(names(x),proximate) else setdiff(intersect(names(x),partisan),proximate)
+ cat("\n\n**",k,"**: ",paste(paste0("`",v,"`"),collapse=", "),".\n\n",sep="")
+}
+```
+
+Election-fraud and January 6 items are withheld as explicitly election-framed
+responses, including news awareness (`Q47`) and the 2020 election tradeoff
+(`Q684`). General voting rules, political participation, nonspecific campaign
+contact, and electoral-college policy remain eligible. Candidate experiments
+include ranked/single-choice 2024 vignettes (`Q195`–`Q201`), state-assembly choice
+(`Q272`), candidate representation/trust (`Q323`–`Q328`), and the council conjoint
+(`Q340`–`Q341`). The candidate-feeling battery `Q575_Q581` is withheld in full.
+Generic desired representative traits remain eligible except explicit shared-party
+preference. These are conceptual rules fixed before importance estimation.
+
+The additional partisan exclusions include `Q17`–`Q19` foreign-party attachment
+and its routed follow-ups; `Q21`–`Q28` identity/history and party associations;
+party-antagonism priorities `Q1R17/R18`; party support/threat to one's vision of society `Q225R10/R11`;
+party identity in `Q287R6`, `Q294`, `Q301`, `Q315`, `Q560R4`;
+shared-party candidate preference `Q316R7`; partisan redistricting tradeoff
+`Q334`; and spouse's identity/strength/leaning `Q743`–`Q745`.
+The entire 100-point `Q301` allocation is withheld because its remaining components
+could reconstruct the party allocation. Ideology (`Q43`) remains available. The least-liked-group ranking includes
+Democratic Socialists and the Tea Party as named movements, not Democratic or
+Republican party identification. It and its piped follow-ups remain eligible, as
+do congressional-caucus evaluations and nonspecific campaign contact; these
+boundary decisions do not claim that the responses are unrelated to partisanship.
+No identifiable parental-party item was found. Racial, policy, religious,
+economic, and demographic opinions are not removed merely as party proxies.
+
+Randomized target/wording fields are joined where needed, including immigrant
+health frames, representation vignettes, local-institution diversity, women’s
+stereotypes, government-level trust, and outsider/insider wording. Distinct source
+fields already tied to different wording remain distinct. The least-liked-group
+pipe is joined to `Q607_Q610` responses. Rich conjoint profiles can produce rare
+joint categories; the unchanged rare-level rule may remove their encoded variation.
+Their policy eligibility does not guarantee retention. Placement-only metadata
+never enters as a separate predictor.
+
+## Measurement issues requiring review
+
+ICPSR processing notes on codebook PDF p. 3 identify inconsistent wording for
+`Q315` and `Q603R2` between the questionnaire and data. Supplied response labels
+are retained; those codes receive review flags and no confident substantive name.
+`Q315` is joined to its selected identity target and withheld from Model 3 because
+that target can reveal party identity. `Q603R2` remains a component of the
+source-learning ranking question; its disputed target must not be interpreted
+as established. Truncated labels elsewhere remain linked to their source code
+and are flagged where full wording has not been verified. The response-level
+CSV preserves supplied category labels rather than guessing their completion.
+Source codes and questionnaire numbers differ in places: data `Q614` is
+questionnaire item 613 on Trump immigration policies; data `Q615` is item 614
+on expressing that view. The verified crosswalk records these correspondences
+by wording, including the shifted discrimination battery.
+
+Calendar-year factors `Q742`, `Q806`, and `Q808` use their displayed years rather
+than stored level indices. Birth year, sliders and allocations remain numeric;
+`Q504`, `Q603`, and `Q674` rating/rank categories remain categorical. Explicit
+special responses on other fields are not deleted. Duration fields retain their
+supplied categories, including “less than a year.” System missingness cannot
+distinguish every reason for nonresponse. Rare pooling may combine substantively
+meaningful categories; `rare-category-training-audit.csv` records the affected
+inner- and outer-training categories and counts.
+
+## Fitted-feature and reconstruction audit
+
+```{r}
+#| label: final-audit
+#| include: false
+stopifnot(length(results)==9L)
+feature_checks<-do.call(rbind,lapply(names(results),function(n){a<-results[[n]];s<-a$metrics$spec
+ blocked<-c(admin,vars[metadata|free_text],if(s!="diagnostic")proximate,
+  if(s=="withheld")partisan)
+ violations<-intersect(a$retained_variables,blocked)
+ # Routing metadata can share an item prefix with an eligible response; do not
+ # mistake that shared prefix for a fitted metadata column.
+ allowed_items<-unique(vapply(a$retained_variables,item_of,character(1)))
+ encoded_violations<-setdiff(a$feature_map$item,allowed_items)
+ stopifnot(all(a$feature_map$item %in% vapply(a$retained_variables,item_of,character(1))))
+ stopifnot(length(violations)==0,length(encoded_violations)==0,
+  "Q43" %in% a$retained_variables,"Q43" %in% a$feature_map$item,
+  !any(c("model","predictions","signed_shap","row_id","train_idx","test_idx") %in% names(a)),
+  all(a$direction$n>=10))
+ data.frame(run=n,retained_variables=length(a$retained_variables),
+  encoded_columns=nrow(a$feature_map),excluded_variables_present=length(violations),
+  excluded_encoded_items_present=length(encoded_violations),ideology_retained=TRUE,
+  shap_max_error=a$additivity_error,mtry=a$chosen$mtry,node=a$chosen$node,
+  outer_mtry=switch(a$chosen$mtry,sqrt=floor(sqrt(nrow(a$feature_map))),
+   fraction20=floor(.2*nrow(a$feature_map)),fraction40=floor(.4*nrow(a$feature_map)),stop("Unknown mtry option")),
+  inner_mtry=a$chosen$actual_mtry,inner_encoded_p=a$chosen$encoded_p)
+}))
+for(seed in cfg$seeds) {
+ a<-lapply(names(names_pretty),function(s)results[[paste(s,seed,"forest_FALSE",sep="_")]])
+ stopifnot(all(a[[2]]$retained_variables %in% a[[1]]$retained_variables),
+  all(a[[3]]$retained_variables %in% a[[2]]$retained_variables),
+  all(a[[2]]$feature_map$item %in% a[[1]]$feature_map$item),
+  all(a[[3]]$feature_map$item %in% a[[2]]$feature_map$item))
+}
+stopifnot(max(feature_checks$shap_max_error)<1e-6)
+write.csv(feature_checks,file.path(out,"fitted-feature-audit.csv"),row.names=FALSE)
+retained_features<-do.call(rbind,lapply(names(results),function(n)
+ data.frame(run=n,variable=results[[n]]$retained_variables)))
+write.csv(retained_features,file.path(out,"retained-source-variables.csv"),row.names=FALSE)
+encoded_maps<-do.call(rbind,lapply(names(results),function(n)
+ data.frame(run=n,results[[n]]$feature_map)))
+write.csv(encoded_maps,file.path(out,"encoded-item-maps.csv"),row.names=FALSE)
+
+screening<-list()
+for(seed in cfg$seeds){tr<-split_train(y,seed);inn<-tr[split_train(y[tr],seed+11,.8)]
+ for(stage in c("inner","outer")){ii<-if(stage=="inner")inn else tr
+ for(v in names(x)){a<-x[[v]][ii];obs<-sum(!is.na(a));missing<-mean(is.na(a));vary<-length(unique(a[!is.na(a)]))
+ screening[[length(screening)+1L]]<-data.frame(seed=seed,stage=stage,variable=v,n_train=length(ii),observed=obs,
+ missing_fraction=missing,distinct=vary,passes_screen=obs>=30 & missing<=.9 & vary>1)}}}
+write.csv(do.call(rbind,screening),file.path(out,"training-screening.csv"),row.names=FALSE)
+
+# Audit actual training-only pooling without changing the established algorithm.
+pooling<-list()
+for(seed in cfg$seeds) {
+ tr<-split_train(y,seed);inner<-tr[split_train(y[tr],seed+11,.8)]
+ for(stage in c("inner","outer")) {
+  ii<-if(stage=="inner")inner else tr
+  for(n in names(x))if(is.character(x[[n]])||is.factor(x[[n]])) {
+   vv<-x[[n]][ii];if(sum(!is.na(vv))<30 || mean(is.na(vv))>.9 || length(unique(vv[!is.na(vv)]))<2)next
+   v<-as.character(vv);v[is.na(v)]<-"Not observed / routed";tt<-table(v)
+   rare<-tt[tt<10]
+   if(length(rare))pooling[[length(pooling)+1L]]<-data.frame(seed=seed,stage=stage,
+    variable=n,response=names(rare),training_n=as.integer(rare))
+  }
+ }
+}
+write.csv(do.call(rbind,pooling),file.path(out,"rare-category-training-audit.csv"),row.names=FALSE)
+
+for(a in results)stopifnot(nrow(a$tuning)==9L,
+ a$chosen$validation_brier==min(a$tuning$validation_brier),
+ setequal(a$tuning$mtry,c("sqrt","fraction20","fraction40")),setequal(a$tuning$node,c(5,20,50)))
+boundary_n<-sum(feature_checks$mtry=="fraction40")
+validation<-c("NINE FROZEN-GRID FOREST FITS VALIDATED",
+ "Primary-release Latino registered reported voters; vote/support routing checked; WEIGHT used without trimming or balancing.",
+ "Nested source and encoded-item sets passed for all seeds; identified exclusions absent; ideology retained.",
+ "Training-only preprocessing and internal validation; all nine grid cells evaluated for each fit.",
+ paste("Maximum SHAP reconstruction error:",format(max(feature_checks$shap_max_error),scientific=TRUE)),
+ paste("fraction40 selected in",boundary_n,"of 9 fits; no grid expansion."),
+ "All-item rankings and top-50 profiles saved. Signed cells require at least 10 holdout observations.",
+ "Measurement review flags: Q315/Q603R2 wording discrepancies, published/local release counts, and remaining truncated labels.")
+writeLines(validation,file.path(out,"validation.txt"))
+tuning_note<-data.frame(Model=match(sub("_[0-9].*","",feature_checks$run),names(names_pretty)),
+ Seed=sub(".*_([0-9]+)_forest_FALSE","\\1",feature_checks$run),
+ Option=feature_checks$mtry,Node=feature_checks$node,
+ Inner_mtry=feature_checks$inner_mtry,Final_mtry=feature_checks$outer_mtry)
+write.csv(tuning_note,file.path(out,"selected-tuning.csv"),row.names=FALSE)
+calibration_summary<-do.call(rbind,lapply(names(names_pretty),function(s){z<-performance[performance$spec==s,]
+ data.frame(Model=paste("Model",match(s,names(names_pretty))),N=fmt(z$n,0),
+  Prevalence=fmt(z$prevalence,3),Prediction=fmt(z$mean_prediction,3),
+  Intercept=fmt(z$calibration_intercept,2),Slope=fmt(z$calibration_slope,2))}))
+write.csv(calibration_summary,file.path(out,"calibration-summary.csv"),row.names=FALSE)
+writeLines(capture.output(sessionInfo()),file.path(out,"session-info.txt"))
+```
+
+All nine models passed source-variable exclusions, encoded-item membership,
+nesting within each seed, ideology retention, grid selection, and SHAP
+reconstruction. Maximum reconstruction error is
+**`r format(max(feature_checks$shap_max_error),scientific=TRUE)`**, below $10^{-6}$.
+The weighted AUC implementation also passes an independent tied-score check.
+
+```{r}
+knitr::kable(tuning_note,row.names=FALSE)
+```
+
+The 40% upper boundary was selected in **`r boundary_n` of nine fits**. The grid
+was not expanded. Inner and final `mtry` counts differ when the training-specific
+encoded feature count differs.
+
+## Calibration diagnostics
+
+```{r}
+knitr::kable(calibration_summary,row.names=FALSE)
+```
+
+Values are mean [minimum, maximum]. An intercept near zero and slope near one
+indicate closer calibration. All nine slopes exceed one, suggesting that the fitted probability contrasts
+are too compressed relative to the observed holdout relationship. Model 3
+also predicts a higher mean Trump share than observed in every split. The
+high AUC values therefore do not establish probability calibration.
+No calibration correction is fitted to these holdouts.
+
+## Reproduction and saved outputs
+
+From this QMD's directory, run:
+
+```bash
+quarto render cmps2020_latino_trump_analysis.qmd --to pdf
+```
+
+R packages `ranger`, `treeshap`, `digest`, and `knitr`, Quarto, and XeLaTeX are
+required; package versions are recorded in `session-info.txt`. The source root
+defaults to `/Users/jessala/Desktop/Active/Github/ml-latino-vote-2020` and can be
+relocated with `CMPS2020_SOURCE`. The raw data and two local documentation checksums
+are asserted. An ordinary render recomputes all nine fits. Optional
+`CMPS2020_SCRATCH` holds fingerprinted aggregate-only checkpoints during layout
+verification; no external preparation or baseline result is required.
+
+The `results/` directory contains aggregate sample, source, disposition, tuning,
+performance, calibration, importance, direction, feature, pooling, and validation
+records plus three top-50 figures. The QMD, PDF, results directory, and concise
+execution note are the persistent deliverables. Forest objects, respondent IDs,
+individual predictions and SHAP arrays are never exported. Scratch render files
+and aggregate checkpoints are removed after final verification.
+
+```{r}
+#| label: execution-note
+#| include: false
+note<-c("# CMPS 2020 execution note","",
+ sprintf("Final primary-release sample: %s Latino registered reported voters, including %s Trump voters; unweighted share %.4f%% and weighted share %.4f%%.",length(y),sum(y),100*mean(y),100*weighted.mean(y,w)),"",
+ "Sample: MAIN_ETH_QUOTA=2, BASELINE=1, S6=1, Q12 in {1,2}, Q14 in {1,2,3,4,5}; Trump is Q14=1. Nonvoter support is excluded. The 138 otherwise eligible oversample voters are excluded by the explicitly resolved primary-sample choice.","",
+ "Weight: WEIGHT, labelled primary sample only. Official methodology recommends within-racial-group raking to 2019 ACS adult age, gender, education, nativity and ancestry margins. Applied to the voter subset without trimming or class balancing; not separately calibrated to Latino voters.","",
+ "Sources: local data/raw/39096-0001-Data.rda, docs/39096-Questionnaire.pdf, docs/39096-0001-Codebook-ICPSR.pdf under CMPS2020_SOURCE; official UCLA primary-sample methodology; inspected existing preparation and QMD files. Exact paths, roles, MD5 and SHA-256 hashes are in results/source-manifest.csv.","",
+ "Model 2 removes Q2 candidate evaluations; Q15 congressional vote; Q47–56 election-fraud/January 6 reactions; candidate-specific protest responses in Q96/Q98; Q130 Trump/COVID; Q195–201, Q272, Q323–328 and Q340–341 candidate experiments; Q504R11/R12 candidate anxiety; Q509_Q511R3 Trump executive-order experience; Q575_Q581 candidate feelings; Q614/Q615 immigration-policy approval/expression; and Q684's 2020-election tradeoff. Exact source-column dispositions are in results/predictor-ledger.csv.","",
+ "Model 3 additionally removes Q17–19 foreign-party history/follow-ups, Q21–28 party identification/strength/leaning/history/associations, Q1R17/R18 party antagonism, Q225R10/R11 party support/threat to one's vision of society, Q287R6/Q294/Q301/Q315 party-selected identity, Q316R7 shared party, Q334 partisan redistricting, Q560R4 party identity importance, and Q743–745 spouse partisanship. All Q301 allocation components are withheld because the 100-point total could recover party allocation. Q43 ideology remains. Named movements, caucuses and nonspecific campaign contact remain eligible under the direct-partisanship rule.","",
+ "Selected frozen-grid settings (150 tuning trees; 300 final trees):","",
+ capture.output(knitr::kable(tuning_note,format="pipe",row.names=FALSE)),"",
+ paste("The 40% boundary was selected in",boundary_n,"of nine fits. No grid expansion."),"",
+ "Weighted holdout performance, mean [minimum, maximum]:","",
+ capture.output(knitr::kable(summary_table,format="pipe",row.names=FALSE)),"",
+ "Model 1: congressional vote, Trump immigration-policy approval and Trump favorability rank 1–3 in every fit. Model 2: identification and histories lead on average, with substantial reshuffling of party-group associations. Model 3: border-security spending and BLM support rank 1 and 2 in every fit; dislike rankings, issue priorities and BLM warmth occupy 3–5; ideology ranks 6–7.","",
+ "Signed patterns: border spending/wall support is consistently positive, opposition negative. Model 3 strong opposition to BLM averages +11.81 pp [10.30,13.86], while somewhat opposing is near zero and unstable (+0.58 [-1.01,1.85]); support and neutrality are negative. Very conservative ideology is a pronounced positive endpoint. Trump somewhat-unfavorable responses remain positive relative to the Model 1 reference; only very unfavorable is consistently negative. The dislike-ranking summaries condition the whole ranking, not isolated group effects.","",
+ validation,"",
+ "Calibration slopes exceed one in all nine fits; Model 3 overpredicts mean Trump prevalence in every split. No correction was fitted to holdouts.","",
+ "Unresolved measurement review: the local primary flag identifies 14,977 records versus 14,988 published; Latino quota N=3,942 (RACE=2 N=3,951) versus 4,006 published. No records were fabricated/reassigned. ICPSR flags Q315 and Q603R2 wording discrepancies; source codes remain flagged. Other unverified truncated labels retain codes. The detailed crosswalk and response-label expansions are aggregate audit outputs.","",
+ "Reproduce with quarto render cmps2020_latino_trump_analysis.qmd --to pdf. The source QMD is self-contained and has no permanent model cache. Only aggregate results and the final report are retained; no individual political scores, predictions, SHAP arrays, respondent IDs or forests are exported.")
+writeLines(note,"cmps2020_execution_note.md")
+```

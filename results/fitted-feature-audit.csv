@@ -1,0 +1,10 @@
+"run","retained_variables","encoded_columns","excluded_variables_present","excluded_encoded_items_present","ideology_retained","shap_max_error","mtry","node","outer_mtry","inner_mtry","inner_encoded_p"
+"diagnostic_202001_forest_FALSE",1179,5872,0,0,TRUE,3.33066907387547e-15,"fraction20",20,1174,1147,5737
+"primary_202001_forest_FALSE",1095,5194,0,0,TRUE,4.44089209850063e-15,"fraction20",5,1038,1019,5098
+"withheld_202001_forest_FALSE",1030,4963,0,0,TRUE,2.77555756156289e-15,"fraction20",5,992,974,4873
+"diagnostic_202002_forest_FALSE",1169,5848,0,0,TRUE,3.77475828372553e-15,"fraction20",20,1169,1146,5734
+"primary_202002_forest_FALSE",1085,5170,0,0,TRUE,4.77395900588817e-15,"fraction20",5,1034,1018,5093
+"withheld_202002_forest_FALSE",1020,4942,0,0,TRUE,3.77475828372553e-15,"fraction40",5,1976,1947,4869
+"diagnostic_202003_forest_FALSE",1176,5870,0,0,TRUE,5.77315972805081e-15,"fraction40",5,2348,2296,5740
+"primary_202003_forest_FALSE",1092,5193,0,0,TRUE,3.88578058618805e-15,"sqrt",5,72,71,5099
+"withheld_202003_forest_FALSE",1027,4964,0,0,TRUE,2.88657986402541e-15,"fraction20",5,992,975,4875

@@ -1,0 +1,9 @@
+"function_name","same_as_frozen_template"
+"auc_weighted",TRUE
+"split_train",TRUE
+"preprocess",TRUE
+"rf_fit",TRUE
+"rf_predict",TRUE
+"metrics",TRUE
+"cal_bins",TRUE
+"explain_aggregate",TRUE

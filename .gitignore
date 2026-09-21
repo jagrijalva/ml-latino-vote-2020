@@ -30,3 +30,15 @@ data/
 
 # macOS
 .DS_Store
+
+# Local preservation snapshot includes licensed derived data; never push.
+/archive/2026-09-14-before-shared-workflow/
+
+/archive/2026-09-14-report-layout/
+
+/archive/2026-09-14-evidence-layout/
+
+# Local inputs, preserved runs and respondent-level outputs
+/archive/
+/outputs/
+*.knit.md

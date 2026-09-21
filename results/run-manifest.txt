@@ -1,0 +1,8 @@
+Computation fingerprint: b67ed20f1e9eed4c91e7a09e91962478
+list(seeds = 202001:202003, trees = 300L, tune_trees = 150L, 
+    reference = "complete unweighted training sample", rare_n = 10L, 
+    min_observed = 30L, max_missing = 0.9, mtry_grid = c("sqrt", 
+    "fraction20", "fraction40"), node_grid = c(5L, 20L, 50L), 
+    version = "frozen-grid-2020-primary-v1")
+Source: /Users/jessala/Desktop/Active/Github/ml-latino-vote-2020/data/raw/39096-0001-Data.rda
+Raw MD5: a02f00860e598a49720a396c6f829873

@@ -1,0 +1,10 @@
+Final PDF rendered successfully with Quarto/XeLaTeX.
+Visual review: all 13 pages inspected; tables, three top-50 figures and signed-response tables readable; no clipped content observed.
+Aggregate verification: 9 fits, 81 tuning evaluations, 1490 distinct source-variable ledger entries, 7599 item-by-fit rows, 42711 signed response cells (all N >= 10).
+All displayed top-30 items retained in 3 fits; exclusions and nesting passed; maximum SHAP error 5.77315972805081e-15.
+Local input/source hashes verified; the frozen 2016 template remains unchanged.
+Final primary Latino quota records all have RACE=2; WEIGHT is scoped to that documented primary racial group.
+Source QMD equals the version used for the verified render.
+cmps2020_latino_trump_analysis.qmd SHA256: ef2d5d1903cfaf778988e22a8e6447a7a22f4496c2494c58728daf498ab38795
+cmps2020_latino_trump_analysis.pdf SHA256: 26754a3eb74e74e7f1dfcb7930d67f3ac86c9618b04cb077c6d3e4f6f023be41
+Task scratch directory, render auxiliaries, image-review copies and aggregate checkpoints removed after successful verification.
